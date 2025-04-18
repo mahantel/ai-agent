@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open AI 이미지 생성 및 데이터 분석 활용 리뷰</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+    
+    :root {
+      --fashion-1: #593C47;
+      --fashion-2: #F2E63D;
+      --fashion-3: #F2C53D;
+      --fashion-4: #F25C05;
+      --fashion-5: #F24405;
+      --section-title: #1e40af;
+      --subtitle: #475569;
+      --body-text: #334155;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+      line-height: 1.4;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, var(--fashion-1), var(--fashion-5));
+      padding: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px dashed var(--fashion-3);
+      position: relative;
+    }
+    
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      right: 40px;
+      width: 30px;
+      height: 30px;
+      background-color: var(--fashion-3);
+      border-radius: 50%;
+      transform: rotate(-15deg);
+    }
+    
+    .title {
+      font-size: 32px;
+      color: white;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .title::before {
+      content: '🎨';
+      margin-right: 10px;
+    }
+    
+    .date {
+      color: white;
+      font-size: 14px;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 8px 15px;
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+    }
+    
+    .introduction {
+      padding: 30px;
+      border-bottom: 2px dotted #e2e8f0;
+      position: relative;
+    }
+    
+    .introduction-title {
+      font-size: 24px;
+      color: var(--fashion-1);
+      font-weight: 700;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .introduction-title::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' stroke='%23F2C53D' stroke-width='4' stroke-dasharray='6, 14' stroke-dashoffset='0' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+    
+    .section {
+      padding: 30px;
+      border-bottom: 2px dotted #e2e8f0;
+      position: relative;
+    }
+    
+    .section:nth-child(odd) {
+      background-color: rgba(242, 230, 61, 0.05);
+    }
+    
+    .section-icon {
+      position: absolute;
+      top: -15px;
+      left: 30px;
+      font-size: 24px;
+      background-color: white;
+      padding: 8px;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+    }
+    
+    .section-title {
+      font-size: 22px;
+      color: var(--fashion-1);
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--fashion-3);
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+      margin-left: 10px;
+    }
+    
+    .subsection {
+      margin-bottom: 25px;
+    }
+    
+    .subsection-title {
+      font-size: 18px;
+      color: var(--section-title);
+      font-weight: 700;
+      margin-bottom: 15px;
+      position: relative;
+      display: inline-block;
+      padding-left: 25px;
+    }
+    
+    .subsection-title::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--fashion-4);
+    }
+    
+    .feature-list {
+      list-style-type: none;
+      margin-left: 20px;
+    }
+    
+    .feature-list li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 12px;
+      color: var(--body-text);
+      font-size: 14px;
+    }
+    
+    .feature-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--fashion-4);
+      font-size: 20px;
+      top: -5px;
+    }
+    
+    .main-content {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 30px;
+    }
+    
+    .column {
+      flex: 1;
+      min-width: calc(50% - 30px);
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 2px solid #f1f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .card-title {
+      font-size: 18px;
+      color: var(--fashion-1);
+      font-weight: 700;
+      margin-bottom: 15px;
+      padding-left: 30px;
+      position: relative;
+    }
+    
+    .card-title .icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 22px;
+    }
+    
+    .keyword {
+      font-weight: 700;
+      color: var(--fashion-1);
+      background: linear-gradient(transparent 60%, var(--fashion-2) 40%);
+      padding: 0 2px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 5px;
+      background-color: var(--fashion-3);
+      color: var(--fashion-1);
+    }
+    
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(89, 60, 71, 0.05), rgba(242, 68, 4, 0.05));
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+      border-left: 4px solid var(--fashion-4);
+      position: relative;
+    }
+    
+    .quote {
+      font-style: italic;
+      color: var(--fashion-5);
+      margin: 10px 0;
+      padding-left: 15px;
+      border-left: 3px solid var(--fashion-3);
+    }
+    
+    .footer {
+      padding: 20px;
+      text-align: center;
+      color: var(--subtitle);
+      font-size: 14px;
+      border-top: 2px dashed #e2e8f0;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+      .column {
+        min-width: 100%;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .date {
+        margin-top: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">AI 기술 활용 격주 리뷰 (2차)</h1>
+      <div class="date">2025.04.18 (금)</div>
+    </div>
+    
+    <div class="main-content">
+      <div class="column">
+        <div class="section">
+          <div class="section-icon">🖼️</div>
+          <h2 class="section-title">Open AI 이미지 생성모델 활용</h2>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">다양한 스타일 변환 기능</h3>
+            <ul class="feature-list">
+              <li>사용자 사진을 <span class="keyword">지브리, 슬램덩크, 도라에몽</span> 등 다양한 애니메이션/만화 스타일로 손쉽게 변환</li>
+              <li>원본 이미지의 특징을 유지하면서도 선택한 스타일로 적용</li>
+            </ul>
+          </div>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">이모티콘 제작 활용</h3>
+            <ul class="feature-list">
+              <li>본인 사진으로 맞춤형 캐릭터 이미지 생성</li>
+              <li><span class="keyword">16가지 감정 표현</span>의 이모티콘 세트 제작 가능</li>
+              <li>커뮤니케이션 도구에서 활용 가능한 개인화된 이모티콘</li>
+            </ul>
+          </div>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">확장 활용</h3>
+            <ul class="feature-list">
+              <li>생성된 이미지로 피규어 제작 가능 (예시: <a href="https://www.jeongsanghoon.store/DongigaImage.png" target="_blank" style="color: inherit; text-decoration: underline;">동기자</a>, <a href="https://www.jeongsanghoon.store/Imagessanghooni.png" target="_blank" style="color: inherit; text-decoration: underline;">개인페르소나</a>)</li>
+              <li><span class="keyword">Kling AI</span> 활용한 짧은 애니메이션/동영상 제작 (예시: <a href="https://www.jeongsanghoon.store/dongija.mp4" target="_blank" style="color: inherit; text-decoration: underline;">동기자</a>, <a href="https://www.jeongsanghoon.store/wakesup.mp4" target="_blank" style="color: inherit; text-decoration: underline;">개인페르소나</a>)</li>
+              <li>회사홍보, 마케팅, 교육 자료에 활용 가능</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="section">
+          <div class="section-icon">💡</div>
+          <h2 class="section-title">AI 이미지 생성의 의미</h2>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">AI의 킬러앱으로서의 위치</h3>
+            <ul class="feature-list">
+              <li>ChatGPT 이미지 생성 기능은 <span class="keyword">한 시간 만에 100만 명의 신규 사용자 유치</span><br>⇒ 초창기 100만명 가입자 1주일 소요</li>
+              <li class="quote">샘 알트만: "사람들이 원하는 것은 결국 이미지였다"</li>
+              <li>AI 기술 채택의 <span class="keyword">"전환점(tipping point)"</span> 역할</li>
+            </ul>
+          </div>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">비즈니스 영향과 의미</h3>
+            <ul class="feature-list">
+              <li>기술적 지식 없이도 누구나 고품질 시각 콘텐츠 제작 가능</li>
+              <li><span class="keyword">누구나 쉽게 멋진 시각 자료를 만들 수 있는 시대</span></li>
+              <li>1980년대 엑셀이 PC 도입을 가속화했듯이, 이미지 생성이 AI 도입 가속화</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="column">
+        <div class="section">
+          <div class="section-icon">📊</div>
+          <h2 class="section-title">AI를 활용한 데이터분석과 보고서 작성</h2>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">데이터 분석 사례</h3>
+            <ul class="feature-list">
+              <li>IT 서비스 만족도 조사 결과 데이터를 <span class="keyword"><a href="https://dongwha01.sharepoint.com/:x:/s/ITPTEAM/EecDJPjd3DdCqiQZfVDEbV4BuYktL_55uE2PMFMWuhzkXA?e=RUCiwx" target="_blank" style="color: inherit; text-decoration: underline;">신속한 분석 (샘플데이터)</a></span></li>
+              <li>서비스 영역별 긍정적, 부정적 요인 <a href="https://claude.ai/share/20dca2d5-2224-4134-ad41-f288fd67030e" target="_blank" style="color: inherit; text-decoration: underline;">자동 비교 분석 (AI 협업 예시)</a></li>
+              <li>서비스 영역별(인프라, 업무시스템, 헬프데스크 등) 만족도 패턴 식별</li>
+            </ul>
+          </div>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">맞춤형 보고서 자동 생성<br>(예시 <a href="https://claude.site/artifacts/676134b7-b27e-4946-8e54-176dbe63e905" target="_blank" style="color: inherit; text-decoration: underline;">반응형리포트</a>, <a href="https://ai-agent-n91i.vercel.app/itsurveydashboard.html" target="_blank" style="color: inherit; text-decoration: underline;">정적리포트</a>)</h3>
+            <ul class="feature-list">
+              <li>분석된 IT 서비스 만족도 데이터를 바탕으로 구조화된 보고서 생성</li>
+              <li>핵심 발견사항과 개선 필요 영역을 한눈에 파악 가능한 형태로 정리</li>
+              <li><span class="keyword">차트와 그래프</span>를 포함한 시각화 요소 자동 생성</li>
+            </ul>
+          </div>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">일반 직원 관점의 활용 방안</h3>
+            <div class="highlight-box">
+              <ul class="feature-list">
+                <li><strong>셀프 서비스 데이터 분석</strong>: Excel이나 통계 지식 없이도 팀 실적 데이터, 프로젝트 진행률, 고객 피드백 등을 직접 분석 가능</li>
+                <li><strong>맞춤형 보고서 템플릿</strong>: 주간/월간 보고서, 프로젝트 현황, 예산 사용 등 반복적으로 작성하는 보고서 템플릿을 생성하고 데이터만 업데이트하여 재활용 가능</li>
+                <li><strong>회의 효율화</strong>: 회의 전 데이터 요약 및 핵심 포인트 추출로 준비 시간 단축, 회의록 작성 및 액션 아이템 추적 자동화</li>
+                <li><strong>업무 인사이트 발굴</strong>: 일상 업무 데이터에서 놓치기 쉬운 패턴(예: 특정 시간대 헬프데스크 요청 증가, 시스템 사용 피크 타임)을 발견하여 업무 최적화</li>
+                <li><strong>커뮤니케이션 개선</strong>: 복잡한 데이터를 상사나 타 부서에 효과적으로 전달할 수 있는 시각적 자료 자동 생성</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <div class="section-icon">✨</div>
+          <h2 class="section-title">AI 데이터 분석의 의미</h2>
+          
+          <div class="subsection">
+            <h3 class="subsection-title">개인 역량 및 조직 효율성 향상</h3>
+            <ul class="feature-list">
+              <li><strong>데이터 리터러시 향상</strong>: 일반 직원들의 데이터 해석 및 활용 능력이 자연스럽게 향상되어 <span class="keyword">전사적 디지털 역량 강화</span></li>
+              <li><strong>업무 자율성 증대</strong>: IT부서나 Datalab에 의존하지 않고 스스로 필요한 분석을 수행함으로써 <span class="keyword">의사결정 속도 향상</span> 및 부서 간 병목 현상 감소</li>
+              <li><strong>시간 자원 최적화</strong>: 일반 직원 기준 주당 4-5시간 소요되던 데이터 정리 및 보고서 작성 시간을 <span class="keyword">30분 이내로 단축</span>, 핵심 업무에 집중할 수 있는 여유 확보</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer">
+      © 2025 AI 기술 활용 격주 리뷰 | 문의: <a href="mailto:stephan@dongwha.com" style="color: inherit; text-decoration: underline;">stephan@dongwha.com</a>
+    </div>
+  </div>
+</body>
+</html>
