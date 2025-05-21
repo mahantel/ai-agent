@@ -43,6 +43,8 @@
         .bg-teal-accent { background-color: #50E3C2; color: white; }
         .bg-yellow-accent { background-color: #F5A623; color: white; }
         .bg-red-accent { background-color: #D0021B; color: white; }
+        .bg-green-accent { background-color: #34A853; color: white; }
+
 
         /* Timeline specific styles */
         .timeline-item {
@@ -139,12 +141,84 @@
             margin-bottom: 0.75rem;
             border-radius: 0.375rem;
         }
+        /* Learning Process Styles */
+        .learning-process-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        .learning-step {
+            display: flex;
+            align-items: stretch; 
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 700px; 
+        }
+        .learning-step-process {
+            flex: 1;
+            background-color: #e9ecef; 
+            color: #343a40; 
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-right: 0.5rem; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .learning-step-lm-feature {
+            flex: 1;
+            background-color: #e0f2fe; 
+            color: #0c4a6e; 
+            padding: 1rem;
+            border: 1px dashed #4A90E2; 
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-left: 0.5rem; 
+             display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .learning-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem; /* 24px */
+            color: #4A90E2; /* Blue arrow */
+            margin: 0 0.5rem; 
+        }
+         .learning-process-title {
+            font-weight: bold;
+            color: #343a40;
+            font-size: 1rem;
+             margin-bottom: 0.25rem;
+        }
+        .learning-lm-title {
+            font-weight: bold;
+            color: #0c4a6e;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .process-step-number {
+            font-size: 0.8rem;
+            color: #6c757d; /* Medium gray */
+            margin-bottom: 0.25rem;
+        }
+        .feature-description {
+            font-size: 0.8rem; /* 작은 글씨 */
+            color: #495057; /* 약간 어두운 회색 */
+            margin-top: 0.25rem;
+            line-height: 1.4;
+        }
+
     </style>
 </head>
 <body class="text-gray-800">
     <div class="container mx-auto p-4 md:p-8 max-w-5xl">
 
         <header class="header-gradient text-white p-6 md:p-10 rounded-xl shadow-lg mb-8 md:mb-12 text-center">
+            <p class="text-sm md:text-base mb-2">2025.5.22(목)</p>
             <h1 class="text-3xl md:text-4xl font-bold mb-3">AI와 생산성 도구를 활용한 업무 효율화</h1>
             <p class="text-lg md:text-xl">Google NotebookLM을 중심으로 ("자신의 문서에 기반한 AI 비서"가 핵심 컨셉임)</p>
         </header>
@@ -159,7 +233,6 @@
                 <div class="card p-6">
                     <h3 class="text-xl font-semibold text-blue-600 mb-2">서비스 개념</h3>
                     <ul class="list-disc list-inside space-y-1 text-gray-700">
-                        <li>사용자의 문서와 AI가 상호작용하는 <strong class="text-blue-600">새로운 지식 작업 패러다임</strong></li>
                         <li>업로드한 문서를 기반으로 마치 그 주제의 <strong class="text-blue-600">즉석 전문가</strong>처럼 질문에 답변</li>
                         <li>근거 기반의 요약본이나 보고서를 자동 생성</li>
                         <li>출처에 대한 인라인 인용으로 <strong class="text-blue-600">신뢰성 있는 정보</strong> 제공</li>
@@ -167,7 +240,7 @@
                 </div>
                 <div class="card p-6">
                     <h3 class="text-xl font-semibold text-teal-600 mb-2">주요 장점</h3>
-                    <ul class="list-disc list-inside space-y-1">
+                    <ul class="list-disc list-inside space-y-1 text-gray-700">
                         <li><strong class="text-teal-600">정보 과부하 해결:</strong> 방대한 자료도 빠르게 핵심만 파악함.</li>
                         <li><strong class="text-teal-600">신뢰성 있는 답변:</strong> 모든 답변의 근거를 원본 문서에서 찾아 명확히 제시함 (환각 현상 최소화).</li>
                         <li><strong class="text-teal-600">업무 시간 단축:</strong> 자료 검색, 요약, 초안 작성 등 반복 업무를 자동화함.</li>
@@ -313,6 +386,87 @@
 
         <section class="mb-8 md:mb-12">
             <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-green-accent">📈</span>
+                NotebookLM 활용 학습 프로세스
+            </h2>
+            <div class="learning-process-container">
+                <div class="learning-step">
+                    <div class="learning-step-process">
+                        <div class="process-step-number">단계 1</div>
+                        <div class="learning-process-title">목표 설정 / 질문 리스트 업</div>
+                    </div>
+                    <div class="learning-arrow">➡️</div>
+                    <div class="learning-step-lm-feature">
+                        <div class="learning-lm-title">FAQ</div>
+                        <p class="feature-description">자주 나올 만한 질문 자동 생성</p>
+                    </div>
+                </div>
+                <div class="learning-step">
+                    <div class="learning-step-process">
+                        <div class="process-step-number">단계 2</div>
+                        <div class="learning-process-title">큰 그림 이해하기</div>
+                    </div>
+                    <div class="learning-arrow">➡️</div>
+                    <div class="learning-step-lm-feature">
+                        <div class="learning-lm-title">마인드 맵</div>
+                        <p class="feature-description">내용 구조 시각화, 채팅 연동</p>
+                        <div class="learning-lm-title mt-2">브리핑 문서</div>
+                        <p class="feature-description">핵심 주제/아이디어 요약</p>
+                        <div class="learning-lm-title mt-2">학습 가이드 / 타임라인</div>
+                        <p class="feature-description">핵심 정보 Q&A, 용어집 / 시간 순 정보 정리</p>
+                    </div>
+                </div>
+                <div class="learning-step">
+                    <div class="learning-step-process">
+                         <div class="process-step-number">단계 3</div>
+                        <div class="learning-process-title">핵심 개념 쉽게 공부하기</div>
+                    </div>
+                    <div class="learning-arrow">➡️</div>
+                    <div class="learning-step-lm-feature">
+                        <div class="learning-lm-title">팟캐스트 생성 (AI 음성)</div>
+                        <p class="feature-description">소스 기반 오디오 요약, 내용 초점 맞춤 가능</p>
+                    </div>
+                </div>
+                <div class="learning-step">
+                    <div class="learning-step-process">
+                        <div class="process-step-number">단계 4</div>
+                        <div class="learning-process-title">나만의 인사이트 생성</div>
+                    </div>
+                    <div class="learning-arrow">➡️</div>
+                    <div class="learning-step-lm-feature">
+                        <div class="learning-lm-title">원본 소스 공부 & 채팅창 논의</div>
+                        <p class="feature-description">질문-답변 상호작용, 소스 기반 답변</p>
+                        <div class="learning-lm-title mt-2">메모 추가</div>
+                        <p class="feature-description">학습 내용 및 아이디어 저장</p>
+                    </div>
+                </div>
+                <div class="learning-step">
+                    <div class="learning-step-process">
+                         <div class="process-step-number">단계 5</div>
+                        <div class="learning-process-title">빈 틈 추가 공부</div>
+                    </div>
+                    <div class="learning-arrow">➡️</div>
+                    <div class="learning-step-lm-feature">
+                        <div class="learning-lm-title">탐색 / 소스 검색</div>
+                        <p class="feature-description">관련 추가 소스 검색 및 추천</p>
+                    </div>
+                </div>
+                <div class="learning-step">
+                    <div class="learning-step-process">
+                         <div class="process-step-number">단계 6</div>
+                        <div class="learning-process-title">최종 요약본 생성</div>
+                    </div>
+                    <div class="learning-arrow">➡️</div>
+                    <div class="learning-step-lm-feature">
+                        <div class="learning-lm-title">메모</div>
+                        <p class="feature-description">학습 내용 최종 요약 및 보관</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
                 <span class="icon-placeholder bg-red-accent">💼</span>
                 실용적인 활용 예시
             </h2>
@@ -419,5 +573,10 @@
             <p>© 2025 AI 생산성 도구 스터디 그룹 | 문의: stephan@dongwha.com</p>
         </footer>
     </div>
+
+    <script>
+        // Gemini API call related JavaScript has been removed.
+    </script>
+
 </body>
 </html>
