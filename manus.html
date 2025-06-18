@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manus.im AI 에이전트 서비스 분석</title>
+    <style>
+        /*
+         * 전반적인 스타일 설정
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /*
+         * 헤더 섹션 스타일
+         */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titlePulse {
+            from { transform: scale(1); filter: hue-rotate(0deg); }
+            to { transform: scale(1.05); filter: hue-rotate(10deg); }
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #555;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .header-description {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /*
+         * 개요 카드 섹션 스타일
+         */
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card:hover {
+            transform: translateY(-15px) rotate(1deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-icon {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-5px) rotate(-1deg); }
+            75% { transform: translateY(-15px) rotate(1deg); }
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        .card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: #f093fb;
+            transition: width 0.3s ease;
+        }
+        
+        .card:hover h3::after {
+            width: 100%;
+        }
+        
+        /*
+         * 핵심 기능 상세 분석 섹션 스타일
+         */
+        .features-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-item {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+            opacity: 0;
+        }
+        
+        .feature-item:hover::before {
+            animation: shine 0.8s ease;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+        
+        .feature-item:hover {
+            transform: scale(1.08) rotate(-2deg);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        /*
+         * 핵심 지표 섹션 스타일
+         */
+        .stats-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            position: relative;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(240, 147, 251, 0.1));
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(240, 147, 251, 0.2));
+        }
+        
+        .stat-number {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+            animation: countUp 2s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(50px) scale(0.5); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        /*
+         * 상세 발전 과정 타임라인 섹션 스타일
+         */
+        .timeline-section {
+            margin: 60px 0;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #667eea, #764ba2, #f093fb);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+        
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, #667eea, #f093fb);
+            border-radius: 50%;
+            top: 40px;
+            box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+            border: 3px solid white;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -65px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -65px;
+        }
+        
+        .timeline-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        
+        /*
+         * 활용 사례 섹션 스타일
+         */
+        .use-cases-section {
+            margin: 60px 0;
+        }
+        
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .use-case {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            border-left: 8px solid #667eea;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .use-case::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.02), rgba(240, 147, 251, 0.02));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .use-case:hover::before {
+            opacity: 1;
+        }
+        
+        .use-case:hover {
+            border-left-width: 20px;
+            transform: translateX(15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .use-case h3 {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .prompt-example {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #f093fb;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .prompt-example::before {
+            content: '💬';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+        }
+        
+        .prompt-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .prompt-text {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .result-box {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .result-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /*
+         * 장점 및 한계점 섹션 스타일
+         */
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .pros {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+            border: 2px solid #27ae60;
+        }
+        
+        .cons {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
+            border: 2px solid #e74c3c;
+        }
+        
+        .pros h4, .cons h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .pros h4 {
+            color: #27ae60;
+        }
+        
+        .cons h4 {
+            color: #e74c3c;
+        }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pros li, .cons li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .pros li:last-child, .cons li:last-child {
+            border-bottom: none;
+        }
+        
+        /*
+         * 공통 강조 스타일
+         */
+        .strong {
+            font-weight: bold;
+            color: #2c3e50;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /*
+         * 결론 섹션 스타일
+         */
+        .conclusion {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .conclusion::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .conclusion p {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /*
+         * 반응형 디자인
+         */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+            }
+            
+            .timeline-item::after {
+                left: -65px !important;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .use-cases {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /*
+         * 추가 애니메이션 및 타이틀 스타일
+         */
+        .pulse {
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            70% { box-shadow: 0 0 0 30px rgba(102, 126, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Manus.im AI 에이전트</h1>
+            <p class="subtitle">💭 <span class="strong">생각에서 실행까지</span> - 차세대 완전 자율형 AI 비서 서비스</p>
+            <div class="header-description">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>🤖 <strong>Manus AI</strong>는 단순한 챗봇을 넘어 <span class="strong">사용자의 아이디어를 실질적인 행동과 결과로 연결</span>하는 범용 자율형 AI 에이전트</li>
+                    <li>🚀 2025년 초 출시되어 전 세계적으로 폭발적인 관심을 획득</li>
+                    <li>🏆 <span class="highlight">"제2의 딥시크"</span>로 불리며 AI 에이전트 시대의 선두주자로 인정</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="overview">
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>혁신적 AI 패러다임</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>🧠 <span class="strong">완전 자율형 AI 에이전트</span>로서 기존 GPT-4나 Gemini와 완전히 차별화</li>
+                    <li>⚡ 사용자 지시를 기다리지 않고 <span class="highlight">스스로 다음 할 일을 찾아 실행</span></li>
+                    <li>📊 단순 텍스트 응답을 넘어 <strong>복잡한 업무의 전체 워크플로우를 자동화</strong></li>
+                    <li>🎯 "Think-Engine"에서 "Do-Engine"으로의 패러다임 전환을 주도</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🌍</div>
+                <h3>글로벌 센세이션</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>🔥 폐쇄형 베타임에도 불구하고 <span class="strong">전세계적 관심 폭발</span></li>
+                    <li>💰 중국에서 초대장이 <span class="highlight">최대 1,300만원</span>에 거래</li>
+                    <li>👥 공식 디스코드에 <strong>13만명 이상</strong> 몰림</li>
+                    <li>📈 출시 한달 내 <span class="strong">대기자 100만명</span> 돌파</li>
+                    <li>🚀 AI 에이전트 시대의 서막을 알린 역사적 사건</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>멀티에이전트 시스템</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>🔧 <span class="strong">29개 이상의 전문 도구</span>와 완전 통합</li>
+                    <li>⚡ 웹 검색, 코딩, 이미지 생성, 데이터 분석을 <span class="highlight">병렬로 처리</span></li>
+                    <li>🧠 Anthropic Claude와 Alibaba Qwen 등 <strong>최신 AI 모델들을 파인튜닝</strong></li>
+                    <li>🏗️ 멀티에이전트 아키텍처로 설계된 차세대 AI 시스템</li>
+                    <li>🎯 각 전문 영역별 최적화된 성능 구현</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <h2 class="section-title">📊 핵심 지표 &amp; 성과</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">29+</span>
+                    <div class="stat-label">🔧 연동 전문 도구</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">13만+</span>
+                    <div class="stat-label">👥 디스코드 사용자</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1시간</span>
+                    <div class="stat-label">⏱️ 복합 마케팅 업무</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100만+</span>
+                    <div class="stat-label">📝 웨이팅 리스트</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1위</span>
+                    <div class="stat-label">🏆 GAIA 벤치마크</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">1,300만원</span>
+                    <div class="stat-label">💰 최고 거래가격</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2 class="section-title">🎛️ 핵심 기능 상세 분석</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-title">완전 자율 실행</div>
+                    <div class="feature-description">
+                        사용자 지시 없이도 <strong>스스로 계획을 수립하고 실행</strong>. 
+                        모호한 요청도 맥락을 파악하여 필요한 정보를 수집하고 
+                        최적의 해결책을 자동으로 제시합니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔗</div>
+                    <div class="feature-title">멀티스텝 워크플로우</div>
+                    <div class="feature-description">
+                        복잡한 업무를 <strong>여러 하위 작업으로 분해</strong>하여 
+                        순차적으로 처리. 웹 브라우저, VS Code, 터미널 등을 
+                        병렬로 활용하여 목표를 달성합니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">☁️</div>
+                    <div class="feature-title">클라우드 가상환경</div>
+                    <div class="feature-description">
+                        <strong>Ubuntu 기반 가상 워크스테이션</strong>에서 
+                        비동기적으로 작업 수행. 사용자는 명령만 내리고 
+                        결과물을 받는 완전 자동화 경험을 제공합니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">텍스트-투-비디오</div>
+                    <div class="feature-description">
+                        2025년 6월 발표된 <strong>혁신적 영상 생성 기능</strong>. 
+                        텍스트 프롬프트만으로 스토리보드, 애니메이션, 
+                        내러티브 구조를 갖춘 완성된 영상을 제작합니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">고성능 벤치마크</div>
+                    <div class="feature-description">
+                        <strong>GAIA 벤치마크 최고 점수</strong> 달성으로 
+                        OpenAI 에이전트들을 능가. 복잡한 컴퓨터 작업 
+                        평가(CUB)에서도 최고 성능을 입증했습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">동적 적응 시스템</div>
+                    <div class="feature-description">
+                        작업 중 오류 발생 시 <strong>자동으로 접근방식 조정</strong>. 
+                        새로운 정보를 능동적으로 수집하며 
+                        상황에 맞춰 전략을 실시간으로 변경합니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-section">
+            <h2 style="font-size: 2.5em; text-align: center; margin-bottom: 40px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); background: linear-gradient(135deg, #667eea, #764ba2); padding: 20px; border-radius: 15px;">📈 상세 발전 과정</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">2025년 3월 초순</div>
+                    <div class="timeline-title">🚀 프리뷰 버전 출시</div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>🏢 Monica(버터플라이 이펙트)에서 <span class="strong">폐쇄형 베타</span> 공개</li>
+                        <li>📧 선별된 사용자들에게만 초대장 배포</li>
+                        <li>🎯 독점성 마케팅 전략으로 화제성 극대화</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">출시 수일 내</div>
+                    <div class="timeline-title">🔥 폭발적 관심 집중</div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>👥 공식 디스코드 서버에 <span class="strong">13만명 이상</span> 몰림</li>
+                        <li>🌍 글로벌 IT 커뮤니티에서 화제 급증</li>
+                        <li>🔒 초대장 희소성으로 인한 관심 폭발</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">3월 중순</div>
+                    <div class="timeline-title">💰 초대장 거래 시장 형성</div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>🇨🇳 중국 Xianyu 앱에서 초대권 거래 시작</li>
+                        <li>💸 <span class="strong">5만-10만 위안</span> 가격대 형성</li>
+                        <li>🏆 최고가 <span class="highlight">10만 위안(약 1,300만원)</span> 기록</li>
+                        <li>📰 사회적 이슈로 언론 보도 확산</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">3월 말</div>
+                    <div class="timeline-title">🏆 성능 벤치마크 달성</div>
+                    <p><span class="strong">GAIA 벤치마크</span>에서 모든 난이도에서 최고 기록 수립. 
+                    OpenAI의 유사 에이전트들을 능가하는 성능 입증.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">4월</div>
+                    <div class="timeline-title">🌍 글로벌 미디어 주목</div>
+                    <p><span class="strong">Forbes, TechCrunch, Y Combinator</span> 등에서 
+                    "OpenAI를 능가하는 새로운 AI 에이전트"로 집중 보도.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">출시 한달 내</div>
+                    <div class="timeline-title">📝 대기자 100만명 돌파</div>
+                    <p>웨이팅 리스트에 <span class="strong">100만명 이상</span> 등록으로 
+                    AI 에이전트에 대한 대중적 관심과 기대감 입증.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">5월</div>
+                    <div class="timeline-title">🇰🇷 한국 언론 조명</div>
+                    <p>ZDNet 코리아, 동아일보 등에서 <span class="strong">"제2의 딥시크"</span>로 소개. 
+                    국내 IT 커뮤니티에서도 큰 관심 표명.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2025년 6월</div>
+                    <div class="timeline-title">🎬 텍스트-투-비디오 발표</div>
+                    <p>혁신적인 <span class="strong">영상 자동 생성 기능</span> 공개로 
+                    콘텐츠 제작 분야에서의 활용 가능성 대폭 확장.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="use-cases-section">
+            <h2 style="font-size: 2.5em; text-align: center; margin-bottom: 40px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); background: linear-gradient(135deg, #667eea, #764ba2); padding: 20px; border-radius: 15px;">💼 상세 활용 사례 &amp; 프롬프트 예시</h2>
+            
+            <div class="use-cases">
+                <div class="use-case">
+                    <h3>💼 직장인 - 전략 기획 &amp; 마케팅</h3>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">📝 실제 프롬프트 예시:</div>
+                        <div class="prompt-text">
+                            "B2B SaaS 회사를 위한 신규 시장 조사 후 마케팅 전략을 수립해줘. 
+                            타겟은 10-50명 규모의 중소기업이고, 예산은 월 500만원이야. 
+                            다음 순서로 진행해줘: 1) 경쟁사 10개 분석 2) 의사결정권자 컨택 정보 수집 
+                            3) 각 기업별 맞춤 이메일 초안 작성 4) 랜딩페이지 디자인 5) 60일 실행 로드맵"
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">🎯 Manus 실행 결과:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>1시간 내 완료</strong> - 웹 검색부터 문서 작성까지 전체 워크플로우</li>
+                            <li><strong>경쟁사 분석 보고서</strong> - 10개 기업의 가격, 기능, 마케팅 전략 비교</li>
+                            <li><strong>개별 맞춤 제안서</strong> - 각 기업별 니즈에 맞는 차별화된 접근법</li>
+                            <li><strong>실행 가능한 랜딩페이지</strong> - HTML/CSS 코드까지 포함한 완성형</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">📊 데이터 분석 프롬프트:</div>
+                        <div class="prompt-text">
+                            "S&amp;P 500 지수에 글로벌 관세 변동이 끼칠 영향을 분석해줘. 
+                            과거 관세 변화 시 주가 반응 데이터를 찾고, 몬테카를로 시뮬레이션 10,000회 돌려서 
+                            향후 6개월 예측 시나리오 3가지(낙관/중립/비관)로 보고서 만들어줘."
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">📈 결과물:</div>
+                        <p><span class="highlight">"복수의 분석가 팀이 만든 것 같다"</span>는 평가를 받은 
+                        전문가급 금융 분석 보고서 완성. 역사적 데이터, 시뮬레이션 결과, 시각화 차트까지 포함.</p>
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <h3>🎨 콘텐츠 제작자 - 영상 &amp; 블로그</h3>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">🎬 영상 제작 프롬프트:</div>
+                        <div class="prompt-text">
+                            "도시에 나타난 드래곤에 맞서는 영웅 이야기를 3분 애니메이션으로 만들어줘. 
+                            스토리는 영웅의 성장 과정을 담고, 각 씬마다 긴장감 있는 음악과 
+                            판타지 분위기의 비주얼로 구성해줘."
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">🎥 Manus 생성 결과:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>완전한 스토리보드</strong> - 씬별 구성과 내러티브 구조</li>
+                            <li><strong>애니메이션 영상</strong> - 자동 생성된 비주얼과 전환 효과</li>
+                            <li><strong>배경음악 및 효과음</strong> - 장면에 맞는 사운드트랙</li>
+                            <li><strong>자막 및 타이틀</strong> - 완성도 높은 후반 작업까지</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">📝 블로그 콘텐츠 프롬프트:</div>
+                        <div class="prompt-text">
+                            "비트코인 투자 전망에 대한 종합 분석 글을 써줘. 
+                            최근 3개월 시황 데이터, 주요 전문가 의견, 기술적 분석, 
+                            그리고 초보자를 위한 투자 가이드까지 포함해서 
+                            5000자 분량으로 SEO 최적화까지 고려해줘."
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">✍️ 생성된 콘텐츠:</div>
+                        <p><span class="highlight">리서치 기반의 전문적인 분석글</span> 완성. 
+                        웹에서 최신 데이터 수집, 전문가 코멘트 인용, 차트 삽입, 메타 태그까지 포함한 
+                        완전한 블로그 포스트 제작.</p>
+                    </div>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">📧 뉴스레터 자동화 프롬프트:</div>
+                        <div class="prompt-text">
+                            "내 기존 뉴스레터 50개를 분석해서 주요 주제별로 분류하고, 
+                            독자들이 가장 관심 있어하는 콘텐츠 패턴을 찾아줘. 
+                            그 결과를 바탕으로 다음 주 뉴스레터 주제 5개 추천하고 
+                            각각의 개요와 참고 자료 링크까지 정리해줘."
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">📊 분석 &amp; 기획 결과:</div>
+                        <p>과거 콘텐츠 패턴 분석을 통한 <span class="highlight">데이터 기반 콘텐츠 전략</span> 수립. 
+                        독자 참여도가 높은 주제 식별 및 향후 콘텐츠 로드맵까지 자동 생성.</p>
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <h3>🏢 기업 업무 - 채용 &amp; HR</h3>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">👥 채용 분석 프롬프트:</div>
+                        <div class="prompt-text">
+                            "이력서 50개를 분석해서 최적의 후보자 5명을 선별해줘. 
+                            각 지원자의 기술 스킬을 추출하고 업계 고용 동향 데이터와 비교해서 
+                            엑셀 시트에 정리된 채용 결정안을 만들어줘."
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">📋 처리 결과:</div>
+                        <p><span class="strong">지원자 순위 매기기</span>를 넘어 각 후보자의 
+                        <span class="highlight">기술 스킬 매트릭스, 시장 가치 분석, 면접 질문 추천</span>까지 
+                        포함한 종합적인 채용 의사결정 자료 완성.</p>
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <h3>🎓 교육 콘텐츠 - 학습 자료</h3>
+                    
+                    <div class="prompt-example" title="클릭하여 프롬프트 복사">
+                        <div class="prompt-label">📚 교육 자료 생성 프롬프트:</div>
+                        <div class="prompt-text">
+                            "중학생을 위한 '모멘텀 정리' 물리 개념 설명 자료를 만들어줘. 
+                            쉬운 예시와 함께 설명하고, 교육용 영상 스크립트, 
+                            시각 자료(도해), 그리고 이해도 확인 퀴즈까지 포함해줘."
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">🎯 교육 패키지 완성:</div>
+                        <p><span class="strong">개념 설명문, 교육용 영상 스크립트, 시각 자료, 평가 문제</span>까지 
+                        <span class="highlight">완전한 교육 커리큘럼</span> 자동 생성. 
+                        교육자는 검토·보완만 하면 되는 수준의 완성도.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ 혁신적 장점</h4>
+                <ul>
+                    <li>🎯 <span class="strong">완전 자율 실행</span> - 지시 없이도 스스로 업무 수행</li>
+                    <li>⚡ <span class="strong">압도적 속도</span> - 복잡한 업무를 시간 단위로 처리</li>
+                    <li>🔧 <span class="strong">29개 도구 통합</span> - 웹부터 코딩까지 원스톱 처리</li>
+                    <li>📊 <span class="strong">전문가급 결과물</span> - "분석가 팀 수준"의 품질</li>
+                    <li>🧠 <span class="strong">맥락 이해</span> - 모호한 요청도 정확히 파악</li>
+                    <li>🔄 <span class="strong">오류 자동 대응</span> - 문제 발생 시 스스로 해결책 모색</li>
+                    <li>🎨 <span class="strong">멀티모달 기능</span> - 텍스트부터 영상까지 다양한 형태</li>
+                    <li>☁️ <span class="strong">클라우드 기반</span> - 사용자 리소스 부담 없음</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 현재 한계점</h4>
+                <ul>
+                    <li>🐛 <span class="strong">간헐적 오류</span> - 복잡한 작업 시 무한루프 발생</li>
+                    <li>⏰ <span class="strong">처리 시간 지연</span> - 고난도 작업 시 10분 이상 소요</li>
+                    <li>🔍 <span class="strong">사실 확인 필요</span> - 출처 표기 불일치 문제</li>
+                    <li>🌐 <span class="strong">한국어 최적화 부족</span> - 영어 대비 정확도 차이</li>
+                    <li>💰 <span class="strong">높은 진입 장벽</span> - 폐쇄형 베타로 접근성 제한</li>
+                    <li>📝 <span class="strong">결과 검증 필요</span> - AI 생성 콘텐츠의 품질 관리</li>
+                    <li>🔒 <span class="strong">블랙박스 구조</span> - 내부 작동 원리 불투명</li>
+                    <li>⚖️ <span class="strong">안정성 이슈</span> - 베타 단계의 불완전성</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="conclusion pulse">
+            <h2>🚀 AI 에이전트 시대의 서막</h2>
+            <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.3);">
+                <p style="font-size: 1.4em; margin-bottom: 25px; font-weight: bold; color: #ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7);">
+                    <span style="background: rgba(255,255,255,0.25); padding: 10px 20px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.4);">
+                        🤖 <strong>Manus AI</strong>는 단순한 도구를 넘어 지식 노동과 콘텐츠 제작의 패러다임을 완전히 바꿀 혁신적 플랫폼입니다.
+                    </span>
+                </p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(15px); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.4);">
+                <p style="font-size: 1.3em; margin-bottom: 20px; font-weight: bold; color: #ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7);">
+                    💭 <span style="background: rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.5);">
+                        <strong>"생각만 하면 나머지는 Manus에 맡겨"</strong>
+                    </span>
+                    <br><br>
+                    👥 인간과 AI의 새로운 협업 시대가 현실이 되고 있습니다.
+                </p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.25); backdrop-filter: blur(20px); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.5);">
+                <p style="font-size: 1.2em; opacity: 1; font-weight: 600; color: #ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7);">
+                    🌟 아직 베타 단계의 한계는 있지만, <span style="background: rgba(255,237,78,0.8); color: #2c3e50; padding: 5px 10px; border-radius: 8px; font-weight: bold;">완전 자율형 AI 에이전트</span>의 
+                    가능성을 보여준 Manus는 곧 우리의 업무와 창작 방식을 
+                    <span style="background: rgba(255,237,78,0.9); color: #2c3e50; padding: 5px 10px; border-radius: 8px; font-weight: bold;">근본적으로 혁신</span>할 것입니다.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 고급 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+        
+        // 모든 애니메이션 요소에 초기 상태 설정
+        document.querySelectorAll('.card, .timeline-item, .use-case, .feature-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px) scale(0.95)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            observer.observe(el);
+        });
+        
+        // 숫자 카운팅 애니메이션 개선
+        function animateNumber(element, targetText) {
+            const duration = 2000;
+            const steps = 60;
+            const stepDuration = duration / steps;
+            let currentStep = 0;
+            
+            const interval = setInterval(() => {
+                currentStep++;
+                const progress = currentStep / steps;
+                const easedProgress = 1 - Math.pow(1 - progress, 3); // easeOut cubic
+                
+                if (currentStep >= steps) {
+                    element.textContent = targetText;
+                    clearInterval(interval);
+                } else {
+                    // 중간 애니메이션 효과
+                    element.style.transform = `scale(${1 + Math.sin(progress * Math.PI) * 0.1})`;
+                }
+            }, stepDuration);
+        }
+        
+        // 통계 숫자 애니메이션 시작
+        setTimeout(() => {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const targets = ['29+', '13만+', '1시간', '100만+', '1위', '1,300만원'];
+            
+            statNumbers.forEach((stat, index) => {
+                setTimeout(() => {
+                    animateNumber(stat, targets[index]);
+                }, index * 200);
+            });
+        }, 1500);
+        
+        // 호버 효과 강화
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.style.transform = 'scale(1.08) rotate(-2deg)';
+            });
+            
+            item.addEventListener('mouseleave', () => {
+                item.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+        
+        // 프롬프트 박스 클릭 시 복사 기능
+        document.querySelectorAll('.prompt-example').forEach(prompt => {
+            prompt.addEventListener('click', () => {
+                const text = prompt.querySelector('.prompt-text').textContent;
+                document.execCommand('copy'); // navigator.clipboard.writeText 대신 사용
+                
+                const originalBg = prompt.style.background;
+                prompt.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+                setTimeout(() => {
+                    prompt.style.background = originalBg;
+                }, 1000);
+            });
+            
+            // 툴팁 추가
+            prompt.title = '클릭하여 프롬프트 복사';
+            prompt.style.cursor = 'pointer';
+        });
+        
+        // 스크롤 진행 표시 (오류를 발생시키는 부분 제거)
+        // window.addEventListener('scroll', () => {
+        //     const scrollProgress = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+        //     document.querySelector('.timeline::before').style.background = 
+        //         `linear-gradient(to bottom, 
+        //             #667eea 0%, 
+        //             #764ba2 ${scrollProgress * 100}%, 
+        //             rgba(102, 126, 234, 0.3) ${scrollProgress * 100}%, 
+        //             rgba(102, 126, 234, 0.3) 100%)`;
+        // });
+    </script>
+</body>
+</html>

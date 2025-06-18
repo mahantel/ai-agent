@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스포츠 아웃도어 시장 판도 변화 분석</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /*
+         * 전반적인 스타일 설정
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI",Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+            color: #172b4d; /* Professional Blue Text */
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /*
+         * 헤더 섹션 스타일
+         */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            color: #0052cc; /* Professional Blue Primary */
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #0052cc, #4c9aff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titlePulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.03); }
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #42526e;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .header-description {
+            font-size: 1.1em;
+            color: #172b4d;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(120deg, #dfefff 0%, #f7f9fb 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /*
+         * 개요 카드 섹션 스타일
+         */
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0052cc, #4c9aff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .card h3 {
+            color: #0052cc;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #dfefff;
+            padding-bottom: 15px;
+        }
+        
+        /*
+         * 핵심 동인 분석 섹션 스타일
+         */
+        .features-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-item {
+            background: linear-gradient(135deg, #0052cc, #4c9aff);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 82, 204, 0.2);
+        }
+        
+        .feature-item:hover {
+            transform: scale(1.08);
+            box-shadow: 0 25px 50px rgba(0, 82, 204, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        /*
+         * 핵심 지표 섹션 스타일
+         */
+        .stats-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            position: relative;
+            padding: 20px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(0, 82, 204, 0.05), rgba(76, 154, 255, 0.05));
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(0, 82, 204, 0.1), rgba(76, 154, 255, 0.1));
+        }
+        
+        .stat-number {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #0052cc;
+            display: block;
+            animation: countUp 2s ease-out;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(50px) scale(0.5); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            color: #42526e;
+            font-weight: 600;
+        }
+        
+        /*
+         * 타임라인 섹션 스타일
+         */
+        .timeline-section {
+            margin: 60px 0;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, #0052cc, #8abfff);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(0, 82, 204, 0.3);
+        }
+        
+        .timeline-item {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, #0052cc, #4c9aff);
+            border-radius: 50%;
+            top: 40px;
+            box-shadow: 0 0 15px rgba(0, 82, 204, 0.4);
+            border: 3px solid white;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -65px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -65px;
+        }
+        
+        .timeline-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0052cc;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #091e42;
+            margin-bottom: 15px;
+        }
+        
+        /*
+         * 비즈니스 모델 분석 섹션 스타일
+         */
+        .use-cases-section {
+            margin: 60px 0;
+        }
+        
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .use-case {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            border-left: 8px solid #0052cc;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        
+        .use-case:hover {
+            border-left-width: 20px;
+            transform: translateX(15px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+        
+        .use-case h3 {
+            font-size: 1.8em;
+            color: #091e42;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .analysis-box {
+            background: linear-gradient(135deg, #0052cc, #4c9aff);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #8abfff;
+            font-family: 'Segoe UI', sans-serif;
+            position: relative;
+        }
+        
+        .analysis-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .analysis-text {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .result-box {
+            background: linear-gradient(120deg, #e0eafc 0%, #f7f9fb 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 2px solid rgba(0, 82, 204, 0.2);
+        }
+        
+        .result-label {
+            font-weight: bold;
+            color: #091e42;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /*
+         * 전망 섹션 스타일
+         */
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .pros {
+            background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.1));
+            border: 2px solid #3498db;
+        }
+        
+        .cons {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
+            border: 2px solid #e74c3c;
+        }
+        
+        .pros h4, .cons h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .pros h4 {
+            color: #2980b9;
+        }
+        
+        .cons h4 {
+            color: #c0392b;
+        }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pros li, .cons li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        
+        .pros li:last-child, .cons li:last-child {
+            border-bottom: none;
+        }
+        
+        /*
+         * 공통 강조 스타일
+         */
+        .strong {
+            font-weight: bold;
+            color: #0052cc;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #deebff 0%, #b3d4ff 100%);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0, 82, 204, 0.15);
+        }
+        
+        /*
+         * 결론 섹션 스타일
+         */
+        .conclusion {
+            background: linear-gradient(135deg, #0052cc, #4c9aff);
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 82, 204, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .conclusion::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .conclusion p {
+            position: relative;
+            z-index: 1;
+            font-size: 1.2em;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        /*
+         * 반응형 디자인
+         */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+            }
+            
+            .timeline-item:nth-child(even) {
+                margin-left: 80px !important;
+            }
+
+            .timeline-item::after {
+                left: -65px !important;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .use-cases {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #091e42;
+            background: linear-gradient(45deg, #0052cc, #4c9aff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🏃‍♂️ 스포츠 아웃도어 시장의 판도 변화</h1>
+            <p class="subtitle">⛰️ <span class="strong">등산의 시대에서 러닝의 시대로</span> - 데이터로 보는 시장의 재편</p>
+            <div class="header-description">
+                <p>국민 소득 3만불 시대와 라이프스타일의 변화는 스포츠 시장의 지형을 근본적으로 바꾸고 있습니다. 전통적인 아웃도어 브랜드가 정체하는 사이, 러닝과 애슬레저가 새로운 주류로 부상하며 시장을 재편하고 있습니다.</p>
+            </div>
+        </header>
+        
+        <div class="overview">
+            <div class="card">
+                <div class="card-icon">💰</div>
+                <h3>소득과 스포츠의 상관관계</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><strong>1만불 이하:</strong> 걷기, 탁구 등 저비용/고접근성 운동</li>
+                    <li><strong>1만불~:</strong> 수영, 테니스 등 <span class="strong">시설 기반 운동</span> 시작</li>
+                    <li><strong>2만불~:</strong> 골프, 익스트림 스포츠, 피트니스 등 <span class="highlight">본격적인 스포츠 활동</span></li>
+                    <li><strong>3만불 이상 (2015년~):</strong> 골프 대중화, <span class="strong">러닝, 사이클</span> 등 개인 맞춤형 운동 급부상</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">📉</div>
+                <h3>아웃도어 시장의 위기</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><strong>기후 변화:</strong> <span class="highlight">따뜻해진 겨울</span>로 고가 동계 의류 수요 감소</li>
+                    <li><strong>시장 정체:</strong> 2015년 이후 성장 멈춤, 코로나 특수 제외 시 하락세</li>
+                    <li><strong>트렌드 변화:</strong> <span class="strong">애슬레저 & 고프코어</span> 유행으로 소비자 이탈</li>
+                    <li><strong>세대 교체:</strong> 2030세대는 등산복을 '아재 패션'으로 인식, 기성세대와 다른 취향</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🚀</div>
+                <h3>러닝의 폭발적 부상</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><strong>글로벌 현상:</strong> 한국을 넘어 미국, 일본, 동남아까지 <span class="strong">전 세계적 트렌드</span></li>
+                    <li><strong>라이프스타일 부합:</strong> <span class="highlight">주 52시간 근무제</span> 이후 '퇴근 후 러닝' 조합 각광</li>
+                    <li><strong>진화하는 러닝:</strong> 단순 조깅을 넘어 트레일러닝, 울트라마라톤 등 <span class="strong">스포츠로 진화</span></li>
+                    <li><strong>검색량 증가:</strong> '아웃도어' 검색량은 감소하고 '러닝' 검색량은 급증</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <h2 class="section-title">📊 핵심 지표로 보는 시장 변화</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">20%</span>
+                    <div class="stat-label">05-15년 아웃도어 연평균 성장률</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2배↑</span>
+                    <div class="stat-label">15년간 30대 운동 참여율</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">-0.2℃</span>
+                    <div class="stat-label">평균 대비 최근 10년 겨울 온도</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">66%</span>
+                    <div class="stat-label">아웃도어 상위 4개사 점유율</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2배↑</span>
+                    <div class="stat-label">주요 러닝 브랜드 3년 매출 성장</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2030</span>
+                    <div class="stat-label">현재 마라톤 핵심 연령층</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2 class="section-title">⚙️ 시장 변화의 핵심 동인</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">⏳</div>
+                    <div class="feature-title">라이프스타일 변화</div>
+                    <div class="feature-description">
+                        <strong>주 52시간 근무제</strong> 도입 후 '퇴근 후' 개인 시간이 확보되면서, 짧고 강렬하게 즐길 수 있는 러닝 같은 활동이 인기를 얻고 있습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👕</div>
+                    <div class="feature-title">패션 트렌드 전환</div>
+                    <div class="feature-description">
+                        일상복과 운동복의 경계를 허문 <strong>'고프코어'와 '애슬레저'</strong>가 주류가 되면서, 전통적인 등산복의 입지가 좁아졌습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏞️</div>
+                    <div class="feature-title">신세대의 공간 변화</div>
+                    <div class="feature-description">
+                        젊은 세대는 산 대신 <strong>한강 공원, 도심 공원</strong> 등 접근성 좋은 야외 공간을 선호하며, 활동의 중심지가 도심으로 이동했습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">☀️</div>
+                    <div class="feature-title">기후 변화</div>
+                    <div class="feature-description">
+                        <strong>따뜻해진 겨울</strong>은 고가의 기능성 동계 의류에 대한 필요성을 감소시켜, 아웃도어 브랜드의 핵심 수익원에 직접적인 타격을 주었습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <div class="feature-title">글로벌 트렌드 동기화</div>
+                    <div class="feature-description">
+                        <strong>러닝 열풍</strong>은 더 이상 특정 국가의 현상이 아닙니다. 소셜 미디어를 통해 전 세계적으로 유행이 동기화되며 시장 성장을 가속화하고 있습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌉</div>
+                    <div class="feature-title">인프라 구축</div>
+                    <div class="feature-description">
+                        한강 공원처럼 잘 정비된 <strong>러닝 인프라</strong>는 운동에 대한 진입 장벽을 낮추고 더 많은 사람들의 참여를 유도하는 핵심 요인입니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-section">
+            <h2 style="font-size: 2.5em; text-align: center; margin-bottom: 40px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); background: linear-gradient(135deg, #0052cc, #4c9aff); padding: 20px; border-radius: 15px;">⏳ 10년간의 지각변동: 아웃도어 vs 러닝</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">~2015년</div>
+                    <div class="timeline-title">🏔️ 아웃도어 황금기</div>
+                    <p>국민소득 3만불 진입과 함께 아웃도어 시장이 <span class="strong">연 20% 이상 폭발적으로 성장</span>하며 전성기를 누렸습니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2015년</div>
+                    <div class="timeline-title">🏢 주 52시간 근무제 도입</div>
+                    <p>'워라밸' 문화가 확산되며 <span class="highlight">'퇴근 후'</span> 개인의 취미 활동에 대한 관심이 급증하는 전환점이 되었습니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2016년~</div>
+                    <div class="timeline-title">📉 아웃도어 시장 정체</div>
+                    <p>성장세가 꺾이며 시장이 정체기에 진입. <span class="strong">따뜻한 겨울과 트렌드 변화</span>가 맞물리며 하락세가 시작되었습니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2018-2021년</div>
+                    <div class="timeline-title">🧘 애슬레저 룩의 부상</div>
+                    <p><span class="strong">룰루레몬, 안다르, 젝시믹스</span> 등 애슬레저 브랜드가 시장을 장악하며, 새로운 시장의 등장을 알렸습니다.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">최근</div>
+                    <div class="timeline-title">🏃‍♂️ 러닝과 고프코어의 시대</div>
+                    <p><span class="highlight">아식스, 호카</span> 등 러닝 전문 브랜드와 <span class="highlight">아크테릭스</span> 같은 고프코어 브랜드가 시장의 새로운 주도권을 잡았습니다.</p>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-date">현재</div>
+                    <div class="timeline-title">🔄 시장 재편 가속화</div>
+                    <p>아웃도어 시장은 소수 브랜드 중심의 <span class="strong">독과점적 재편 단계</span>에 진입했으며, 러닝 시장은 지속적인 성장세를 보이고 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="use-cases-section">
+            <h2 style="font-size: 2.5em; text-align: center; margin-bottom: 40px; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); background: linear-gradient(135deg, #0052cc, #4c9aff); padding: 20px; border-radius: 15px;">🏭 브랜드별 명암: 비즈니스 모델 분석</h2>
+            
+            <div class="use-cases">
+                <div class="use-case">
+                    <h3>⛰️ 고비용 구조의 전통 아웃도어</h3>
+                    <div class="analysis-box">
+                        <div class="analysis-label">📝 분석 대상:</div>
+                        <div class="analysis-text">블랙야크, 몽벨 등 전통 아웃도어 브랜드</div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">🎯 분석 결과:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>높은 GPM:</strong> 매출 총이익률은 50%대로 준수.</li>
+                            <li><strong>과도한 판관비:</strong> <span class="strong">매출의 30%</span>에 달하는 판매수수료(유통 채널 비용)가 이익을 잠식.</li>
+                            <li><strong>낮은 영업이익률:</strong> 높은 비용 구조로 인해 영업이익률은 8%대에 머묾.</li>
+                            <li><strong>결론:</strong> <span class="highlight">자생적 판매 채널 부재</span>로 시장 축소 시 생존 위협. 구조적 개선이 시급.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <h3>🏃‍♂️ 성장 방정식의 러닝 브랜드</h3>
+                     <div class="analysis-box">
+                        <div class="analysis-label">📝 분석 대상:</div>
+                        <div class="analysis-text">아식스, 온러닝, 호카 등 러닝 전문 브랜드</div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <div class="result-label">📈 분석 결과:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                           <li><strong>퍼포먼스 집중:</strong> 핵심인 <span class="strong">'퍼포먼스 러닝화'</span> 매출이 2배 이상 급증하며 성장 견인.</li>
+                            <li><strong>브랜드 파워:</strong> 패션 트렌드와 맞물려 강력한 브랜드 충성도 구축. 일부 제품은 리셀 시장 형성.</li>
+                            <li><strong>성공적 M&A:</strong> 데커스는 <span class="highlight">15억에 인수한 호카</span>를 수조원 가치의 브랜드로 성장시킴.</li>
+                            <li><strong>결론:</strong> 명확한 정체성과 시장 트렌드에 부합하며 <span class="strong">높은 성장률과 이익률</span> 달성.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ 미래 전망: 기회</h4>
+                <ul>
+                    <li><strong>러닝 시장 지속:</strong> 건강과 개인 성취를 중시하는 트렌드에 힘입어 당분간 성장세 유지 가능성 높음.</li>
+                    <li><strong>아웃도어 시장 재편:</strong> 경쟁에서 살아남는 브랜드는 <span class="strong">독과점적 지위</span>를 통해 안정적 수익 확보 가능.</li>
+                    <li><strong>고프코어 확장성:</strong> 기능성 의류가 패션으로 확장되면서 새로운 시장 기회 창출.</li>
+                    <li><strong>유통 혁신:</strong> 아크테릭스 등 해외 브랜드의 <span class="highlight">직접 진출</span>이 시장에 새로운 활력을 불어넣을 수 있음.</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 미래 전망: 위기</h4>
+                <ul>
+                    <li><strong>전통 아웃도어의 한계:</strong> 고비용, 고연령층 이미지 등 <span class="strong">구조적 문제 해결</span> 없이는 쇠퇴 가속화.</li>
+                    <li><strong>경쟁 심화:</strong> 러닝 시장이 커지면서 수많은 브랜드가 진입해 <span class="highlight">경쟁이 치열</span>해질 것.</li>
+                    <li><strong>트렌드의 변동성:</strong> 현재의 러닝/고프코어 유행 역시 언젠가는 새로운 트렌드에 자리를 내줄 수 있음.</li>
+                    <li><strong>온라인 대응:</strong> 무신사와 같은 온라인 커머스 플랫폼에 대한 <span class="strong">대응이 늦은 브랜드</span>는 도태될 위험.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <h2>🔄 시장의 패러다임은 전환되었다</h2>
+            <p>
+                스포츠 아웃도어 시장은 근본적인 패러다임 전환을 맞이했습니다. 전통적인 아웃도어 브랜드들은 생존을 위한 구조적 혁신이 필요한 통합의 시대에 직면했으며, 새로운 라이프스타일과 세대의 가치에 부합하는 러닝 및 애슬레저 브랜드들은 폭발적인 성장의 기회를 맞이했습니다. 이제 성공의 열쇠는 단순한 '기능'이 아닌, 시대의 '흐름'을 읽는 것입니다.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 50);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.card, .timeline-item, .use-case, .feature-item, .stat-item, .pros, .cons').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px) scale(0.98)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

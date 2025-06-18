@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>M365 활용 극대화 및 협업 문화 혁신 인포그래픽</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Noto Sans KR', sans-serif;
+background-color: #f0f4f8;
+}
+.bg-primary { background-color: #00449E; }
+.bg-secondary { background-color: #005CB9; }
+.bg-accent { background-color: #0072CE; }
+.text-primary { color: #00449E; }
+.text-light { color: #6AAFE1; }
+.border-accent { border-color: #0072CE; }
+.chart-container {
+position: relative;
+margin: auto;
+height: 350px;
+width: 100%;
+max-width: 800px;
+}
+@media (max-width: 768px) {
+.chart-container {
+height: 300px;
+}
+}
+.timeline {
+position: relative;
+padding: 2rem 0;
+}
+.timeline::before {
+content: '';
+position: absolute;
+top: 0;
+left: 50%;
+transform: translateX(-50%);
+width: 3px;
+height: 100%;
+background-color: #3E92D5;
+}
+.timeline-item {
+position: relative;
+width: 50%;
+padding: 1rem 2rem;
+}
+.timeline-item:nth-child(odd) {
+left: 0;
+padding-right: 4rem;
+text-align: right;
+}
+.timeline-item:nth-child(even) {
+left: 50%;
+padding-left: 4rem;
+text-align: left;
+}
+.timeline-dot {
+content: '';
+position: absolute;
+top: 50%;
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background-color: white;
+border: 4px solid #005CB9;
+z-index: 10;
+transform: translateY(-50%);
+}
+.timeline-item:nth-child(odd) .timeline-dot {
+right: -10px;
+}
+.timeline-item:nth-child(even) .timeline-dot {
+left: -10px;
+}
+</style>
+</head>
+<body class="text-gray-800">
+
+<div class="container mx-auto p-4 md:p-8">
+
+    <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-primary mb-2">M365 활용 극대화 및 협업 문화 혁신</h1>
+        <p class="text-lg md:text-xl text-gray-600">디지털 역량 강화 프로그램을 통한 전사적 디지털 전환 여정</p>
+    </header>
+
+    <section id="challenge" class="mb-16">
+        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <h2 class="text-3xl font-bold text-primary mb-4 text-center">🎯 우리의 도전과 목표</h2>
+            <p class="text-center text-gray-700 max-w-3xl mx-auto mb-8">
+                현재 우리 회사는 M365를 도입했지만, 많은 임직원들이 일부 기능만 제한적으로 사용하고 있습니다. Teams, SharePoint, Power Platform과 같은 강력한 도구들의 잠재력을 최대로 끌어내지 못하고 있으며, 이는 협업의 비효율과 생산성 정체로 이어질 수 있습니다. 우리의 목표는 M365를 단순한 도구가 아닌, 조직의 핵심 경쟁력으로 전환하여 모든 임직원이 디지털 환경에서 더 스마트하게 일하고 긴밀하게 협력하는 문화를 만드는 것입니다.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-secondary mb-4">현재 활용도 vs 목표</h3>
+                    <p class="text-gray-600 mb-4">현재 M365의 핵심 기능 활용도는 잠재력의 30% 수준에 머물러 있습니다. 1년 내에 전 직원의 70% 이상이 자발적으로 참여하고 주요 기능을 능숙하게 활용하는 것을 목표로 합니다.</p>
+                    <div class="font-bold text-xl mt-4">
+                        <span class="text-red-500">현재 활용도: 30%</span> → <span class="text-green-500">목표 활용도: 70%</span>
+                    </div>
+                </div>
+                <div class="chart-container h-64 md:h-80 mx-auto">
+                    <canvas id="utilizationChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="foundation" class="mb-16">
+        <h2 class="text-3xl font-bold text-primary mb-6 text-center">🏛️ 혁신을 위한 기반 전략: Power Platform CoE</h2>
+         <p class="text-center text-gray-700 max-w-3xl mx-auto mb-8">
+            M365 혁신은 강력한 거버넌스와 지원 체계 위에서만 꽃피울 수 있습니다. 특히 시민 개발의 확산을 체계적으로 지원하고 관리하기 위해 Power Platform CoE(전문가 조직)를 구축하는 것이 필수적입니다. CoE는 기술 통제를 넘어, 직원들의 창의적인 아이디어가 안전하고 효과적으로 구현되도록 돕는 혁신의 심장부 역할을 수행합니다.
+        </p>
+        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <div class="space-y-6">
+                <div class="text-center">
+                    <div class="inline-block bg-primary text-white rounded-lg p-4 shadow-md">
+                        <h3 class="font-bold text-xl">CoE 리더 / 제품 책임자</h3>
+                        <p class="text-sm">전략 방향 및 거버넌스 총괄</p>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                     <div class="w-1 bg-accent h-12"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                    <div class="bg-blue-50 p-4 rounded-lg border-2 border-dashed border-accent">
+                        <h4 class="font-bold text-lg text-secondary">거버넌스 리드</h4>
+                        <p class="text-sm text-gray-600">DLP 정책, 환경 전략, 보안 표준 수립</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border-2 border-dashed border-accent">
+                        <h4 class="font-bold text-lg text-secondary">육성/커뮤니티 리드</h4>
+                        <p class="text-sm text-gray-600">시민 개발자 커뮤니티 육성, 교육 및 멘토링</p>
+                    </div>
+                     <div class="bg-blue-50 p-4 rounded-lg border-2 border-dashed border-accent">
+                        <h4 class="font-bold text-lg text-secondary">기술 지원 전문가</h4>
+                        <p class="text-sm text-gray-600">기술 문의 지원, 문제 해결, 고급 자문</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="initiatives" class="mb-16">
+        <h2 class="text-3xl font-bold text-primary mb-4 text-center">💡 12가지 핵심 실행 아이디어</h2>
+        <p class="text-center text-gray-700 max-w-3xl mx-auto mb-8">
+            M365 활용도 극대화를 위해 12가지 전략적 실행 아이디어를 제안합니다. 각 아이디어는 예상 난이도와 기대 효과를 기준으로 평가되어, 조직의 상황에 맞는 우선순위 설정이 가능합니다. 특히 '빠른 성공(Quick Wins)' 영역의 아이디어들은 적은 노력으로 높은 효과를 기대할 수 있는 최우선 과제입니다.
+        </p>
+        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <div class="chart-container h-[450px]">
+                <canvas id="initiativesBubbleChart"></canvas>
+            </div>
+        </div>
+    </section>
+    
+    <section id="spotlight" class="mb-16">
+        <h2 class="text-3xl font-bold text-primary mb-6 text-center">✨ 주요 아이디어 스포트라이트</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col">
+                <h3 class="text-2xl font-bold text-secondary mb-3">🚀 M365 마스터즈 퀘스트</h3>
+                <p class="text-gray-600 mb-4 flex-grow">M365 학습 과정을 게임처럼 구성하여 자발적 참여를 유도합니다. 포인트, 배지, 리더보드를 통해 학습 동기를 부여하고 조직 내 선의의 경쟁과 학습 문화를 조성합니다.</p>
+                <div class="text-center mt-auto">
+                    <p class="text-lg font-semibold text-accent">목표 참여율</p>
+                    <p class="text-5xl font-extrabold text-primary">70%</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col">
+                <h3 class="text-2xl font-bold text-secondary mb-3">🏆 Power Automate 경진대회</h3>
+                <p class="text-gray-600 mb-4 flex-grow">개인과 팀의 반복적인 수작업 업무를 Power Automate로 자동화하는 경진대회입니다. 시민 개발자를 발굴하고, 실제 업무 개선을 통해 전사적 효율성을 높입니다.</p>
+                 <div class="text-center mt-auto">
+                    <p class="text-lg font-semibold text-accent">연간 목표 절감 시간</p>
+                    <p class="text-5xl font-extrabold text-primary">5,000<span class="text-2xl align-baseline ml-1">시간</span></p>
+                </div>
+            </div>
+             <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col">
+                <h3 class="text-2xl font-bold text-secondary mb-3">🤝 디지털 챔피언 아카데미</h3>
+                <p class="text-gray-600 mb-4 flex-grow">각 부서의 M365 전문가 '챔피언'을 육성하여 현업 중심의 지원 체계를 구축합니다. 챔피언들은 동료들의 M365 활용을 돕고, 성공 사례를 발굴하여 전파하는 역할을 합니다.</p>
+                 <div class="text-center mt-auto">
+                    <p class="text-lg font-semibold text-accent">헬프데스크 문의 감소 목표</p>
+                    <p class="text-5xl font-extrabold text-primary">15%</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="kpis" class="mb-16">
+        <h2 class="text-3xl font-bold text-primary mb-6 text-center">📈 기대 효과 및 핵심 성공 지표(KPI)</h2>
+        <p class="text-center text-gray-700 max-w-3xl mx-auto mb-8">
+            제안된 아이디어들의 성공적인 실행을 통해 우리는 가시적인 성과를 기대할 수 있습니다. 업무 효율성 향상, M365 활용도 증가, 비용 절감 등 핵심 지표들을 통해 프로그램의 효과를 정량적으로 측정하고 지속적으로 개선해 나갈 것입니다.
+        </p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                <h3 class="text-2xl font-bold text-secondary mb-4 text-center">주요 영역별 성과 목표</h3>
+                <div class="chart-container">
+                    <canvas id="kpiBarChart"></canvas>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+                 <h3 class="text-2xl font-bold text-secondary mb-4 text-center">M365 활성 사용자(MAU) 성장 예측</h3>
+                <div class="chart-container">
+                    <canvas id="mauLineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="mb-16">
+        <h2 class="text-3xl font-bold text-primary mb-8 text-center">🗓️ 1년간의 실행 로드맵</h2>
+        <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-accent">
+                        <h3 class="font-bold text-lg text-secondary">2025년 3분기 (준비 및 도입)</h3>
+                        <p class="text-sm text-gray-600 mt-2">
+                            • M365 마스터즈 퀘스트 1단계<br>
+                            • 디지털 챔피언 1기 선발<br>
+                            • Power Automate 경진대회 기획<br>
+                            • Copilot 패스파인더 프로그램 시작
+                        </p>
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                     <div class="bg-blue-50 p-4 rounded-lg border-r-4 border-accent">
+                        <h3 class="font-bold text-lg text-secondary">2025년 4분기 (확산 및 참여)</h3>
+                         <p class="text-sm text-gray-600 mt-2">
+                            • 마스터즈 퀘스트 중급 콘텐츠 확장<br>
+                            • 챔피언 1기 심화 교육 및 활동 개시<br>
+                            • 업무 자동화 아이디어 공모<br>
+                            • 부서별 효율화 챌린지 기획
+                        </p>
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                     <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-accent">
+                        <h3 class="font-bold text-lg text-secondary">2026년 1분기 (심화 및 정착)</h3>
+                         <p class="text-sm text-gray-600 mt-2">
+                            • 제1회 솔루션 쇼케이스 개최<br>
+                            • Power Automate 플로우 개발 지원<br>
+                            • 퀵윈 영상 시리즈 캠페인 활성화<br>
+                            • M365 헬스 체크 클리닉 운영
+                        </p>
+                    </div>
+                </div>
+                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                     <div class="bg-blue-50 p-4 rounded-lg border-r-4 border-accent">
+                        <h3 class="font-bold text-lg text-secondary">2026년 2분기 (성과 및 고도화)</h3>
+                         <p class="text-sm text-gray-600 mt-2">
+                            • 마스터즈 퀘스트 그랜드 챌린지<br>
+                            • 자동화 경진대회 우수작 시상<br>
+                            • Copilot 활용 가이드북 배포<br>
+                            • 로드맵 성과 분석 및 차기 계획 수립
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="text-center pt-8">
+        <h2 class="text-3xl font-bold text-primary mb-4">함께 만드는 디지털 혁신, 스마트한 미래</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">
+            이 여정은 IT 부서만의 과제가 아닌, 우리 모두의 것입니다. 적극적인 참여와 창의적인 아이디어를 통해 M365의 잠재력을 함께 깨우고, 더 나은 협업 문화를 만들어 나갑시다.
+        </p>
+    </footer>
+
+</div>
+
+<script>
+    const brilliantBlues = ['#00449E', '#005CB9', '#0072CE', '#3E92D5', '#6AAFE1'];
+    const brilliantBluesTransparent = ['rgba(0, 68, 158, 0.7)', 'rgba(0, 92, 185, 0.7)', 'rgba(0, 114, 206, 0.7)', 'rgba(62, 146, 213, 0.7)', 'rgba(106, 175, 225, 0.7)'];
+    
+    function processLabels(labels) {
+        return labels.map(label => {
+            if (label.length > 16) {
+                const words = label.split(' ');
+                let currentLine = '';
+                const lines = [];
+                words.forEach(word => {
+                    if ((currentLine + ' ' + word).trim().length > 16 && currentLine.length > 0) {
+                        lines.push(currentLine);
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                });
+                lines.push(currentLine);
+                return lines;
+            }
+            return label;
+        });
+    }
+    
+    const tooltipTitleCallback = {
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        return Array.isArray(label) ? label.join(' ') : label;
+                    }
+                }
+            }
+        }
+    };
+
+    const utilizationChartCtx = document.getElementById('utilizationChart').getContext('2d');
+    new Chart(utilizationChartCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['목표 활용도 달성', '현재 활용도', '미활용 잠재력'],
+            datasets: [{
+                data: [30, 40, 30],
+                backgroundColor: [brilliantBlues[1], brilliantBlues[3], '#e5e7eb'],
+                borderColor: '#ffffff',
+                borderWidth: 4,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: tooltipTitleCallback.plugins.tooltip
+            }
+        }
+    });
+
+    const initiativesData = [
+        { id: 1, name: 'M365 마스터즈 퀘스트', difficulty: 2, impact: 4, budget: 2500 },
+        { id: 2, name: '디지털 챔피언 아카데미', difficulty: 3, impact: 5, budget: 4000 },
+        { id: 3, name: 'Power Automate 경진대회', difficulty: 2, impact: 5, budget: 2000 },
+        { id: 4, name: 'SharePoint 솔루션 쇼케이스', difficulty: 4, impact: 4, budget: 2500 },
+        { id: 5, name: 'Copilot 패스파인더 프로그램', difficulty: 4, impact: 5, budget: 4000 },
+        { id: 6, name: '미션 M365 챌린지', difficulty: 4, impact: 4, budget: 3250 },
+        { id: 7, name: '템플릿 트로브 & 가이드 허브', difficulty: 2, impact: 3, budget: 750 },
+        { id: 8, name: '부서 간 솔버톤', difficulty: 4, impact: 4, budget: 2000 },
+        { id: 9, name: "M365 '퀵윈' 시리즈", difficulty: 1, impact: 3, budget: 400 },
+        { id: 10, name: 'M365 헬스 체크 클리닉', difficulty: 3, impact: 3, budget: 750 },
+        { id: 11, name: '개인 생산성 부스트 캠페인', difficulty: 1, impact: 2, budget: 650 },
+        { id: 12, name: 'M365 이노베이션 허브', difficulty: 4, impact: 5, budget: 2750 }
+    ];
+
+    const initiativesBubbleChartCtx = document.getElementById('initiativesBubbleChart').getContext('2d');
+    new Chart(initiativesBubbleChartCtx, {
+        type: 'bubble',
+        data: {
+            datasets: [{
+                label: '핵심 실행 아이디어',
+                data: initiativesData.map(d => ({
+                    x: d.difficulty,
+                    y: d.impact,
+                    r: Math.sqrt(d.budget) / 3,
+                    name: d.name
+                })),
+                backgroundColor: brilliantBluesTransparent[2],
+                borderColor: brilliantBlues[1],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    title: { display: true, text: '예상 난이도 (낮음 → 높음)', font: { size: 14 } },
+                    min: 0, max: 5,
+                    ticks: { stepSize: 1 }
+                },
+                y: {
+                    title: { display: true, text: '기대 효과 (낮음 → 높음)', font: { size: 14 } },
+                    min: 0, max: 6,
+                    ticks: { stepSize: 1 }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const dataPoint = context.dataset.data[context.dataIndex];
+                            return `${dataPoint.name}: 난이도 ${dataPoint.x}, 효과 ${dataPoint.y}`;
+                        }
+                    }
+                },
+                legend: { display: false },
+                annotation: { // Note: Chart.js annotation plugin might be needed if not included in the Chart.js CDN bundle
+                    annotations: {
+                        box1: {
+                            type: 'box',
+                            xMin: 0.5, xMax: 2.5,
+                            yMin: 2.5, yMax: 5.5,
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1,
+                        },
+                         label1: {
+                            type: 'label',
+                            xValue: 1.5,
+                            yValue: 5,
+                            content: ['빠른 성공', '(Quick Wins)'],
+                            font: { size: 16, weight: 'bold' },
+                            color: 'rgba(75, 192, 192, 1)'
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const kpiBarChartCtx = document.getElementById('kpiBarChart').getContext('2d');
+    new Chart(kpiBarChartCtx, {
+        type: 'bar',
+        data: {
+            labels: processLabels(['업무 효율성 증대', 'M365 활용 역량 강화', 'IT 지원 비용 감소', '직원 참여율']),
+            datasets: [{
+                label: '목표 달성률 (%)',
+                data: [20, 30, 15, 40],
+                backgroundColor: [brilliantBlues[0], brilliantBlues[1], brilliantBlues[2], brilliantBlues[3]],
+                borderColor: [brilliantBlues[0], brilliantBlues[1], brilliantBlues[2], brilliantBlues[3]],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: tooltipTitleCallback.plugins.tooltip
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    max: 50,
+                    title: { display: true, text: '개선 목표치 (%)' }
+                }
+            }
+        }
+    });
+
+    const mauLineChartCtx = document.getElementById('mauLineChart').getContext('2d');
+    new Chart(mauLineChartCtx, {
+        type: 'line',
+        data: {
+            labels: ['현재', '2025-Q3', '2025-Q4', '2026-Q1', '2026-Q2'],
+            datasets: [{
+                label: 'M365 월간 활성 사용자 수 (MAU)',
+                data: [350, 450, 580, 720, 850],
+                fill: true,
+                backgroundColor: brilliantBluesTransparent[3],
+                borderColor: brilliantBlues[2],
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: { display: true, text: '사용자 수' }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 여론 조작 심층 분석 인포그래픽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .flowchart-line {
+            position: absolute;
+            background-color: #FBB03B;
+            z-index: -1;
+        }
+        .flowchart-line-h {
+            height: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .flowchart-line-v {
+            width: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <header class="bg-gray-800 text-white text-center py-12 px-4">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-2">AI 여론 조작: 보이지 않는 위협</h1>
+        <p class="text-lg text-gray-300 max-w-3xl mx-auto">2025년 6월 기준, 생성형 AI 기술은 민주주의의 근간을 흔드는 정교한 여론 조작 도구로 부상했습니다.</p>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+        <section id="introduction" class="mb-16">
+            <div class="bg-white rounded-lg shadow-xl p-8 text-center">
+                <p class="text-2xl font-bold text-red-500 mb-4">"진실과 거짓의 경계가 무너지다"</p>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                    <div class="text-blue-500">
+                        <p class="text-7xl font-black">68%</p>
+                        <p class="text-xl font-semibold">전문가도 구별하기 힘든 딥페이크 비율</p>
+                        <p class="text-sm text-gray-500">(2025년 2월 보고서 기준)</p>
+                    </div>
+                    <div class="max-w-2xl text-left text-lg text-gray-700 leading-relaxed">
+                        <p>소셜 미디어와 생성형 AI의 결합은 여론 조작의 패러다임을 바꾸고 있습니다. 과거 국가 수준의 행위자만이 가능했던 정교한 정보 작전이 이제는 소규모 집단이나 개인에 의해서도 자행될 수 있게 되었습니다. 본 인포그래픽은 AI 여론 조작의 핵심 기술, 실제 사례, 사회·정치·경제적 파급 효과, 그리고 우리가 나아가야 할 대응 전략을 심층적으로 시각화하여 보여줍니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technology" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">여론을 조작하는 AI의 기술적 무기고</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-center mb-4 text-blue-500">✍️</div>
+                    <h3 class="text-xl font-bold mb-2 text-center">자연어 처리 (NLP)</h3>
+                    <p class="text-gray-600">인간과 유사한 가짜 뉴스 기사, 선동적인 소셜 미디어 게시물, 조작된 댓글을 대량으로 신속하게 생성합니다. 다국어 캠페인과 특정 집단을 겨냥한 맞춤형 메시지 제작에 활용됩니다.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-center mb-4 text-red-500">🎭</div>
+                    <h3 class="text-xl font-bold mb-2 text-center">딥페이크 기술</h3>
+                    <p class="text-gray-600">매우 현실적인 가짜 영상, 이미지, 음성을 만들어 특정 인물이 하지 않은 말이나 행동을 한 것처럼 조작합니다. 명예훼손, 허위 정보 유포에 강력한 영향을 미칩니다.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-center mb-4 text-green-500">🤖</div>
+                    <h3 class="text-xl font-bold mb-2 text-center">소셜 봇 & 봇넷</h3>
+                    <p class="text-gray-600">자동화된 소셜 미디어 계정 네트워크를 통해 특정 메시지를 신속하고 광범위하게 확산시키고, '좋아요'나 댓글을 조작하여 인위적인 여론을 형성합니다.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-center mb-4 text-yellow-500">🎯</div>
+                    <h3 class="text-xl font-bold mb-2 text-center">마이크로타겟팅</h3>
+                    <p class="text-gray-600">개인의 온라인 활동과 심리적 특성을 분석하여 특정 감정이나 가치관에 호소하는 고도로 개인화된 설득 메시지를 전달함으로써 선전의 효과를 극대화합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="arms-race" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-2">끝나지 않는 창과 방패의 경쟁</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-3xl mx-auto">AI 조작 콘텐츠 생성 기술은 탐지 기술의 발전 속도를 현저히 앞지르고 있으며, 기존 탐지 모델은 실제 환경에서 급격한 성능 저하를 보입니다.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-center mb-4">AI 기술 발전 속도 비교 (2020-2025)</h3>
+                    <div class="chart-container">
+                        <canvas id="armsRaceChart"></canvas>
+                    </div>
+                     <p class="text-sm text-gray-600 mt-4 text-center">생성 기술의 발전 곡선이 탐지 기술을 크게 상회하며 기술적 비대칭성이 심화되고 있음을 보여줍니다.</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-center mb-4">딥페이크 탐지 모델 성능 저하</h3>
+                    <div class="chart-container">
+                        <canvas id="detectorPerformanceChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4 text-center">최신 딥페이크에 대한 기존 탐지 모델의 정확도(AUC)가 비디오, 오디오, 이미지 전반에서 급격히 하락했습니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="cases" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">AI 조작의 실제: 글로벌 및 국내 사례</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">주요 글로벌 선거 개입 타임라인</h3>
+                    <div class="relative pl-8">
+                        <div class="absolute left-4 top-0 bottom-0 w-1 bg-gray-200"></div>
+                        <div class="relative mb-8">
+                            <div class="absolute left-[-2rem] top-1 w-8 h-8 bg-blue-500 rounded-full text-white flex items-center justify-center font-bold">🇺🇸</div>
+                            <p class="font-bold">2024년 미국 대선</p>
+                            <p class="text-sm text-gray-600">바이든, 트럼프 등 주요 후보 대상 딥페이크 비방 영상/음성 유포. 러시아, 중국 연계 봇넷이 허위 정보 확산.</p>
+                        </div>
+                        <div class="relative mb-8">
+                            <div class="absolute left-[-2rem] top-1 w-8 h-8 bg-red-500 rounded-full text-white flex items-center justify-center font-bold">🇬🇧</div>
+                            <p class="font-bold">2024년 영국 총선</p>
+                            <p class="text-sm text-gray-600">키어 스타머 노동당 대표 관련 딥페이크 및 여성 정치인 대상 딥페이크 음란물 유포로 선거 혼탁.</p>
+                        </div>
+                        <div class="relative mb-8">
+                             <div class="absolute left-[-2rem] top-1 w-8 h-8 bg-green-500 rounded-full text-white flex items-center justify-center font-bold">🇮🇳</div>
+                             <p class="font-bold">2024년 인도 총선</p>
+                            <p class="text-sm text-gray-600">유명 배우의 가짜 후보 지지 영상, 모디 총리 비방 딥페이크 등 AI가 선거 캠페인에 광범위하게 사용.</p>
+                        </div>
+                         <div class="relative">
+                             <div class="absolute left-[-2rem] top-1 w-8 h-8 bg-yellow-500 rounded-full text-white flex items-center justify-center font-bold">🇸🇰</div>
+                             <p class="font-bold">2023년 슬로바키아 대선</p>
+                            <p class="text-sm text-gray-600">선거 직전 유력 후보의 조작된 녹취록이 유포되어 선거 결과에 영향을 미쳤을 가능성 제기.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4 text-center">대한민국 현황</h3>
+                    <div class="chart-container h-64 md:h-72">
+                        <canvas id="koreaCrimeChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2 text-center">인천 지역 딥페이크 성범죄 가해자 연령 분석 (2024)</p>
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <h4 class="font-semibold mb-2">주요 사건:</h4>
+                        <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                            <li><strong>2025 대선:</strong> 이재명 후보 '치킨 먹방' 딥페이크, 윤석열 전 대통령 '탄핵' 관련 딥페이크 등 유포.</li>
+                            <li><strong>'리박스쿨' 댓글 조작:</strong> 보수 단체의 조직적 댓글 조작팀 운영 의혹, 경찰 수사 착수.</li>
+                            <li><strong>딥페이크 성범죄 급증:</strong> 10대 청소년들이 제작/유포의 주범으로 부상하며 심각한 사회 문제화.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="mb-16">
+            <h2 class="text-3xl font-bold text-center mb-8">파급 효과: 사회, 정치, 경제를 흔들다</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="text-5xl mb-4">👥</div>
+                    <h3 class="text-2xl font-bold mb-3">사회적 영향</h3>
+                    <ul class="text-left list-disc list-inside text-gray-600 space-y-2">
+                        <li>여론 양극화 심화</li>
+                        <li>언론·정부에 대한 불신 팽배</li>
+                        <li>특정 집단 혐오 및 차별 확산</li>
+                        <li>공론장 왜곡 및 시민 참여 위축</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="text-5xl mb-4">🏛️</div>
+                    <h3 class="text-2xl font-bold mb-3">정치적 영향</h3>
+                     <ul class="text-left list-disc list-inside text-gray-600 space-y-2">
+                        <li>선거 공정성 및 결과 불신</li>
+                        <li>민주적 의사결정 과정 훼손</li>
+                        <li>외세 개입 등 국가 안보 위협</li>
+                        <li>국제 관계 긴장 고조</li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="text-5xl mb-4">💹</div>
+                    <h3 class="text-2xl font-bold mb-3">경제적 영향</h3>
+                     <ul class="text-left list-disc list-inside text-gray-600 space-y-2">
+                        <li>기업 평판 및 주가 하락</li>
+                        <li>소비자 신뢰도 저하</li>
+                        <li>금융 시장 안정성 저해</li>
+                        <li>'가짜뉴스 산업' 형성</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="strategy">
+            <h2 class="text-3xl font-bold text-center mb-8">대응 전략: 다층적 방어 체계 구축</h2>
+            <p class="text-center text-gray-600 mb-10 max-w-3xl mx-auto">AI 여론 조작의 복잡한 위협에 맞서기 위해서는 기술, 법, 교육, 국제 협력이 유기적으로 결합된 포괄적인 접근이 필수적입니다.</p>
+            <div class="relative max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-blue-500">
+                        <h3 class="text-xl font-bold mb-2">⚙️ 기술적 대응</h3>
+                        <p class="text-gray-600">AI 탐지 모델 고도화, 디지털 워터마킹 표준화, 콘텐츠 출처 추적 기술(C2PA) 도입, '방어적 AI' 연구 개발 지원.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-red-500">
+                        <h3 class="text-xl font-bold mb-2">⚖️ 법·제도적 대응</h3>
+                        <p class="text-gray-600">AI 기본법 등 관련 법제 정비, AI 생성물 표시 의무화, 플랫폼 기업 책임 강화, 표현의 자유와 균형을 맞춘 규제 설계.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-green-500">
+                        <h3 class="text-xl font-bold mb-2">🎓 교육적 대응</h3>
+                        <p class="text-gray-600">정규 교육과정 내 미디어 리터러시 교육 확대, 생애주기별 맞춤형 교육 프로그램 개발, 비판적 사고 능력 함양 캠페인.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-lg p-6 border-l-4 border-yellow-500">
+                        <h3 class="text-xl font-bold mb-2">🌐 국제 공조 및 플랫폼 협력</h3>
+                        <p class="text-gray-600">국가 간 정보 공유 및 공동 대응 체계 구축, 글로벌 표준 개발, 알고리즘 투명성 확보, 연구자 데이터 접근성 확대.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <h2 class="text-2xl font-bold mb-4">결론: 책임감 있는 AI와 회복력 있는 정보 생태계를 향하여</h2>
+            <p class="max-w-4xl mx-auto text-gray-300">
+                AI 여론 조작은 더 이상 먼 미래의 위협이 아닙니다. 기술적 방어, 합리적 규제, 시민 교육, 국제적 협력이 조화를 이룰 때, 우리는 비로소 AI가 주는 혜택을 온전히 누리면서 민주주의와 사회적 신뢰를 지켜낼 수 있을 것입니다. 사회 전체의 정보 면역력을 키우기 위한 지속적인 관심과 노력이 필요한 때입니다.
+            </p>
+            <div class="mt-6 text-sm text-gray-500">
+                <p>본 인포그래픽은 제공된 'AI 여론 조작 심층 분석' 보고서를 기반으로 제작되었습니다.</p>
+                <p>2025년 6월 2일. Canvas Infographics.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const wrapLabel = (str, maxWidth) => {
+                if (typeof str !== 'string' || str.length <= maxWidth) {
+                    return str;
+                }
+                const words = str.split(' ');
+                const lines = [];
+                let currentLine = words[0];
+
+                for (let i = 1; i < words.length; i++) {
+                    if ((currentLine + ' ' + words[i]).length > maxWidth) {
+                        lines.push(currentLine);
+                        currentLine = words[i];
+                    } else {
+                        currentLine += ' ' + words[i];
+                    }
+                }
+                lines.push(currentLine);
+                return lines;
+            };
+
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                    return label.join(' ');
+                } else {
+                    return label;
+                }
+            };
+            
+            const sharedChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#333333',
+                            font: {
+                                size: 14,
+                                family: "'Noto Sans KR', sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        },
+                        titleFont: {
+                           family: "'Noto Sans KR', sans-serif"
+                        },
+                        bodyFont: {
+                           family: "'Noto Sans KR', sans-serif"
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#333333',
+                            font: {
+                                size: 12,
+                                family: "'Noto Sans KR', sans-serif"
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#333333',
+                            font: {
+                                size: 12,
+                                family: "'Noto Sans KR', sans-serif"
+                            }
+                        },
+                        grid: {
+                            color: '#e0e0e0'
+                        }
+                    }
+                }
+            };
+
+            const colors = {
+                blue: '#00AEEF',
+                red: '#ED1C24',
+                yellow: '#FBB03B',
+                green: '#8DC63F',
+                darkGray: '#333333'
+            };
+
+            const armsRaceCtx = document.getElementById('armsRaceChart')?.getContext('2d');
+            if (armsRaceCtx) {
+                new Chart(armsRaceCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                        datasets: [{
+                            label: '생성 기술 정교도',
+                            data: [30, 45, 60, 80, 95, 100],
+                            borderColor: colors.red,
+                            backgroundColor: 'rgba(237, 28, 36, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: '탐지 기술 정교도',
+                            data: [25, 35, 45, 55, 60, 65],
+                            borderColor: colors.blue,
+                            backgroundColor: 'rgba(0, 174, 239, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: { ...sharedChartOptions, scales: {...sharedChartOptions.scales, y: {...sharedChartOptions.scales.y, min: 0, max: 110, title: { display: true, text: '기술 정교도 (가상 수치)'}}}}
+                });
+            }
+
+            const detectorPerformanceCtx = document.getElementById('detectorPerformanceChart')?.getContext('2d');
+            if (detectorPerformanceCtx) {
+                 const originalLabels = ['비디오 탐지', '오디오 탐지', '이미지 탐지'];
+                 const wrappedLabels = originalLabels.map(label => wrapLabel(label, 16));
+                new Chart(detectorPerformanceCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: wrappedLabels,
+                        datasets: [{
+                            label: '학술 데이터셋 (기존 성능)',
+                            data: [95, 92, 96],
+                            backgroundColor: colors.blue,
+                            borderColor: colors.blue,
+                            borderWidth: 1
+                        }, {
+                            label: '실제 환경 데이터 (2024년)',
+                            data: [45, 44, 51],
+                            backgroundColor: colors.red,
+                            borderColor: colors.red,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { ...sharedChartOptions, scales: {...sharedChartOptions.scales, y: {...sharedChartOptions.scales.y, min: 0, max: 100, title: { display: true, text: '탐지 정확도 (AUC %)'}}}}
+                });
+            }
+
+            const koreaCrimeCtx = document.getElementById('koreaCrimeChart')?.getContext('2d');
+            if (koreaCrimeCtx) {
+                new Chart(koreaCrimeCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['10대 가해자', '기타 연령'],
+                        datasets: [{
+                            label: '가해자 비율',
+                            data: [95, 5],
+                            backgroundColor: [
+                                colors.red,
+                                colors.blue
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 2
+                        }]
+                    },
+                     options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: '#333333',
+                                    font: { size: 14, family: "'Noto Sans KR', sans-serif" }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    title: tooltipTitleCallback,
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed + '%';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

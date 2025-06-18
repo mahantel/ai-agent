@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국형 모멘텀 투자 실전 매매법 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI",Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: #f0f2f5; /* Professional Blue Background */
+            color: #172b4d; /* Professional Blue Text */
+        }
+        .header-gradient {
+            background: linear-gradient(135deg, #0052cc 0%, #0065ff 100%); /* Professional Blue Primary */
+        }
+        .section-title {
+            border-bottom: 3px solid #0052cc; /* Professional Blue Primary */
+            padding-bottom: 0.5rem;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.07), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .icon-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            color: white;
+        }
+        .bg-main-accent { background-color: #0052cc; }
+        .text-main-accent { color: #0052cc; }
+        .bg-light-accent { background-color: #e6f0ff; }
+        .text-light-accent-dark { color: #003a94; }
+
+        /* Timeline specific styles */
+        .timeline-item {
+            position: relative;
+            padding-left: 2.5rem; 
+            margin-bottom: 1.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.625rem; 
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #0052cc; 
+        }
+        .timeline-item:last-child::before {
+            height: 1.25rem; 
+        }
+        .timeline-icon {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1.5rem; 
+            height: 1.5rem; 
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Mindmap styles */
+        .mindmap-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 0;
+        }
+        .mindmap-core {
+            background-color: #0052cc;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .mindmap-branches {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 800px;
+        }
+        @media (min-width: 768px) {
+            .mindmap-branches {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+        .mindmap-branch {
+            border: 2px solid #0052cc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .mindmap-branch-title {
+            font-weight: bold;
+            color: #0052cc;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        .mindmap-item {
+            background-color: #e6f0ff;
+            color: #003a94;
+            padding: 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+        .mindmap-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Process Flow Styles */
+        .process-flow-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 2rem;
+        }
+        .process-step {
+            display: flex;
+            align-items: stretch;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 700px;
+        }
+        .process-step-action {
+            flex: 1;
+            background-color: #e9ecef;
+            color: #343a40;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-right: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .process-step-evidence {
+            flex: 1.5;
+            background-color: #e6f0ff;
+            color: #003a94;
+            padding: 1rem;
+            border: 1px dashed #0052cc;
+            border-radius: 0.5rem;
+            text-align: center;
+            margin-left: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .process-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #0052cc;
+            margin: 0 0.5rem;
+        }
+        .process-title {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        .process-description {
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+    </style>
+</head>
+<body class="text-gray-800">
+    <div class="container mx-auto p-4 md:p-8 max-w-5xl">
+
+        <header class="header-gradient text-white p-6 md:p-10 rounded-xl shadow-lg mb-8 md:mb-12 text-center">
+            <p class="text-sm md:text-base mb-2">2025년 주식 투자 전략</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-3">한국형 모멘텀 투자 실전 매매법</h1>
+            <p class="text-lg md:text-xl">가치 투자의 시대는 가고, 이제는 모멘텀 투자와 '상한가 따라잡기'의 시대</p>
+        </header>
+
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-main-accent">📈</span>
+                모멘텀 투자: 새로운 시대의 해답
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-main-accent mb-2">모멘텀 투자란?</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>최근의 호재로 상승한 종목이 앞으로 계속 오를 것이라는 흐름에 따라 투자하는 전략입니다.</li>
+                        <li>대한민국 주식 시장은 시가 총액 30조 기업이 하루에 20% 내외로 상승하고, 주도 섹터는 50%씩 상승하는 현상이 빈번하게 발생하고 있습니다.</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-main-accent mb-2">왜 지금 모멘텀 투자인가?</h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>과거와 달리 저평가 종목 발굴이 어려워졌고, 전통적 가치 투자의 최근 5년간 수익률이 매우 저조해졌습니다.</li>
+                        <li>미국 주식이라는 강력한 대안의 등장으로 국내 가치주에 대한 수급이 약화되었습니다.</li>
+                        <li>현재 시장은 일부 섹터와 종목에 매수세가 극단적으로 쏠리는 현상이 특징이며, 이는 모멘텀 투자에 유리한 환경입니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-main-accent">🎯</span>
+                모멘텀 투자의 핵심 원칙
+            </h2>
+            <div class="space-y-8">
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="icon-placeholder bg-main-accent">💡</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-main-accent mb-2">대량 거래와 'Something New'를 주목하라</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                <li>과거 평소 거래량의 10배 이상 터지면서 장대 양봉이 나오는 기업은 그날이 '제2의 창업일'입니다.</li>
+                                <li>이런 종목은 과거의 주가, 실적, 히스토리를 모두 잊고 새로운 밸류에이션으로 재평가해야 합니다.</li>
+                                <li>여기에 기관과 외국인 등 메이저의 매수세까지 더해진다면 완벽하게 새롭게 태어나는 기업의 신호입니다.</li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                     <div class="flex items-start">
+                        <div class="icon-placeholder bg-main-accent">✍️</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-main-accent mb-2">매매 일지를 통한 역사 학습</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                <li>주식은 역사의 반복이며, 비슷한 사건에 주가는 유사하게 움직입니다.</li>
+                                <li>단순 기록이 아닌 시장 상황, 주도주, 수급 순환, 이벤트 발생 후 움직임 등을 상세히 기록해야 합니다.</li>
+                                <li>워렌 버핏, 레이 달리오 등 세계적인 투자자들도 역사 공부를 투자에 적극적으로 활용합니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <div class="flex items-start">
+                        <div class="icon-placeholder bg-main-accent">📉</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-main-accent mb-2">명확한 매도 시그널</h3>
+                            <ul class="list-disc list-inside space-y-1 text-gray-700">
+                                <li>가장 중요한 매도 시점은 처음에 접근했던 '투자 논리가 훼손'되는 새로운 사실이 등장할 때입니다.</li>
+                                <li>기술적으로는 10일 이동평균선을 종가상으로 3일 연속 이탈하면 단기 모멘텀이 상실된 것으로 판단합니다.</li>
+                                <li>제대로 모멘텀을 받는 주식은 10일 이평선을 깨지 않고 상승하는 것이 일반적입니다.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-main-accent">🗺️</span>
+                한국형 모멘텀 투자 전략 마인드맵
+            </h2>
+            <div class="mindmap-container">
+                <div class="text-center">
+                    <div class="mindmap-core">모멘텀 투자</div>
+                    <div class="mindmap-branches">
+                        <div class="mindmap-branch">
+                            <div class="mindmap-branch-title">🔍 매수 신호</div>
+                            <div class="mindmap-item">대량 거래 발생</div>
+                            <div class="mindmap-item">장대 양봉 출현</div>
+                            <div class="mindmap-item">Something New</div>
+                            <div class="mindmap-item">메이저 수급 동반</div>
+                        </div>
+                        <div class="mindmap-branch">
+                            <div class="mindmap-branch-title">⚙️ 투자 방식</div>
+                            <div class="mindmap-item">추세 추종</div>
+                            <div class="mindmap-item">중기 투자 목표</div>
+                            <div class="mindmap-item">매매 일지 작성</div>
+                            <div class="mindmap-item">대장주 집중</div>
+                        </div>
+                        <div class="mindmap-branch">
+                            <div class="mindmap-branch-title">🚫 매도 신호</div>
+                            <div class="mindmap-item">투자 논리 훼손</div>
+                            <div class="mindmap-item">10일선 3일 이탈</div>
+                            <div class="mindmap-item">성장성 둔화</div>
+                            <div class="mindmap-item">재료 소멸</div>
+                        </div>
+                        <div class="mindmap-branch">
+                            <div class="mindmap-branch-title">📊 시장 트렌드</div>
+                            <div class="mindmap-item">가치 투자 쇠퇴</div>
+                            <div class="mindmap-item">쏠림 현상 심화</div>
+                            <div class="mindmap-item">글로벌 이슈 연동</div>
+                            <div class="mindmap-item">투기적 성향 강화</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-main-accent">📈</span>
+                실전 사례 분석 프로세스: 삼양식품
+            </h2>
+            <div class="process-flow-container">
+                <div class="process-step">
+                    <div class="process-step-action">
+                        <div class="process-title">모멘텀 발생</div>
+                    </div>
+                    <div class="process-arrow">➡️</div>
+                    <div class="process-step-evidence">
+                        <div class="process-title">대박 실적 (어닝 서프라이즈)</div>
+                        <p class="process-description">2024년 1분기, 전년 동기 대비 영업이익 236% 급증. 시장 예상치를 90% 이상 상회.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-action">
+                        <div class="process-title">매수 신호 확인</div>
+                    </div>
+                    <div class="process-arrow">➡️</div>
+                    <div class="process-step-evidence">
+                        <div class="process-title">대량 거래량 + 상한가</div>
+                        <p class="process-description">실적 발표 다음 날 점상한가 기록. 그 다음날 거래량 평소 대비 10배 폭증하며 급등.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-action">
+                        <div class="process-title">밸류에이션 재평가</div>
+                    </div>
+                    <div class="process-arrow">➡️</div>
+                    <div class="process-step-evidence">
+                        <div class="process-title">'제2의 창업일' 선언</div>
+                        <p class="process-description">단순 국내 라면 2위 기업이 아닌, 글로벌 히트 상품을 가진 업체로 위상 변화.</p>
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="process-step-action">
+                        <div class="process-title">추세 추종</div>
+                    </div>
+                    <div class="process-arrow">➡️</div>
+                    <div class="process-step-evidence">
+                        <div class="process-title">지속적 상승</div>
+                        <p class="process-description">급등 이후 50일 이동평균선을 기준으로 지속적인 장대 양봉 출현하며 쏠림 현상 발생.</p>
+                    </div>
+                </div>
+                 <div class="process-step">
+                    <div class="process-step-action">
+                        <div class="process-title">수익 실현</div>
+                    </div>
+                    <div class="process-arrow">➡️</div>
+                    <div class="process-step-evidence">
+                        <div class="process-title">120% 상승</div>
+                        <p class="process-description">저자의 타점 이후 약 120% 상승하며 추세의 초입이었음을 증명.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-main-accent">🔥</span>
+                실전 투자 기법 심화: 상한가 따라잡기 (상따)
+            </h2>
+            <div class="space-y-6">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-main-accent mb-3 flex items-center">
+                        <span class="text-2xl mr-2">💎</span>상따 매매의 5가지 매력
+                    </h3>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                        <li><strong>종목 선정 용이:</strong> 시장이 가장 강한 종목을 상한가로 직접 골라줌.</li>
+                        <li><strong>높은 익일 상승 확률:</strong> 매수 잔량이 쌓여 있어 다음날 상승 확률이 매우 높음 (99% 이상).</li>
+                        <li><strong>명확한 매도 시점:</strong> 대부분 다음날 오전 30분 이내에 매도하므로 매도 고민이 짧음.</li>
+                        <li><strong>거래대금 확보:</strong> 평소 거래가 없던 종목도 상한가 당일엔 수백억 이상 거래됨.</li>
+                        <li><strong>폭발적 수익률:</strong> 리스크 관리 성공 시, 계좌를 폭발적으로 성장시킴 (저자 4년간 25배 달성).</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-main-accent mb-3 flex items-center">
+                        <span class="text-2xl mr-2">⚖️</span>상따 매매 3대 원칙
+                    </h3>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                        <li><strong>상한가에서만 산다:</strong> 20~25%에서 미리 예측 매수하는 것은 변동성을 견디기 어려워 추천하지 않음.</li>
+                        <li><strong>강력함과 신선함에 주목:</strong> 시장이 처음 보거나, 수년 만에 다시 가시화되는 재료일수록 강함.</li>
+                        <li><strong>오직 대장주만 집중:</strong> 찰나의 순간이 중요한 매매이므로, 가장 강하게 상승하는 1등주만 대응.</li>
+                    </ul>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold text-main-accent mb-3 flex items-center">
+                        <span class="text-2xl mr-2">👨‍💼</span>직장인을 위한 오후 2시 응용 기법
+                    </h3>
+                    <ul class="list-disc list-inside space-y-1 text-gray-700">
+                        <li>오후 2시는 시장의 방향성이 결정되는 시간. 이때 등락률 상위 창을 확인.</li>
+                        <li>강력한 테마가 단체 상승하는 것을 확인했다면, 아직 상한가에 도달하지 못한 대장주 후보를 공략.</li>
+                        <li>예시: 동해 유전 테마 발생 시, 오후 2시경 상한가 직전의 대성에너지를 매수 대응.</li>
+                        <li>-3% 등 짧은 손절 라인을 잡고, 다음날 갭 상승 시 익절하는 전략으로 높은 확률의 매매 가능.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-8 md:mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 section-title flex items-center">
+                <span class="icon-placeholder bg-main-accent">⚠️</span>
+                투자 시 유의사항 및 리스크 관리
+            </h2>
+            <div class="overflow-x-auto card p-0">
+                <table class="w-full text-sm text-left">
+                    <thead class="text-xs text-gray-700 uppercase bg-light-accent">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-main-accent">주요 리스크</th>
+                            <th scope="col" class="px-6 py-3 text-main-accent">대응 전략</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium whitespace-nowrap">상따 매매의 높은 변동성</td>
+                            <td class="px-6 py-4">원칙 준수 (상한가 매수, 풀리면 매도). 소액으로 충분한 가상매매 연습 후 실전 투입. 별도 계좌 운용 필수.</td>
+                        </tr>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium whitespace-nowrap">추세의 갑작스러운 붕괴</td>
+                            <td class="px-6 py-4">10일선/20일선 이탈 등 명확한 기술적 매도 원칙을 수립하고 기계적으로 실행.</td>
+                        </tr>
+                        <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium whitespace-nowrap">잘못된 대장주 판단</td>
+                            <td class="px-6 py-4">테마 발생 시 상승률, 거래대금, 재료의 연관성을 종합하여 가장 강한 종목을 판단하는 훈련 필요.</td>
+                        </tr>
+                        <tr class="bg-white hover:bg-gray-50">
+                            <td class="px-6 py-4 font-medium whitespace-nowrap">허무맹랑한 테마 (초전도체 등)</td>
+                            <td class="px-6 py-4">가급적 신빙성 있는 재료를 선택하되, 테마의 강도가 모든 것을 압도할 경우엔 비중을 조절하여 리스크 관리.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12 text-sm text-gray-500">
+            <p>본 콘텐츠는 제공된 '한국형 모멘텀 투자 실전 매매법' 분석 텍스트를 기반으로 제작되었습니다.</p>
+            <p class="mt-1 font-semibold">※ 투자의 최종 판단과 책임은 투자자 본인에게 있습니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
