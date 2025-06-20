@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글로벌 시장 동향 및 주요 기업 전략 분석</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /*
+         * 전반적인 스타일 설정
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI",Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: #f0f2f5; /* Professional Blue Background */
+            min-height: 100vh;
+            color: #172b4d; /* Professional Blue Text */
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /*
+         * 헤더 섹션 스타일
+         */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            color: #0052cc; /* Professional Blue Primary */
+            margin-bottom: 25px;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #5e6c84;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .header-description {
+            font-size: 1.1em;
+            color: #172b4d;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #e9f2ff; /* Lighter blue */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        /*
+         * 개요 카드 섹션 스타일
+         */
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .card {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            border: 1px solid #dfe1e6;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: #0052cc; /* Professional Blue Primary */
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-icon {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .card h3 {
+            color: #0052cc;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 2px solid #0052cc;
+            padding-bottom: 15px;
+        }
+        
+        /*
+         * 핵심 전략 포커스 섹션 스타일
+         */
+        .features-section {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-item {
+            background: #0052cc;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 35px rgba(0, 82, 204, 0.2);
+        }
+        
+        .feature-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 82, 204, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        /*
+         * 핵심 지표 섹션 스타일
+         */
+        .stats-container {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            position: relative;
+            padding: 20px;
+            border-radius: 15px;
+            background: #e9f2ff;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.1);
+            background: #ddeaff;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #0052cc;
+            display: block;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            color: #5e6c84;
+            font-weight: 600;
+        }
+        
+        /*
+         * 시장 이벤트 타임라인 섹션 스타일
+         */
+        .timeline-section {
+            margin: 60px 0;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: #c1c7d0;
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #dfe1e6;
+        }
+        
+        .timeline-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #0052cc;
+            border-radius: 50%;
+            top: 40px;
+            box-shadow: 0 0 10px rgba(0, 82, 204, 0.5);
+            border: 3px solid white;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -62px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -62px;
+        }
+        
+        .timeline-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0052cc;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #172b4d;
+            margin-bottom: 15px;
+        }
+        
+        /*
+         * 시장 전망 섹션 스타일
+         */
+        .perspectives-section {
+            margin: 60px 0;
+        }
+        
+        .perspectives {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+        
+        .opportunities, .risks {
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .opportunities {
+            background: rgba(52, 168, 83, 0.1);
+            border: 2px solid #34A853;
+        }
+        
+        .risks {
+            background: rgba(234, 67, 53, 0.1);
+            border: 2px solid #EA4335;
+        }
+        
+        .opportunities h4, .risks h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .opportunities h4 { color: #34A853; }
+        .risks h4 { color: #EA4335; }
+        
+        .opportunities ul, .risks ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .opportunities li, .risks li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .opportunities li:last-child, .risks li:last-child {
+            border-bottom: none;
+        }
+        
+        /*
+         * 공통 강조 스타일
+         */
+        .strong {
+            font-weight: bold;
+            color: #0052cc;
+        }
+        
+        .highlight {
+            background: #e9f2ff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        /*
+         * 결론 섹션 스타일
+         */
+        .conclusion {
+            background: #0052cc;
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 82, 204, 0.2);
+        }
+        
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /*
+         * 반응형 디자인
+         */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+            }
+            
+            .timeline-item::after {
+                left: -62px !important;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .perspectives {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #0052cc;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 글로벌 시장 동향 및 주요 기업 전략 분석</h1>
+            <p class="subtitle">미국 시장 리스크, 자율주행 경쟁, TSMC 성공 요인 심층 탐구</p>
+            <div class="header-description">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>📈 <strong>미국 시장</strong>은 밸류에이션 부담 속에서 <span class="strong">무역 전쟁, 인플레이션, 금리</span> 등 다양한 리스크에 직면해 있습니다.</li>
+                    <li>🚗 <strong>자율주행 시장</strong>은 <span class.strong">테슬라, 구글 웨이모, 아마존</span>의 3강 구도로 재편되며 기술 및 비용 경쟁이 치열해지고 있습니다.</li>
+                    <li>🏆 <strong>TSMC</strong>는 독보적인 거버넌스와 비경쟁 철학을 바탕으로 반도체 시장에서의 리더십을 공고히 하고 있습니다.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="overview">
+            <div class="card">
+                <div class="card-icon">⚠️</div>
+                <h3>미국 시장의 주요 리스크</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><strong>무역 전쟁:</strong> 글로벌 경제 침체를 유발할 수 있는 가장 큰 요인으로 지목됩니다.</li>
+                    <li><strong>인플레이션 재발:</strong> 연준의 예상 밖 금리 인상을 초래할 수 있는 리스크입니다.</li>
+                    <li><strong>채권 시장 충격:</strong> 금리 급등으로 이어질 수 있는, 특히 트럼프 행정부에서 부각될 수 있는 리스크입니다.</li>
+                    <li><strong>달러 신뢰 하락:</strong> 기축 통화로서의 지위가 흔들릴 경우 달러 가치가 폭락할 수 있습니다.</li>
+                    <li>대부분의 리스크는 시장에 노출된 <span class="highlight">'알려진 불확실성(Known Unknowns)'</span>으로, 큰 변동성을 유발하지 않을 수 있습니다.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🚗</div>
+                <h3>자율주행 3강 체제 본격화</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><strong>구글 웨이모:</strong> 누적 주행거리 <span class="strong">1,600만 마일</span>, 주간 유료 승객 <span class="strong">25만 명</span>을 돌파했으나, 차량 가격이 <span class="highlight">20만 달러</span>에 달하는 점이 한계입니다.</li>
+                    <li><strong>테슬라:</strong> <span class="strong">3-4만 달러</span> 수준의 원가 경쟁력을 바탕으로 오스틴에서 완전 무인 로보택시 시범 운행을 계획 중입니다.</li>
+                    <li><strong>아마존:</strong> 연간 <span class="strong">1만 대</span> 생산 능력의 자율주행 택시 공장 건설을 시작하며 시장에 본격적으로 뛰어들었습니다.</li>
+                    <li>기술 방식(카메라 vs 라이다)과 원가 경쟁력이 향후 시장 판도를 결정할 핵심 변수입니다.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🏆</div>
+                <h3>TSMC, 반도체 리더십의 비결</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li><strong>3+1 성공 요인:</strong> 가성비 높은 인력, 성과 기반 보상, 치열한 내부 경쟁, 그리고 <span class="highlight">'고객과 경쟁하지 않는다'</span>는 핵심 철학이 성공의 기반입니다.</li>
+                    <li><strong>강력한 거버넌스:</strong> 분기별 3일간 진행되는 이사회, 다수의 외국인 이사 참여 등 선진적인 지배구조를 갖추고 있습니다.</li>
+                    <li><strong>리더십 철학 '기식(器識)':</strong> 창업자 모리스 창이 강조한 <span class="strong">'큰 그릇(스케일)'</span>과 <span class="strong">'깊은 식견'</span>을 갖춘 리더십이 성장의 원동력입니다.</li>
+                    <li>이러한 질적 요인들이 기술력과 결합하여 세계 최강의 반도체 기업을 만들었습니다.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <h2 class="section-title">📊 핵심 수치로 보는 시장</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">1,600만</span>
+                    <div class="stat-label">🛣️ 웨이모 누적 주행 마일</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">25만</span>
+                    <div class="stat-label">👥 웨이모 주간 유료 승객</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">$20만</span>
+                    <div class="stat-label">💰 웨이모 차량 가격</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">$4만</span>
+                    <div class="stat-label">💵 테슬라 예상 차량 가격</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4배</span>
+                    <div class="stat-label">📈 TSMC vs 삼성 시총 격차</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">21.5배</span>
+                    <div class="stat-label">⚖️ 시장 전체 P/E 밸류에이션</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2 class="section-title">🎯 핵심 전략 포커스</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">분산 투자 전략</div>
+                    <div class="feature-description">
+                        미국 시장의 높은 밸류에이션 리스크 대응은 <strong>투자 축소가 아닌 분산 투자</strong>가 핵심. 최근 모멘텀이 좋은 한국 시장 등이 대안으로 제시됩니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔬</div>
+                    <div class="feature-title">기술 경쟁력</div>
+                    <div class="feature-description">
+                        자율주행 분야에서 <strong>테슬라의 카메라 기반 저비용 접근법</strong>과 <strong>웨이모의 고가 센서 시스템</strong> 간의 기술 패권 경쟁이 심화되고 있습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🏛️</div>
+                    <div class="feature-title">연준의 신중한 태도</div>
+                    <div class="feature-description">
+                        파월 의장은 <strong>"기다리며 더 알아보겠다"</strong>는 입장. 관세로 인한 인플레이션 우려 속에서 섣불리 금리를 인하하기 어려운 딜레마를 보여줍니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤝</div>
+                    <div class="feature-title">기업 거버넌스</div>
+                    <div class="feature-description">
+                        TSMC의 성공은 <strong>전문 경영인 체제와 이를 감독하는 강력하고 다양한 이사회</strong>라는 선진적 거버넌스에 기반합니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💎</div>
+                    <div class="feature-title">M7 밸류에이션 매력</div>
+                    <div class="feature-description">
+                        시장 전체의 밸류에이션 부담에도 불구, M7(빅테크) 주가는 <strong>전고점 대비 여전히 낮은 수준</strong>이며, 견고한 2분기 실적 기대감에 매력적인 구간일 수 있습니다.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-title">고객과 비경쟁 철학</div>
+                    <div class="feature-description">
+                        TSMC의 핵심 성공 요인으로, 파운드리 사업에 집중하며 <strong>수많은 '우군'을 확보</strong>한 반면, 다각화된 삼성은 많은 경쟁자를 만들었다는 분석입니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-section">
+            <h2 class="section-title">🗓️ 최근 주요 시장 이벤트</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">최근</div>
+                    <div class="timeline-title">🏛️ 연준, 금리 동결 및 신중론 유지</div>
+                    <p>파월 의장은 데이터에 의존하며 향후 경제 데이터를 더 지켜보겠다는 <span class="strong">'Wait and Learn'</span> 입장을 밝혀, 단기 금리 인하 기대감을 낮췄습니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">최근</div>
+                    <div class="timeline-title">🚗 아마존, 자율주행 시장 진출 선언</div>
+                    <p>베이 지역에 연간 1만 대 생산 능력의 자율주행 택시 공장 건설 계획을 발표하며 <span class="strong">구글, 테슬라와의 3강 구도</span>를 예고했습니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">예정</div>
+                    <div class="timeline-title">🤖 테슬라, 오스틴 로보택시 시범 운행</div>
+                    <p>10~20대 규모로 <span class="strong">완전 무인(Driverless) 로보택시</span> 시범 서비스를 시작할 계획이나, 규제 관련 불확실성이 존재합니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">최근</div>
+                    <div class="timeline-title">🗣️ 트럼프, 파월 의장 공개 비판</div>
+                    <p>SNS를 통해 파월 의장을 '바보'라고 칭하며 연준의 독립성을 위협하는 발언을 했으나, 시장에 미치는 영향은 아직 제한적입니다.</p>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">최근</div>
+                    <div class="timeline-title">📈 TSMC, 압도적 실적 발표</div>
+                    <p>최근 매출이 <span class="strong">40% 증가</span>했다고 언급되며, 기술력과 시장 지배력을 다시 한번 입증했습니다.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="perspectives-section">
+             <h2 class="section-title">🔭 시장 전망: 기회와 리스크</h2>
+            <div class="perspectives">
+                <div class="opportunities">
+                    <h4>✅ 투자 기회 요인</h4>
+                    <ul>
+                        <li><strong>M7 및 빅테크:</strong> 주가 회복 여력과 2분기 어닝 서프라이즈 가능성이 존재합니다.</li>
+                        <li><strong>반도체 섹터:</strong> 견고한 이익 대비 밸류에이션 매력이 부각되고 있습니다.</li>
+                        <li><strong>TSMC:</strong> 확고한 기술력과 거버넌스를 바탕으로 장기 성장 가능성이 높습니다.</li>
+                        <li><strong>한국 시장:</strong> 미국 시장의 대안으로서 모멘텀을 보유하고 있다는 분석이 있습니다.</li>
+                    </ul>
+                </div>
+                <div class="risks">
+                    <h4>❌ 잠재 리스크 요인</h4>
+                    <ul>
+                        <li><strong>거시 경제 불확실성:</strong> 무역 전쟁, 인플레이션 재발, 채권시장 충격 등 리스크가 상존합니다.</li>
+                        <li><strong>시장 밸류에이션 부담:</strong> S&P 500 P/E가 21.5배에 달해 추가 상승이 제한될 수 있습니다.</li>
+                        <li><strong>지정학적 리스크:</strong> 중동(이란) 관련 불확실성이 '노운 언노운' 리스크로 작용합니다.</li>
+                        <li><strong>연준 정책 딜레마:</strong> 예상과 다른 금리 인상 가능성 또는 인하 지연이 시장을 압박할 수 있습니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <h2>🧭 결론: '뜨뜻미지근한' 장세 속 전략적 접근 필요</h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; margin: 20px 0;">
+                <p style="font-size: 1.3em; margin-bottom: 20px; font-weight: bold;">
+                    현재 시장은 <span style="background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 8px;">'뜨뜻미지근한' 국면</span>으로 요약됩니다. 리스크 요인들이 상당 부분 노출되어 큰 폭의 하락 가능성은 낮지만, 높은 밸류에이션이 상승을 제한하고 있습니다.
+                </p>
+                <p style="font-size: 1.2em;">
+                    따라서, <strong>전략적 자산 분배</strong>와 <strong>TSMC처럼 강력한 펀더멘털 및 거버넌스를 갖춘 기업</strong>에 집중하는 것이 중요합니다. 향후 시장은 거시 경제 정책과 AI, 자율주행 등 기술 혁신이 주도하는 복잡한 환경을 항해할 것입니다.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
