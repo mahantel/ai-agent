@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회의록 작성 도우미 (AWS S3 연동) - 수정본</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1149.0.min.js" defer></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --accent-color: #3B82F6; 
+            --accent-color-light: #BFDBFE;
+            --accent-color-start: #3B82F6;
+            --accent-color-end: #2563EB;
+            --header-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="white"><path d="M50,10c-22,0-40,18-40,40s18,40,40,40s40-18,40-40S72,10,50,10z M50,82c-17.7,0-32-14.3-32-32s14.3-32,32-32s32,14.3,32,32S67.7,82,50,82z"/><path d="M53.5,26.5h-7v26h22v-7H53.5V26.5z"/></svg>');
+            --header-bg-position: right 10% center;
+            --header-bg-size: 30% auto;
+            --header-bg-opacity: 0.1;
+            --header-mix-blend-mode: soft-light;
+        }
+
+        body { font-family: 'Noto Sans KR', sans-serif; }
+        .material-section { break-inside: avoid; page-break-inside: avoid; margin-bottom: 1.5rem; padding: 1.5rem; background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
+        .input-group { margin-bottom: 1rem; }
+        .dynamic-item { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+        .dynamic-item input { flex: 1; }
+        .remove-btn { background-color: #EF4444; color: white; border-radius: 50%; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; border: none; cursor: pointer; flex-shrink: 0; }
+        .add-btn { background-color: var(--accent-color); color: white; padding: 0.25rem 0.75rem; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.2s; font-size: 0.875rem; }
+        .add-btn:hover { background-color: var(--accent-color-end); }
+        .gradient-header-bg { background: linear-gradient(135deg, var(--accent-color-start) 0%, var(--accent-color-end) 100%); padding: 2.5rem; border-radius: 1rem; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); position: relative; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .gradient-header-bg::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: var(--header-bg-image); background-repeat: no-repeat; background-position: var(--header-bg-position); background-size: var(--header-bg-size); opacity: var(--header-bg-opacity); z-index: 1; mix-blend-mode: var(--header-mix-blend-mode); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .gradient-header-bg > * { position: relative; z-index: 2; }
+        .section-heading { font-family: 'Playfair Display', serif !important; font-weight: 700 !important; color: #1F2937 !important; display: flex; align-items: center; border-bottom: 3px solid var(--accent-color-light); padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+        .section-heading i { margin-right: 0.75rem; color: var(--accent-color); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+        #fileListModal { border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border: 1px solid #e5e7eb; padding: 1.5rem; min-width: 400px; }
+        #s3FileList { list-style-type: none; padding: 0; margin: 1rem 0; max-height: 400px; overflow-y: auto; }
+        #s3FileList li { padding: 0.75rem 1rem; cursor: pointer; border-radius: 0.375rem; transition: background-color 0.2s; border-bottom: 1px solid #f3f4f6; }
+        #s3FileList li:hover { background-color: #f3f4f6; }
+        #s3FileList li:last-child { border-bottom: none; }
+        .loading-spinner { border: 4px solid #f3f4f6; border-top: 4px solid var(--accent-color); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 10pt; background-color: white !important; }
+            .container { max-width: 100%; padding: 0; margin: 0; }
+            .shadow-lg { box-shadow: none !important; }
+            .document-output { margin: 0; padding: 0; width: 100%; font-family: 'Noto Sans KR', sans-serif !important; }
+            .material-section { box-shadow: none !important; border: 1px solid #eee !important; padding: 1rem !important; margin-bottom: 1rem !important; background-color: #ffffff !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .gradient-header-bg { background: linear-gradient(135deg, var(--accent-color-start) 0%, var(--accent-color-end) 100%) !important; color: white !important; text-shadow: none !important; }
+            .gradient-header-bg::before { opacity: 0.05 !important; mix-blend-mode: normal !important; }
+            .document-output h2, .document-output h3 { font-family: 'Playfair Display', serif !important; }
+            table { width: 100%; border-collapse: collapse; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+        @page { size: A4; margin: 1in; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="text-center mb-8 no-print">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2"><i class="fas fa-clipboard-list text-blue-600 mr-3"></i>회의록 작성 도우미</h1>
+            <p class="text-gray-600 text-lg">핵심 정보만 입력하여 체계적인 회의록을 간편하게 완성하세요.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 no-print">
+                <div class="flex items-center justify-between mb-6">
+                     <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-edit text-blue-500 mr-2"></i>정보 입력</h2>
+                     <div class="flex items-center gap-2">
+                        <button type="button" id="saveToS3Button" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 font-semibold text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"><i class="fas fa-cloud-upload-alt mr-2"></i>S3에 저장</button>
+                        <button type="button" id="loadFromS3Button" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300 font-semibold text-sm disabled:bg-gray-400 disabled:cursor-not-allowed"><i class="fas fa-cloud-download-alt mr-2"></i>S3에서 불러오기</button>
+                     </div>
+                </div>
+                <form id="documentForm" class="space-y-4">
+                    <div class="material-section">
+                        <h3 class="section-heading"><i class="fas fa-info-circle"></i>기본 정보</h3>
+                        <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="meetingTitle">회의 제목/명칭*</label><input type="text" id="meetingTitle" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 2025년 3분기 마케팅 전략 회의"></div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="meetingDate">회의 일시</label><input type="date" id="meetingDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+                            <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="meetingTime">시간 (시작 ~ 종료)</label><div class="flex items-center gap-2"><input type="time" id="startTime" class="w-full px-3 py-2 border border-gray-300 rounded-md"><span class="text-gray-500">~</span><input type="time" id="endTime" class="w-full px-3 py-2 border border-gray-300 rounded-md"></div></div>
+                        </div>
+                        <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="meetingLocation">회의 장소/링크</label><input type="text" id="meetingLocation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 본사 1회의실 또는 zoom.us/j/12345"></div>
+                        <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="meetingHost">주최/주관</label><input type="text" id="meetingHost" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 마케팅팀"></div>
+                    </div>
+
+                    <div class="material-section">
+                        <h3 class="section-heading"><i class="fas fa-users"></i>참석자 정보</h3>
+                        <div id="attendeesContainer"></div>
+                        <button type="button" id="addAttendeeBtn" class="add-btn mt-2"><i class="fas fa-plus mr-1"></i>참석자 추가</button>
+                    </div>
+
+                    <div class="material-section">
+                        <h3 class="section-heading"><i class="fas fa-bullseye"></i>회의 목적 및 안건</h3>
+                        <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="meetingPurpose">회의 목적</label><textarea id="meetingPurpose" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="예: 3분기 마케팅 캠페인 성과 분석 및 4분기 계획 수립"></textarea></div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">안건 목록 (Agenda)</label>
+                        <div id="agendaContainer"></div>
+                        <button type="button" id="addAgendaBtn" class="add-btn mt-2"><i class="fas fa-plus mr-1"></i>안건 추가</button>
+                    </div>
+                    
+                    <div class="material-section">
+                         <h3 class="section-heading"><i class="fas fa-comments"></i>논의 내용 및 결정 사항</h3>
+                         <textarea id="discussionContent" rows="8" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="각 안건별 주요 논의사항, 발언, 결정 내용을 자유롭게 요약하여 작성합니다.&#10;&#10;[안건 1] 3분기 성과 분석&#10;- 주요 논의: ...&#10;- 결정 사항: ...&#10;&#10;[안건 2] 4분기 계획 수립&#10;- 주요 논의: ...&#10;- 결정 사항: ..."></textarea>
+                    </div>
+
+                    <div class="material-section">
+                        <h3 class="section-heading"><i class="fas fa-tasks"></i>후속 조치 (Action Items)</h3>
+                        <div id="actionItemsContainer"></div>
+                        <button type="button" id="addActionItemBtn" class="add-btn mt-2"><i class="fas fa-plus mr-1"></i>항목 추가</button>
+                    </div>
+                    
+                    <div class="material-section">
+                         <h3 class="section-heading"><i class="fas fa-paperclip"></i>기타</h3>
+                         <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="referenceDocs">참고 자료/링크</label><input type="text" id="referenceDocs" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="예: 3분기 성과 보고서.pptx"></div>
+                         <div class="input-group"><label class="block text-sm font-medium text-gray-700 mb-1" for="nextMeetingDate">다음 회의 일정</label><input type="text" id="nextMeetingDate" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="예: 2025년 10월 20일 (월) 10:00"></div>
+                    </div>
+
+                    <button type="button" id="clearFormButton" class="w-full bg-gray-300 text-gray-800 py-3 px-6 rounded-md hover:bg-gray-400 transition duration-300 font-semibold"><i class="fas fa-trash-alt mr-2"></i>양식 초기화</button>
+                </form>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-8 sticky top-8">
+                <div class="flex items-center justify-between mb-6 no-print">
+                    <h2 class="text-2xl font-bold text-gray-800"><i class="fas fa-file-alt text-green-600 mr-2"></i>미리보기</h2>
+                    <button type="button" id="printPdfBtn" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300"><i class="fas fa-print mr-2"></i>PDF 저장</button>
+                </div>
+                <div id="documentPreview" class="document-output">
+                    <div class="text-center text-gray-500 py-12"><i class="fas fa-clipboard-list text-6xl mb-4"></i><p class="text-lg">좌측에 정보를 입력하면 회의록이 실시간으로 생성됩니다.</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <dialog id="fileListModal">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">S3에서 파일 불러오기</h2>
+            <button id="closeModalButton" class="text-gray-500 hover:text-gray-800">&times;</button>
+        </div>
+        <div id="modalContent">
+             <ul id="s3FileList"></ul>
+        </div>
+    </dialog>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Configuration ---
+            const awsConfig = {
+                region: 'ap-northeast-2',
+                identityPoolId: 'ap-northeast-2:f5f1d985-e91b-4895-a632-96e5e7df2ec8',
+                s3BucketName: 'gemini-form-save',
+            };
+            const formId = '회의록';
+            const localStorageKey = `form-generator-${formId}`;
+            let s3;
+
+            // --- Dynamic Field Definitions ---
+            const dynamicFields = {
+                attendees: { containerId: 'attendeesContainer', fields: { name: '이름', position: '소속/직책' } },
+                agendas: { containerId: 'agendaContainer', fields: { agenda: '안건' } },
+                actionItems: { containerId: 'actionItemsContainer', fields: { task: '실행 항목', owner: '담당자', due: '기한(YYYY-MM-DD)' } }
+            };
+
+            // --- Main Execution ---
+            initializeAwsSdk();
+            loadFormDataFromLocalStorage();
+            initializeEventListeners();
+            
+            // --- Functions ---
+            function initializeEventListeners() {
+                const form = document.getElementById('documentForm');
+                form.addEventListener('input', saveAndGenerate);
+                form.addEventListener('change', saveAndGenerate);
+
+                document.getElementById('clearFormButton').addEventListener('click', clearForm);
+                document.getElementById('saveToS3Button').addEventListener('click', () => s3 && saveToS3());
+                document.getElementById('loadFromS3Button').addEventListener('click', () => s3 && showFileListModal());
+                document.getElementById('printPdfBtn').addEventListener('click', () => window.print());
+
+                document.getElementById('addAttendeeBtn').addEventListener('click', () => addDynamicItem(dynamicFields.attendees.containerId, dynamicFields.attendees.fields));
+                document.getElementById('addAgendaBtn').addEventListener('click', () => addDynamicItem(dynamicFields.agendas.containerId, dynamicFields.agendas.fields));
+                document.getElementById('addActionItemBtn').addEventListener('click', () => addDynamicItem(dynamicFields.actionItems.containerId, dynamicFields.actionItems.fields));
+
+                const modal = document.getElementById('fileListModal');
+                document.getElementById('closeModalButton').addEventListener('click', () => modal.close());
+                modal.addEventListener('click', (e) => {
+                    if (e.target.id === 'fileListModal') modal.close();
+                });
+            }
+
+            function initializeAwsSdk() {
+                if (typeof window.AWS === 'undefined') {
+                    console.warn("AWS SDK is not loaded. S3 features will be disabled.");
+                    const saveBtn = document.getElementById('saveToS3Button');
+                    const loadBtn = document.getElementById('loadFromS3Button');
+                    saveBtn.disabled = true;
+                    loadBtn.disabled = true;
+                    saveBtn.title = "AWS SDK 로딩에 실패하여 사용할 수 없습니다.";
+                    loadBtn.title = "AWS SDK 로딩에 실패하여 사용할 수 없습니다.";
+                    return;
+                }
+
+                AWS.config.update({
+                    region: awsConfig.region,
+                    credentials: new AWS.CognitoIdentityCredentials({ IdentityPoolId: awsConfig.identityPoolId })
+                });
+                s3 = new AWS.S3({ apiVersion: '2006-03-01' });
+                console.log("AWS SDK initialized successfully.");
+            }
+
+            const saveAndGenerate = () => {
+                saveFormDataToLocalStorage();
+                generateDocument();
+            };
+
+            function getDynamicData(containerId) {
+                const items = [];
+                document.getElementById(containerId).querySelectorAll('.dynamic-item').forEach(item => {
+                    const itemData = {};
+                    item.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.dataset.key) {
+                            itemData[input.dataset.key] = input.value;
+                        }
+                    });
+                    items.push(itemData);
+                });
+                return items;
+            }
+
+            function setDynamicData(containerId, data, fields) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                if (data && Array.isArray(data)) {
+                    data.forEach(itemData => addDynamicItem(containerId, fields, itemData));
+                }
+            }
+
+            function saveFormDataToLocalStorage() {
+                const formData = {};
+                document.querySelectorAll('#documentForm input, #documentForm textarea').forEach(el => {
+                    if (el.id) formData[el.id] = el.value;
+                });
+                formData.attendees = getDynamicData(dynamicFields.attendees.containerId);
+                formData.agendas = getDynamicData(dynamicFields.agendas.containerId);
+                formData.actionItems = getDynamicData(dynamicFields.actionItems.containerId);
+                localStorage.setItem(localStorageKey, JSON.stringify(formData));
+            }
+
+            function loadFormDataFromLocalStorage() {
+                const savedData = localStorage.getItem(localStorageKey);
+                if (!savedData) {
+                    const meetingDateEl = document.getElementById('meetingDate');
+                    if(meetingDateEl) meetingDateEl.valueAsDate = new Date();
+                    generateDocument();
+                    return;
+                }
+                const formData = JSON.parse(savedData);
+                document.querySelectorAll('#documentForm input, #documentForm textarea').forEach(el => {
+                    if (el.id && formData[el.id] !== undefined) {
+                        if (el.type === 'date' && formData[el.id]) el.valueAsDate = new Date(formData[el.id]);
+                        else el.value = formData[el.id];
+                    }
+                });
+                setDynamicData(dynamicFields.attendees.containerId, formData.attendees, dynamicFields.attendees.fields);
+                setDynamicData(dynamicFields.agendas.containerId, formData.agendas, dynamicFields.agendas.fields);
+                setDynamicData(dynamicFields.actionItems.containerId, formData.actionItems, dynamicFields.actionItems.fields);
+                generateDocument();
+            }
+
+            function clearForm() {
+                if (confirm('정말로 모든 내용을 초기화하시겠습니까? 로컬에 저장된 데이터도 삭제됩니다.')) {
+                    document.getElementById('documentForm').reset();
+                    localStorage.removeItem(localStorageKey);
+                    Object.values(dynamicFields).forEach(df => {
+                        document.getElementById(df.containerId).innerHTML = '';
+                    });
+                    document.getElementById('meetingDate').valueAsDate = new Date();
+                    generateDocument();
+                }
+            }
+            
+            function addDynamicItem(containerId, fields, values = {}) {
+                const container = document.getElementById(containerId);
+                const item = document.createElement('div');
+                item.className = 'dynamic-item';
+                
+                let html = '';
+                for (const [key, placeholder] of Object.entries(fields)) {
+                    const value = values[key] || '';
+                    html += `<input type="text" data-key="${key}" placeholder="${placeholder}" class="w-full px-2 py-1 border border-gray-300 rounded-md" value="${value}">`;
+                }
+                item.innerHTML = html;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.className = 'remove-btn';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = () => {
+                    item.remove();
+                    saveAndGenerate();
+                };
+                item.appendChild(removeBtn);
+                container.appendChild(item);
+            }
+
+            async function saveToS3() {
+                const saveButton = document.getElementById('saveToS3Button');
+                const originalText = saveButton.innerHTML;
+                saveButton.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i>저장 중...`;
+                saveButton.disabled = true;
+
+                try {
+                    const credentials = await s3.config.credentials.getPromise();
+                    const identityId = credentials.identityId;
+                    
+                    const formTitle = (document.getElementById('meetingTitle').value || '회의록').replace(/[\\/:*?"<>|]/g, '-');
+                    const dateStr = new Date().toISOString().slice(0, 10);
+                    const folderName = formId.toLowerCase().replace(/\s/g, '-');
+                    const fileName = `${formTitle}-${dateStr}.json`;
+                    const s3Key = `${identityId}/${folderName}/${fileName}`;
+
+                    const data = localStorage.getItem(localStorageKey);
+
+                    const params = { Bucket: awsConfig.s3BucketName, Key: s3Key, Body: data, ContentType: 'application/json' };
+                    await s3.putObject(params).promise();
+                    alert(`성공적으로 S3에 저장되었습니다!\n파일명: ${fileName}`);
+
+                } catch (err) {
+                    console.error("S3 저장 오류:", err);
+                    alert(`S3 저장 중 오류가 발생했습니다: ${err.message}`);
+                } finally {
+                    saveButton.innerHTML = originalText;
+                    saveButton.disabled = false;
+                }
+            }
+
+            async function showFileListModal() {
+                const modal = document.getElementById('fileListModal');
+                const modalContent = document.getElementById('modalContent');
+                const fileList = document.getElementById('s3FileList');
+                modalContent.innerHTML = '<div class="loading-spinner"></div>';
+                modal.showModal();
+
+                try {
+                    const credentials = await s3.config.credentials.getPromise();
+                    const identityId = credentials.identityId;
+                    const folderName = formId.toLowerCase().replace(/\s/g, '-');
+                    
+                    const params = { Bucket: awsConfig.s3BucketName, Prefix: `${identityId}/${folderName}/` };
+                    const data = await s3.listObjectsV2(params).promise();
+                    
+                    if (!data.Contents || data.Contents.length === 0) {
+                        modalContent.innerHTML = '<p class="text-center text-gray-500">저장된 파일이 없습니다.</p>';
+                        return;
+                    }
+
+                    fileList.innerHTML = '';
+                    const sortedFiles = data.Contents.sort((a, b) => b.LastModified - a.LastModified);
+
+                    sortedFiles.forEach(file => {
+                        const listItem = document.createElement('li');
+                        const fileName = file.Key.split('/').pop();
+                        const lastModified = new Date(file.LastModified).toLocaleString('ko-KR');
+                        listItem.innerHTML = `<strong>${fileName}</strong><br><span class="text-sm text-gray-500">${lastModified}</span>`;
+                        listItem.onclick = () => loadFileFromS3(file.Key);
+                        fileList.appendChild(listItem);
+                    });
+                    modalContent.innerHTML = '';
+                    modalContent.appendChild(fileList);
+
+                } catch (err) {
+                    console.error("S3 파일 목록 조회 오류:", err);
+                    modalContent.innerHTML = `<p class="text-center text-red-500">파일 목록을 불러오는 중 오류가 발생했습니다.</p>`;
+                }
+            }
+
+            async function loadFileFromS3(key) {
+                const modal = document.getElementById('fileListModal');
+                const modalContent = document.getElementById('modalContent');
+                modalContent.innerHTML = '<div class="loading-spinner"></div><p class="text-center">파일을 불러오는 중...</p>';
+
+                try {
+                    const params = { Bucket: awsConfig.s3BucketName, Key: key };
+                    const data = await s3.getObject(params).promise();
+                    const fileContent = data.Body.toString('utf-8');
+                    
+                    localStorage.setItem(localStorageKey, fileContent);
+                    loadFormDataFromLocalStorage();
+
+                    modal.close();
+                    alert('파일을 성공적으로 불러왔습니다.');
+                } catch (err) {
+                    console.error("S3 파일 로딩 오류:", err);
+                    alert(`S3에서 파일을 불러오는 중 오류가 발생했습니다: ${err.message}`);
+                    showFileListModal();
+                }
+            }
+
+            function generateDocument() {
+                const getVal = (id, placeholder = '') => document.getElementById(id)?.value || placeholder;
+                const formatDate = (dateStr) => dateStr ? new Date(dateStr).toLocaleDateString('ko-KR') : '미지정';
+
+                const meetingTitle = getVal('meetingTitle', '회의 제목');
+                const meetingDate = getVal('meetingDate');
+                const startTime = getVal('startTime');
+                const endTime = getVal('endTime');
+                const meetingLocation = getVal('meetingLocation', '미지정');
+                const meetingHost = getVal('meetingHost', '미지정');
+                const meetingPurpose = getVal('meetingPurpose').replace(/\n/g, '<br>');
+                const discussionContent = getVal('discussionContent').replace(/\n/g, '<br>');
+                const referenceDocs = getVal('referenceDocs');
+                const nextMeetingDate = getVal('nextMeetingDate');
+
+                const attendees = getDynamicData(dynamicFields.attendees.containerId);
+                const agendas = getDynamicData(dynamicFields.agendas.containerId);
+                const actionItems = getDynamicData(dynamicFields.actionItems.containerId);
+
+                const attendeesHtml = attendees.length > 0 ? `<ul>${attendees.map(p => `<li>${p.name || ''} (${p.position || '소속 미지정'})</li>`).join('')}</ul>` : '<p>참석자 정보 없음</p>';
+                const agendaHtml = agendas.length > 0 ? `<ol>${agendas.map(a => `<li>${a.agenda || ''}</li>`).join('')}</ol>` : '<p>안건 없음</p>';
+                const actionItemsHtml = actionItems.length > 0 ? `
+                    <table class="w-full text-left border-collapse mt-2">
+                        <thead><tr><th class="p-2 border">실행 항목</th><th class="p-2 border">담당자</th><th class="p-2 border">기한</th></tr></thead>
+                        <tbody>${actionItems.map(item => `
+                            <tr>
+                                <td class="p-2 border">${item.task || ''}</td>
+                                <td class="p-2 border">${item.owner || ''}</td>
+                                <td class="p-2 border">${item.due || ''}</td>
+                            </tr>`).join('')}
+                        </tbody>
+                    </table>` : '<p>후속 조치 없음</p>';
+                
+                let timeString = '';
+                if (startTime && endTime) timeString = `${startTime} ~ ${endTime}`;
+                else if (startTime) timeString = `${startTime} ~`;
+                
+                const generatedHtml = `
+                    <div class="fade-in">
+                        <div class="gradient-header-bg text-center mb-8">
+                            <p class="text-lg opacity-80">회의록</p>
+                            <h1 class="text-4xl font-bold mb-2">${meetingTitle}</h1>
+                        </div>
+                        
+                        <div class="material-section">
+                            <h2 class="text-xl font-bold mb-4">1. 기본 정보</h2>
+                            <table class="w-full text-left"><tbody>
+                                <tr><td class="font-semibold p-2 w-1/4">회의 일시</td><td class="p-2">${formatDate(meetingDate)} ${timeString}</td></tr>
+                                <tr><td class="font-semibold p-2 w-1/4">회의 장소</td><td class="p-2">${meetingLocation}</td></tr>
+                                <tr><td class="font-semibold p-2 w-1/4">주최/주관</td><td class="p-2">${meetingHost}</td></tr>
+                            </tbody></table>
+                        </div>
+
+                        <div class="material-section">
+                            <h2 class="text-xl font-bold mb-4">2. 참석자</h2>
+                            ${attendeesHtml}
+                        </div>
+
+                        <div class="material-section">
+                            <h2 class="text-xl font-bold mb-4">3. 회의 목적 및 안건</h2>
+                            <h3 class="font-semibold mt-4 mb-2">회의 목적</h3>
+                            <p>${meetingPurpose || '내용 없음'}</p>
+                            <h3 class="font-semibold mt-4 mb-2">안건 (Agenda)</h3>
+                            ${agendaHtml}
+                        </div>
+
+                        <div class="material-section">
+                            <h2 class="text-xl font-bold mb-4">4. 논의 내용 및 결정 사항</h2>
+                            <div class="prose max-w-none">${discussionContent || '내용 없음'}</div>
+                        </div>
+                        
+                        <div class="material-section">
+                            <h2 class="text-xl font-bold mb-4">5. 후속 조치 (Action Items)</h2>
+                            ${actionItemsHtml}
+                        </div>
+
+                        <div class="material-section">
+                            <h2 class="text-xl font-bold mb-4">6. 기타</h2>
+                            <p><strong>참고 자료:</strong> ${referenceDocs || '없음'}</p>
+                            <p><strong>다음 회의:</strong> ${nextMeetingDate || '미정'}</p>
+                        </div>
+
+                        <div class="text-center text-gray-500 text-sm mt-8 pt-4 border-t">
+                            <p>본 문서는 ${new Date().toLocaleDateString('ko-KR')}에 생성되었습니다.</p>
+                        </div>
+                    </div>
+                `;
+                document.getElementById('documentPreview').innerHTML = generatedHtml;
+            }
+        });
+    </script>
+</body>
+</html>
