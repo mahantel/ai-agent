@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구글 AI 서비스 완전 가이드: 제미나이(Gemini) 중심</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /*
+         * 전반적인 스타일 설정
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI",Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: #121212; /* Futuristic Tech Background */
+            min-height: 100vh;
+            color: #e0e0e0; /* Futuristic Tech Text */
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /*
+         * 헤더 섹션 스타일
+         */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(28, 28, 28, 0.85);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            color: #e0e0e0;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titlePulse {
+            from { transform: scale(1); filter: hue-rotate(0deg); }
+            to { transform: scale(1.05); filter: hue-rotate(10deg); }
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #00ffff;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .header-description {
+            font-size: 1.1em;
+            color: #cccccc;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(120deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /*
+         * 개요 카드 섹션 스타일
+         */
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .card {
+            background: rgba(28, 28, 28, 0.85);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00ffff, #ff00ff);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card:hover {
+            transform: translateY(-15px) rotate(1deg);
+            box-shadow: 0 30px 60px rgba(0, 255, 255, 0.2);
+        }
+        
+        .card-icon {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-10px) rotate(2deg); }
+            50% { transform: translateY(-5px) rotate(-1deg); }
+            75% { transform: translateY(-15px) rotate(1deg); }
+        }
+        
+        .card h3 {
+            color: #00ffff;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #00ffff;
+            padding-bottom: 15px;
+            position: relative;
+        }
+        
+        .card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: #ff00ff;
+            transition: width 0.3s ease;
+        }
+        
+        .card:hover h3::after {
+            width: 100%;
+        }
+
+        /*
+         * 통합 기능 및 활용 방안 섹션 스타일
+         */
+        .feature-use-case-section {
+            padding: 50px 0;
+        }
+
+        .feature-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+            margin-bottom: 50px;
+            align-items: stretch;
+        }
+
+        .feature-description-box {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #121212;
+            padding: 40px;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 255, 255, 0.2);
+        }
+        
+        .feature-description-box .feature-icon {
+             font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .feature-description-box .feature-title {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+
+        .feature-description-box .feature-description {
+            font-size: 1.1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .use-case-box {
+            background: rgba(28, 28, 28, 0.85);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .use-case-box h4 {
+            font-size: 1.6em;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .use-case-box h4 a {
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        .use-case-box h4 a:hover {
+            text-decoration: underline;
+        }
+
+        /*
+         * 핵심 기능 2x2 그리드 스타일
+         */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px; /* 상단 showcase와 간격 */
+        }
+        
+        .feature-item {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #121212;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 255, 255, 0.2);
+        }
+        
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.8s ease;
+            opacity: 0;
+        }
+        
+        .feature-item:hover::before {
+            animation: shine 0.8s ease;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+        
+        .feature-item:hover {
+            transform: scale(1.08) rotate(-2deg);
+            box-shadow: 0 25px 50px rgba(255, 0, 255, 0.3);
+        }
+        
+        .feature-item .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-item .feature-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+        
+        .feature-item .feature-description {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .prompt-example {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #121212;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #ffffff;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .prompt-example::before {
+            content: '💬';
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5em;
+        }
+        
+        .prompt-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .prompt-text {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        
+        .result-box {
+            background: rgba(224, 224, 224, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+        }
+        
+        .result-label {
+            font-weight: bold;
+            color: #e0e0e0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-label a {
+            color: #00ffff;
+            text-decoration: underline;
+            font-size: 0.8em;
+        }
+
+        .result-box ul a, .feature-description-box a {
+            color: #121212;
+            font-weight: bold;
+        }
+        
+        /*
+         * 장점 및 한계점 섹션 스타일
+         */
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            background: rgba(28, 28, 28, 0.85);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .pros {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(0, 255, 255, 0.05));
+            border: 2px solid #00ffff;
+        }
+        
+        .cons {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(255, 0, 255, 0.05));
+            border: 2px solid #ff00ff;
+        }
+        
+        .pros h4, .cons h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .pros h4 {
+            color: #00ffff;
+        }
+        
+        .cons h4 {
+            color: #ff00ff;
+        }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pros li, .cons li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(224, 224, 224, 0.2);
+        }
+        
+        .pros li:last-child, .cons li:last-child {
+            border-bottom: none;
+        }
+        
+        /*
+         * 공통 강조 스타일
+         */
+        .strong {
+            font-weight: bold;
+            color: #e0e0e0;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(0, 255, 255, 0.8), rgba(255, 0, 255, 0.8));
+            color: #121212;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 255, 255, 0.2);
+        }
+        
+        /*
+         * 결론 섹션 스타일
+         */
+        .conclusion {
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            color: #121212;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .conclusion::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .conclusion p {
+            position: relative;
+            z-index: 1;
+        }
+
+        /*
+         * 푸터 섹션 스타일
+         */
+        .site-footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            color: rgba(224, 224, 224, 0.5);
+            font-size: 0.9em;
+            border-top: 1px solid rgba(224, 224, 224, 0.2);
+        }
+
+        .site-footer a {
+            color: rgba(224, 224, 224, 0.7);
+            text-decoration: none;
+        }
+
+        .site-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /*
+         * 반응형 디자인
+         */
+        @media (max-width: 992px) {
+            .feature-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            .features-grid, .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /*
+         * 추가 애니메이션 및 타이틀 스타일
+         */
+        .pulse {
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 30px rgba(0, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #e0e0e0;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 구글 AI 서비스 소개</h1>
+            <p class="subtitle">🚀 <span class="strong">제미나이(Gemini)</span>를 중심으로: 단순 업무는 AI에게, 직원은 핵심에 집중</p>
+            <div class="header-description">
+                <ul style="list-style: none; padding: 0; margin: 0; text-align: left;">
+                    <li><strong class="strong">🤝 일상의 활용:</strong> 번역, 글쓰기, 검색 등 일상 업무를 더 쉽고 빠르게 처리함.</li>
+                    <li><strong class="strong">🎨 창의력의 확장:</strong> 새로운 아이디어, 블로그 글, 영상 스크립트 제작에 영감을 줌.</li>
+                    <li><strong class="strong">📈 업무 효율성 혁신:</strong> 데이터 분석, 회의록 요약, 보고서 작성 등 시간을 절약함.</li>
+                    <li><strong class="strong">🔬 최신 기술 체험:</strong> 구글의 가장 진보된 AI 기술을 누구보다 먼저 사용함.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="overview">
+            <div class="card">
+                <div class="card-icon">🧠</div>
+                <h3>제미나이: 멀티모달 AI 엔진</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>✨ 구글이 개발한 <span class="strong">멀티모달(Multi-Modal) AI</span>로, 여러 종류의 정보를 동시에 이해하고 처리함.</li>
+                    <li>- <strong class="highlight">텍스트:</strong> 글, 질문</li>
+                    <li>- <strong class="highlight">이미지:</strong> 사진, 차트</li>
+                    <li>- <strong class="highlight">오디오:</strong> 음성, 소리</li>
+                    <li>- <strong class="highlight">비디오:</strong> 동영상</li>
+                    <li>💡 여행 사진을 보여주며 "여기 어디야?"라고 물으면, 사진과 질문을 함께 이해하여 답변함.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">💡</div>
+                <h3>뛰어난 AI 모델 활용 </h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>🗣️ <span class="strong">깊이 있는 대화:</span> 복잡하고 미묘한 주제에 대해 논리적이고 상세한 답변 제공.</li>
+                    <li>✍️ <span class="strong">창의적 생성:</span> 소설, 시, 프로그래밍 코드 등 다양한 형태의 창작물 생성.</li>
+                    <li>🔗 <span class="strong">통합적 사고:</span> 서로 다른 정보(예: 이미지+텍스트)를 연결하여 종합적인 결론 도출.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🌍</div>
+                <h3>요금제 비교</h3>
+                 <ul style="list-style: none; padding: 0; margin: 0; font-size: 0.95em;">
+                    <li style="margin-bottom: 15px;">
+                        <strong style="color: #00ffff;">Gemini (무료)</strong><br>
+                        1) 가볍게 AI를 체험하거나 일상적인 검색, 글쓰기 도움을 원하는 사용자.<br>
+                        2) 대화 및 파일처리, 텍스트/이미지 기본 입출력 지원
+                    </li>
+                    <li>
+                        <strong style="color: #ff00ff;">Gemini Advanced (유료)</strong><br>
+                        1) 월 ₩29,000. 전문가 및 파워 유저용.<br>
+                        2) 고성능 2.5 Pro 모델로 초대용량 분석 및 모든 모달리티(영상,음성 등) 지원.<br>
+                        3) Gems, Drive 2TB 등 추가 혜택 제공.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="feature-use-case-section">
+            <h2 class="section-title">🎛️ 주요 기능 및 활용 방안</h2>
+
+            <div class="feature-showcase">
+                <div class="feature-description-box">
+                    <div class="feature-icon">💎</div>
+                    <div class="feature-title">Gems (젬스)</div>
+                    <div class="feature-description">
+                        <strong>나만의 맞춤형 AI 비서</strong>를 코딩 없이 만드는 기능. 업무 활용 셀프코딩, 유투브 요약 등 특정 목적에 맞게 AI를 설정하여 반복 작업을 자동화함.
+                    </div>
+                </div>
+                <div class="use-case-box">
+                    <h4>☁️ 사용 목적에 맞는 나만의 AI 자동화 활용 </h4>
+                    <div class="prompt-example">
+                        <div class="prompt-label">📝 Gem 만들기 :</div>
+                        <div class="prompt-text">
+                           "유튜브 영상 URL만 입력하면 ①분석 보고서(Markdown), ②상세 인포그래픽(HTML), ③핵심 마인드맵(Markdown) 생성 하기"
+                        </div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">🎯 Gem 활용 예시 : <a href="https://jeongsanghoon.notion.site/Gemini-Gem-prompt-21cda23d969a80978e15dad9920dc628" target="_blank">상세 프롬프트 링크</a></div>
+                         <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>프롬프트 프로메테우스 :</strong> AI에게 조사나, 작업 지시를 위한 전문가 프롬프트 작성 </li>
+                            <li><strong>양식 프로메테우스:</strong> 회의록, 주간보고 등 업무 양식 생성 및 저장 등 업무 자동화 .</li>
+                            <li><strong>다단계 업무 자동화 :</strong> 하나의 명령으로 여러 작업을 순서대로 자동 진행 .</li>
+                            <li><strong>반복 업무 자동화:</strong> Gems를 활용해 정보 수집 및 분석 프로세스를 시스템화.</li>
+                            <li><strong>맞춤형 비서:</strong> 특정 작업을 전담하는 개인화된 AI 에이전트 구축.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-showcase">
+                <div class="feature-description-box">
+                    <div class="feature-icon">📓</div>
+                    <div class="feature-title">NotebookLM</div>
+                    <div class="feature-description">
+                        사용자가 업로드한 문서(PDF, URL)를 기반으로 답변하고 요약하는 <strong>AI 연구 및 글쓰기 파트너</strong>. 정보의 출처를 명확히 제시하여 신뢰도 높은 결과물 생성.
+                        <br><br>
+                        <a href="https://ai-agent-wine-two.vercel.app/notebookLM.html" target="_blank">인포그래픽 상세 소개</a>
+                    </div>
+                </div>
+                <div class="use-case-box">
+                     <h4>🤝 자신의 문서에 기반한 AI 비서 <a href="https://notebooklm.google.com/" target="_blank">(바로가기)</a></h4>
+                    <div class="prompt-example">
+                        <div class="prompt-label">📝 업무 활용 예시:</div>
+                        <div class="prompt-text">
+                           "①회의록에서 주요 결정과 액션 아이템 추출, ②프로젝트 관련 문서 한곳에 모아 쉬운 업무 파악, ③관심 주제와 뉴스를 모아 종합 브리핑 자동 생성과 여러 출처간 교차점과 공통정보 탐색"
+                        </div>
+                    </div>
+                    <div class="result-box">
+                        <div class="result-label">🎯 주요기능:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>다양한 자료를 한 노트북에 관리 :</strong> PDF, 텍스트,Google 문서, 오디오파일, 웹 페이지 URL, YouTube 동영상 링크 등  </li>
+                            <li><strong>자동 요약과 문서 가이드 제공 :</strong> FAQ, 브리핑문서, 타임라인, 학습 가이드 등 </li>
+                            <li><strong>문맥 기반 질의응답 강점 :</strong> 업로드한 자료 기반 AI 대화, 본문 내 출처 표시로 신뢰성 확보 </li>
+                            <li><strong>AI 음성 팟캐스트 :</strong> 두 명의 호스트 간 대호 형태의 오디오로 문서 요약 </li>
+                            <li><strong>협업 및 공유 :</strong> 노트북 공유로 팀단위, 조직단위 참고자료와 대화 내용 공유 </li>
+                            <li><strong>동화기업 업무메뉴얼 사례:</strong> <a href="https://notebooklm.google.com/notebook/ba56f94c-d71e-4d32-aee2-8e6b5f7043f6" target="_blank" style="color: #e0e0e0; text-decoration: underline;">바로가기</a></li>
+                            <li><strong>웹 정보 수집 프로그램 :</strong> 유투브나 웹서핑 중 발견한 유용한 정보 즉시 추가하고 핵심 추출 <a href="https://chromewebstore.google.com/detail/notebooklm-%EC%9B%B9-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0-%EB%8F%84%EA%B5%AC/ijdefdijdmghafocfmmdojfghnpelnfn" target="_blank" style="color: #e0e0e0; text-decoration: underline;">(웹 가져오기 Chrome 확장프로그램)</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                     <div class="feature-icon">🔬</div>
+                    <div class="feature-title">Deep Research</div>
+                    <div class="feature-description">
+                        최대 <strong>100만 토큰(75만단어. 2,500페이지)</strong>의 정보를 한 번에 분석하여 깊이 있는 인사이트를 제공하는 심층 연구 도구임.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">Canvas (캔버스)</div>
+                    <div class="feature-description">
+                        텍스트, 이미지, 도표를 결합하여 <strong>시각적으로 아이디어를 발전</strong>시키는 AI 스케치패드. 마인드맵, UI 프로토타입 제작에 활용됨.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">워크스페이스 통합</div>
+                    <div class="feature-description">
+                        <strong>Gmail, Docs, Sheets</strong> 등 기존 구글 서비스에 완벽하게 통합되어, 별도 프로그램 없이 사용하던 도구에서 바로 AI 기능 활용 가능함.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-title">강력한 검색 결합</div>
+                    <div class="feature-description">
+                        AI 답변 생성 시 <strong>실시간 웹 검색 결과</strong>를 결합하여 항상 최신 정보와 명확한 출처를 제공하여 답변의 신뢰도를 높임.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ 구글 AI의 강력한 장점</h4>
+                <ul>
+                    <li><span class="strong">완벽한 통합성:</span> 구글 워크스페이스에서 바로 AI 사용 가능.</li>
+                    <li><span class="strong">최신 정보 반영:</span> 실시간 검색 결합으로 신뢰도 높은 답변.</li>
+                    <li><span class="strong">초대용량 처리:</span> 긴 문서, 여러 파일을 한 번에 분석.</li>
+                    <li><span class="strong">오프라인 작동:</span> 인터넷 없이도 스마트폰에서 기본 기능 사용.</li>
+                    <li><span class="strong">유연한 요금제:</span> 개인부터 기업까지 최적화된 비용 설계.</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 고려해야 할 한계점</h4>
+                <ul>
+                    <li><span class="strong">정보 왜곡(환각):</span> 드물지만 사실과 다른 정보 생성 가능성.</li>
+                    <li><span class="strong">데이터 프라이버시:</span> 민감 정보 사용 시 보안 정책 확인 필요.</li>
+                    <li><span class="strong">편향성 문제:</span> 학습 데이터에 내재된 편향이 결과에 영향.</li>
+                    <li><span class="strong">비용 발생:</span> 고급 기능 사용 시 비용 고려.</li>
+                    <li><span class="strong">기능의 복잡성:</span> 일부 전문 기능은 학습 시간 필요.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="conclusion pulse">
+            <h2>🚀 가능성을 증폭시키는 플랫폼</h2>
+            <div style="background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); padding: 30px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.3); text-align: left;">
+                <p style="font-size: 1.2em; line-height: 1.7; margin-bottom: 20px;">
+                    <strong class="highlight">회사 관점에서, 구글 AI는 미래 기술이 아닌 현재의 업무 생산성을 즉각적으로 향상시키는 현실적인 비즈니스 도구임.</strong>
+                    직원들이 이미 익숙한 Gmail, Docs 등 구글 워크스페이스에 완벽하게 통합되어, 별도의 도입 장벽이나 학습 비용 없이 기존 업무 프로세스의 효율을 극대화하는 것이 핵심.
+                </p>
+                <div style="border-top: 1px solid rgba(0,0,0,0.2); padding-top: 20px;">
+                     <p style="font-size: 1.1em; line-height: 1.7;">
+                        방대한 보고서와 데이터를 수 분 내에 분석하고(<strong style="color: black;">Deep Research, NotebookLM</strong>), 반복적인 프로세스는 맞춤형 AI(<strong style="color: black;">Gems</strong>)로 자동화하며, 회의록 요약부터 보고서 초안 작성까지의 시간을 획기적으로 단축시킴.
+                        결과적으로, 기업의 의사결정 속도를 높이고 직원들이 더 높은 가치를 창출하는 핵심 업무에 집중하도록 지원함.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="site-footer">
+        <p>2025.6.27(금)</p>
+        <p>© 2025 AI 생산성 도구 스터디 그룹 | 문의: <a href="mailto:stephan@dongwha.com">stephan@dongwha.com</a></p>
+    </footer>
+</body>
+</html>
