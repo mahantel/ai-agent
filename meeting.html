@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회의록 작성 도우미 ✍️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap'); /* 제목용 폰트 */
+
+        :root {
+            --accent-color: #3B82F6; /* 기본 파란색 */
+            --accent-color-light: #BFDBFE;
+            --accent-color-start: #3B82F6;
+            --accent-color-end: #2563EB;
+            --header-bg-image: url('https://images.unsplash.com/photo-1554224155-1696413565d3?q=80&w=2070&auto=format&fit=crop'); /* 회의/문서 관련 이미지 */
+            --header-bg-position: center 30%;
+            --header-bg-size: cover;
+            --header-bg-opacity: 0.1;
+            --header-mix-blend-mode: soft-light;
+        }
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .material-section {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 3rem 0;
+        }
+        .gradient-header-bg {
+            background: linear-gradient(135deg, var(--accent-color-start) 0%, var(--accent-color-end) 100%);
+            padding: 2.5rem;
+            border-radius: 1rem;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .gradient-header-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--header-bg-image);
+            background-repeat: no-repeat;
+            background-position: var(--header-bg-position);
+            background-size: var(--header-bg-size);
+            opacity: var(--header-bg-opacity);
+            z-index: 1;
+            mix-blend-mode: var(--header-mix-blend-mode);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .gradient-header-bg h1, .gradient-header-bg p {
+            position: relative;
+            z-index: 2;
+        }
+        .accent-border {
+            border-left: 5px solid var(--accent-color);
+            padding-left: 1rem;
+            background-color: #f9fafb;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .section-heading, .document-output h2, .document-output h3 {
+            font-family: 'Playfair Display', serif !important;
+            font-weight: 700 !important;
+            color: #1F2937 !important;
+            display: flex;
+            align-items: center;
+        }
+        .section-heading {
+            border-bottom: 3px solid var(--accent-color-light);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-heading i {
+            margin-right: 0.75rem;
+            color: var(--accent-color);
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                font-size: 10pt;
+                line-height: 1.5;
+                color: #333333;
+                background-color: transparent !important;
+            }
+            .container { max-width: 100%; padding: 0; margin: 0; }
+            .shadow-lg { box-shadow: none !important; }
+            .document-output { margin: 0; padding: 0; width: 100%; font-family: 'Noto Sans KR', sans-serif !important; }
+            .material-section {
+                box-shadow: none !important;
+                border: 1px solid #e5e7eb !important;
+                padding: 1.2rem !important;
+                margin-bottom: 1.5rem !important;
+                background-color: #ffffff !important;
+                border-radius: 0 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .document-output h2, .document-output h3 {
+                font-family: 'Playfair Display', serif !important;
+                font-weight: 700 !important;
+                color: #1F2937 !important;
+            }
+            .section-heading {
+                border-bottom: 2px solid #ddd !important;
+                padding-bottom: 0.25rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .gradient-header-bg {
+                background: linear-gradient(135deg, var(--accent-color-start) 0%, var(--accent-color-end) 100%) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color: white !important;
+                padding: 1rem !important;
+                border-radius: 0 !important;
+                text-shadow: none !important;
+                border: none !important;
+            }
+            .gradient-header-bg::before {
+                background-image: var(--header-bg-image) !important;
+                opacity: 0.05 !important;
+                mix-blend-mode: normal !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .accent-border {
+                border-left-color: var(--accent-color) !important;
+                background-color: #f3f4f6 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+        @page {
+            size: A4;
+            margin: 0.75in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="text-center mb-8 no-print">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-file-signature text-blue-600 mr-3"></i> 회의록 작성 도우미
+            </h1>
+            <p class="text-gray-600 text-lg">필요 정보를 입력하여 체계적인 회의록을 신속하게 완성하세요.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Input Form Section -->
+            <div class="bg-white rounded-lg shadow-lg p-6 no-print">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-edit text-blue-500 mr-2"></i>
+                    정보 입력
+                </h2>
+                <form id="documentForm" class="space-y-6">
+                    <!-- Basic Info -->
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-info-circle"></i> 기본 정보
+                        </h3>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="meetingTitle">회의 제목*</label>
+                            <input type="text" id="meetingTitle" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 2025년 3분기 마케팅 전략 회의">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="meetingDate">회의 일시</label>
+                                <input type="date" id="meetingDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="startTime">시작 시간</label>
+                                <input type="time" id="startTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-sm font-medium text-gray-700 mb-2" for="endTime">종료 시간</label>
+                                <input type="time" id="endTime" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="location">회의 장소</label>
+                            <input type="text" id="location" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 본사 15층 대회의실 / 온라인 (Google Meet)">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="organizer">주최자/주관</label>
+                            <input type="text" id="organizer" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 마케팅팀">
+                        </div>
+                    </div>
+
+                    <!-- Attendees -->
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-users"></i> 참석자 정보
+                        </h3>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="attendees">참석자 명단</label>
+                            <textarea id="attendees" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 홍길동 (마케팅팀/팀장)&#10;김영희 (개발팀/선임)&#10;이순신 (기획팀/대리)"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="absentees">불참자 (사유)</label>
+                            <input type="text" id="absentees" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 박혁거세 (영업팀/과장) (외부 미팅)">
+                        </div>
+                    </div>
+                    
+                    <!-- Purpose and Agenda -->
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-bullseye"></i> 회의 목적 및 안건
+                        </h3>
+                        <div class="input-group">
+                             <label class="block text-sm font-medium text-gray-700 mb-2" for="purpose">회의 목적 (Goal)</label>
+                             <textarea id="purpose" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 3분기 신규 캠페인 아이디어 공유 및 실행 계획 수립"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="agenda">안건 목록 (Agenda)</label>
+                            <textarea id="agenda" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1. 2분기 마케팅 성과 리뷰&#10;2. 3분기 신규 캠페인 아이디어 브레인스토밍&#10;3. 캠페인 실행 방안 및 R&R 논의"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Discussion and Decisions -->
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                           <i class="fas fa-comments"></i> 논의 내용 및 결정 사항
+                        </h3>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="discussion">주요 논의사항 (각 안건별 요약)</label>
+                            <textarea id="discussion" rows="6" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="[안건 1] ...에 대한 논의가 있었음.&#10;[안건 2] ... 아이디어가 제안되었음.&#10;- 발언자 (홍길동): ... 의견 제시"></textarea>
+                        </div>
+                         <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="decisions">결정된 내용 (의사결정 사항)</label>
+                            <textarea id="decisions" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1. '썸머 페스타' 캠페인을 3분기 메인 캠페인으로 선정함.&#10;2. SNS 채널을 중심으로 홍보를 진행하기로 결정함."></textarea>
+                        </div>
+                         <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="unresolved">미해결 안건 / 추가 논의 필요 사항</label>
+                            <textarea id="unresolved" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 캠페인 세부 예산안은 차주 재무팀과 협의 후 확정 필요"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Action Items -->
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-tasks"></i> 후속 조치 (Action Items)
+                        </h3>
+                         <textarea id="actionItems" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="[할 일] [담당자] [마감 기한] 형식으로 작성&#10;예:&#10;1. 캠페인 상세 기획안 작성 (담당: 김영희, 기한: 2025-07-10)&#10;2. 재무팀과 예산안 협의 미팅 조율 (담당: 홍길동, 기한: 2025-07-05)"></textarea>
+                    </div>
+
+                    <!-- Other -->
+                    <div>
+                         <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-paperclip"></i> 기타
+                        </h3>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="references">참고 문서/자료</label>
+                            <input type="text" id="references" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 2분기 성과 보고서.pptx (내부망 링크)">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="nextMeeting">다음 회의 일정</label>
+                            <input type="text" id="nextMeeting" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 2025년 7월 12일 (금) 10:00 / 주제: 캠페인 기획안 리뷰">
+                        </div>
+                         <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="notes">기타 특이사항</label>
+                            <textarea id="notes" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="내용 없음"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="flex flex-col space-y-3 pt-4">
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 font-semibold">
+                            <i class="fas fa-magic mr-2"></i>
+                            회의록 생성하기
+                        </button>
+                        <button type="button" id="saveFileButton" class="w-full bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition duration-300 font-semibold">
+                            <i class="fas fa-download mr-2"></i>
+                            데이터 파일로 저장
+                        </button>
+                        <label for="loadFile" class="w-full bg-gray-500 text-white py-3 px-6 rounded-md hover:bg-gray-600 transition duration-300 font-semibold text-center cursor-pointer">
+                            <i class="fas fa-upload mr-2"></i>
+                            데이터 파일 불러오기
+                            <input type="file" id="loadFile" accept=".json" class="hidden">
+                        </label>
+                        <button type="button" id="clearFormButton" class="w-full bg-gray-300 text-gray-800 py-3 px-6 rounded-md hover:bg-gray-400 transition duration-300 font-semibold">
+                            <i class="fas fa-trash-alt mr-2"></i>
+                            양식 초기화
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Preview Section -->
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="flex items-center justify-between mb-6 no-print">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-file-alt text-green-600 mr-2"></i>
+                        생성된 회의록
+                    </h2>
+                    <button onclick="window.print()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
+                        <i class="fas fa-print mr-2"></i>
+                        PDF 저장
+                    </button>
+                </div>
+                <div id="documentPreview" class="document-output">
+                    <div class="text-center text-gray-500 py-12">
+                        <i class="fas fa-clipboard-list text-6xl mb-4"></i>
+                        <p class="text-lg">좌측 양식을 작성하고 "회의록 생성하기" 버튼을 클릭하세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for notifications -->
+    <div id="notificationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 no-print">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 max-w-sm text-center">
+            <p id="modalMessage" class="text-gray-800 mb-4"></p>
+            <button id="modalCloseButton" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">확인</button>
+        </div>
+    </div>
+    
+    <script>
+        const formId = 'documentForm'; 
+        const localStorageKey = 'meeting_minutes_form_data';
+
+        const modal = document.getElementById('notificationModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalCloseButton = document.getElementById('modalCloseButton');
+
+        // Function to show modal
+        function showNotification(message) {
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+        }
+
+        // Close modal
+        modalCloseButton.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Util function to replace newlines with <br> tags
+        function nl2br(str) {
+            if (typeof str !== 'string') {
+                return '';
+            }
+            return str.replace(/\n/g, '<br>');
+        }
+
+        // Function to generate a section of the document
+        function generateSection(title, icon, content, isList = false) {
+            if (!content || content.trim() === '' || content.trim() === '내용 없음') return '';
+            
+            const processedContent = isList ? 
+                `<p class="text-gray-700 leading-relaxed">${nl2br(content)}</p>` :
+                `<p class="text-gray-700 leading-relaxed">${nl2br(content)}</p>`;
+
+            return `
+                <div class="material-section">
+                    <h3 class="section-heading text-xl">
+                        <i class="fas ${icon}"></i>
+                        ${title}
+                    </h3>
+                    ${processedContent}
+                </div>
+            `;
+        }
+        
+        // Save form data to Local Storage
+        function saveFormDataToLocalStorage() {
+            const formData = {};
+            const formElements = document.querySelectorAll(`#${formId} input, #${formId} textarea`);
+            formElements.forEach(element => {
+                if (element.id) {
+                    formData[element.id] = element.value;
+                }
+            });
+            localStorage.setItem(localStorageKey, JSON.stringify(formData));
+        }
+
+        // Load form data from Local Storage
+        function loadFormDataFromLocalStorage() {
+            const savedData = localStorage.getItem(localStorageKey);
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                for (const id in formData) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.value = formData[id];
+                    }
+                }
+                generateDocument();
+            } else {
+                 const meetingDateElement = document.getElementById('meetingDate');
+                 if(meetingDateElement) {
+                       meetingDateElement.value = new Date().toISOString().slice(0,10);
+                 }
+                 const startTimeElement = document.getElementById('startTime');
+                 if(startTimeElement) startTimeElement.value = "10:00";
+                 const endTimeElement = document.getElementById('endTime');
+                 if(endTimeElement) endTimeElement.value = "11:00";
+            }
+        }
+
+        // Clear the form and local storage
+        function clearForm() {
+            document.getElementById(formId).reset();
+            const meetingDateElement = document.getElementById('meetingDate');
+            if(meetingDateElement) {
+                meetingDateElement.value = new Date().toISOString().slice(0,10);
+            }
+            const startTimeElement = document.getElementById('startTime');
+            if(startTimeElement) startTimeElement.value = "10:00";
+            const endTimeElement = document.getElementById('endTime');
+            if(endTimeElement) endTimeElement.value = "11:00";
+            localStorage.removeItem(localStorageKey);
+            generateDocument(); // Update preview to be empty
+        }
+
+        // Download form data as a JSON file
+        function downloadDataFile() {
+            const formData = {};
+            const formElements = document.querySelectorAll(`#${formId} input, #${formId} textarea`);
+            formElements.forEach(element => {
+                if (element.id) {
+                    formData[element.id] = element.value;
+                }
+            });
+            const dataStr = JSON.stringify(formData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const formTitle = document.getElementById('meetingTitle').value.replace(/[^a-zA-Z0-9가-힣_]/g, '_') || '회의록';
+            a.download = `${formTitle}_${new Date().toISOString().slice(0,10)}.json`; 
+            a.href = url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Upload and load data from a JSON file
+        function uploadDataFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const loadedData = JSON.parse(e.target.result);
+                    for (const id in loadedData) {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.value = loadedData[id];
+                        }
+                    }
+                    saveFormDataToLocalStorage();
+                    generateDocument();
+                    showNotification('데이터를 성공적으로 불러왔습니다!');
+                } catch (error) {
+                    showNotification('파일을 읽는 중 오류가 발생했습니다: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset file input
+        }
+
+        // Main function to generate the document preview
+        function generateDocument() {
+            const getVal = (id) => document.getElementById(id).value;
+            const getPlaceholder = (id) => document.getElementById(id).placeholder;
+            
+            const meetingTitle = getVal('meetingTitle') || '제목 미입력';
+            const meetingDate = getVal('meetingDate');
+            const startTime = getVal('startTime');
+            const endTime = getVal('endTime');
+            const location = getVal('location');
+            const organizer = getVal('organizer');
+
+            let dateTimeString = '';
+            if (meetingDate) {
+                 dateTimeString += new Date(meetingDate).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+            }
+            if (startTime && endTime) {
+                dateTimeString += ` (${startTime} ~ ${endTime})`;
+            } else if (startTime) {
+                 dateTimeString += ` (${startTime} ~ )`;
+            }
+
+            const attendees = getVal('attendees');
+            const absentees = getVal('absentees');
+            const purpose = getVal('purpose');
+            const agenda = getVal('agenda');
+            const discussion = getVal('discussion');
+            const decisions = getVal('decisions');
+            const unresolved = getVal('unresolved');
+            const actionItems = getVal('actionItems');
+            const references = getVal('references');
+            const nextMeeting = getVal('nextMeeting');
+            const notes = getVal('notes');
+
+            // Check if all fields are empty to show placeholder text
+            const allEmpty = ![meetingTitle, dateTimeString, location, organizer, attendees, absentees, purpose, agenda, discussion, decisions, unresolved, actionItems, references, nextMeeting, notes].some(val => val && (val !=='제목 미입력'));
+
+            if (allEmpty) {
+                 document.getElementById('documentPreview').innerHTML = `
+                    <div class="text-center text-gray-500 py-12">
+                        <i class="fas fa-clipboard-list text-6xl mb-4"></i>
+                        <p class="text-lg">좌측 양식을 작성하고 "회의록 생성하기" 버튼을 클릭하세요</p>
+                    </div>`;
+                return;
+            }
+
+            let generatedHtml = `
+                <div class="fade-in">
+                    <div class="gradient-header-bg text-center mb-8">
+                        <p class="text-xl opacity-90">회의록</p>
+                        <h1 class="text-4xl font-bold mb-2">${meetingTitle}</h1>
+                    </div>
+
+                    <div class="material-section">
+                        <h3 class="section-heading text-xl"><i class="fas fa-info-circle"></i> 기본 정보</h3>
+                        <table class="w-full text-left text-gray-700">
+                            <tbody>
+                                <tr class="border-b"><td class="py-2 pr-4 font-semibold w-1/4">일시</td><td class="py-2">${dateTimeString || '미지정'}</td></tr>
+                                <tr class="border-b"><td class="py-2 pr-4 font-semibold">장소</td><td class="py-2">${location || '미지정'}</td></tr>
+                                <tr class="border-b"><td class="py-2 pr-4 font-semibold">주최/주관</td><td class="py-2">${organizer || '미지정'}</td></tr>
+                                <tr class="border-b"><td class="py-2 pr-4 font-semibold">참석자</td><td class="py-2">${nl2br(attendees) || '정보 없음'}</td></tr>
+                                ${absentees ? `<tr><td class="py-2 pr-4 font-semibold">불참자</td><td class="py-2">${absentees}</td></tr>` : ''}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    ${generateSection('회의 목적', 'fa-bullseye', purpose)}
+                    ${generateSection('안건 목록', 'fa-list-check', agenda, true)}
+                    ${generateSection('주요 논의 내용', 'fa-comments', discussion, true)}
+                    
+                    <div class="material-section accent-border">
+                        <h3 class="section-heading text-xl"><i class="fas fa-gavel"></i> 결정 사항</h3>
+                        <p class="text-gray-800 font-semibold leading-relaxed">${nl2br(decisions) || '결정된 내용 없음'}</p>
+                    </div>
+
+                    ${unresolved ? generateSection('미해결 / 추후 논의', 'fa-question-circle', unresolved) : ''}
+                    
+                    <div class="material-section">
+                        <h3 class="section-heading text-xl"><i class="fas fa-tasks"></i> 후속 조치 (Action Items)</h3>
+                        <p class="text-gray-700 leading-relaxed">${nl2br(actionItems) || '해당 없음'}</p>
+                    </div>
+
+                    ${(references || nextMeeting || notes && notes.trim() !== '내용 없음' ) ? `
+                    <div class="material-section">
+                        <h3 class="section-heading text-xl"><i class="fas fa-paperclip"></i> 기타</h3>
+                        ${references ? `<p><strong>참고 자료:</strong> ${references}</p>` : ''}
+                        ${nextMeeting ? `<p class="mt-2"><strong>다음 회의:</strong> ${nextMeeting}</p>` : ''}
+                        ${notes && notes.trim() !== '내용 없음' ? `<p class="mt-2"><strong>특이사항:</strong> ${nl2br(notes)}</p>` : ''}
+                    </div>` : ''}
+                    
+                    <div class="text-center text-gray-500 text-sm mt-8 pt-4 border-t border-gray-200">
+                        <p>상기 내용과 같이 회의록을 작성함.</p>
+                        <p class="mt-4">${new Date(meetingDate || new Date()).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                        <p class="mt-2">작성자: (자동 생성)</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('documentPreview').innerHTML = generatedHtml;
+        }
+
+        // Feature: Pressing Tab in an empty field fills it with the placeholder text
+        function setupInputPlaceholders() {
+            const inputs = document.querySelectorAll('#documentForm input[placeholder], #documentForm textarea[placeholder]');
+            inputs.forEach(input => {
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab' && input.value.trim() === '' && e.target.placeholder) {
+                        e.preventDefault();
+                        // Handle multiline placeholders in textareas
+                        input.value = e.target.placeholder.replace(/&#10;/g, '\n');
+                        saveFormDataToLocalStorage();
+                        generateDocument();
+                        // Find next focusable element and focus it
+                        const allInputs = Array.from(document.querySelectorAll('input, textarea, button, [tabindex]:not([tabindex="-1"])'));
+                        const currentIndex = allInputs.indexOf(e.target);
+                        const nextElement = allInputs[currentIndex + 1];
+                        if (nextElement) {
+                            nextElement.focus();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Event Listeners Setup
+        document.addEventListener('DOMContentLoaded', function() {
+            setupInputPlaceholders();
+            loadFormDataFromLocalStorage();
+            
+            const formElements = document.querySelectorAll(`#${formId} input, #${formId} textarea`);
+            formElements.forEach(element => {
+                element.addEventListener('input', () => {
+                    saveFormDataToLocalStorage();
+                    generateDocument();
+                });
+            });
+
+            document.getElementById('saveFileButton').addEventListener('click', downloadDataFile);
+            document.getElementById('loadFile').addEventListener('change', uploadDataFile);
+            document.getElementById('clearFormButton').addEventListener('click', clearForm);
+            
+            document.getElementById('documentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                generateDocument();
+                // On small screens, scroll to the preview after generating
+                if (window.innerWidth < 1024) { 
+                    document.getElementById('documentPreview').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
