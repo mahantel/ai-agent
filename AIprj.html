@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동화그룹 AI 도입 전략 보고서 분석</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: #f0f2f5;
+            color: #172b4d;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dfe1e6;
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            color: #0052cc;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #42526e;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .header-description {
+            font-size: 1.1em;
+            color: #172b4d;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #e9f2ff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #0052cc;
+        }
+        
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 82, 204, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #dfe1e6;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover { 
+            transform: translateY(-10px); 
+            box-shadow: 0 20px 40px rgba(0, 82, 204, 0.2); 
+        }
+        
+        .card-icon {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #0052cc;
+        }
+        
+        .card h3 {
+            color: #0052cc;
+            margin-bottom: 15px;
+            font-size: 1.6em;
+            border-bottom: 2px solid #0065ff;
+            padding-bottom: 10px;
+        }
+
+        .card-goal {
+            font-size: 0.95em;
+            color: #42526e;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f7f8fa;
+            border-left: 4px solid #0065ff;
+            line-height: 1.5;
+        }
+        .card ul { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 18px; 
+            flex-grow: 1; 
+        }
+        .card ul li { 
+            font-size: 0.95em; 
+            line-height: 1.5; 
+        }
+        
+        .features-section {
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .feature-item {
+            background: linear-gradient(135deg, #0052cc, #0065ff);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 82, 204, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .feature-description {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        
+        .timeline-section {
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 60px 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dfe1e6;
+        }
+        
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: #b3bac5;
+        }
+        
+        .timeline-item {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border: 1px solid #dfe1e6;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #0052cc;
+            border-radius: 50%;
+            top: 40px;
+            box-shadow: 0 0 10px rgba(0, 82, 204, 0.5);
+            border: 3px solid white;
+        }
+        
+        .timeline-item:nth-child(odd)::after {
+            right: -62px;
+        }
+        
+        .timeline-item:nth-child(even)::after {
+            left: -62px;
+        }
+        
+        .timeline-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0052cc;
+            margin-bottom: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #172b4d;
+            margin-bottom: 15px;
+        }
+        
+        .conclusion {
+            background: #0052cc;
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 82, 204, 0.2);
+        }
+        
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .strong {
+            font-weight: bold;
+            color: #0052cc;
+        }
+        
+        .highlight {
+            background: #e9f2ff;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #0052cc;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style-position: inside;
+            padding-left: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-section {
+                padding: 30px;
+            }
+            .timeline::before {
+                left: 20px;
+            }
+            .timeline-item {
+                width: calc(100% - 60px);
+                margin-left: 60px !important;
+            }
+            .timeline-item::after {
+                left: -50px !important;
+            }
+            .header h1 {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 동화그룹 AI 도입 전략 보고서</h1>
+            <p class="subtitle"><strong>경영의 관점으로 접근하는 AI 혁신</strong> - 기술을 넘어 비전, 데이터, 사람으로 (2025.07.02)</p>
+            <div class="header-description">
+                <p>동화그룹의 AI 전략은 기술 도입 자체를 넘어, <span class="strong">AI를 활용해 각 사업의 본질적인 문제를 해결</span>하고 지속 가능한 경쟁력을 확보하는 것을 목표로 합니다. 이는 단순한 기술 트렌드 추종이 아닌, 전사적 혁신을 위한 체계적인 청사진입니다.</p>
+            </div>
+        </div>
+        
+        <div class="overview">
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>1. 명확한 사업 비전</h3>
+                <ul>
+                    <li>💡 기술이 아닌 <span class="strong">사업 문제(Pain Point) 해결</span>에서 출발</li>
+                    <li>🏢 각 사업부의 특성에 맞는 <span class="highlight">구체적인 AI 적용 목표</span> 설정</li>
+                    <li>📈 AI를 통한 비즈니스 가치 창출을 최우선 과제로 인식</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">💾</div>
+                <h3>2. 데이터 거버넌스</h3>
+                <ul>
+                    <li>⛽ AI의 성과는 <span class="strong">데이터의 품질</span>을 넘을 수 없음을 명시</li>
+                    <li>📋 데이터 수집-정제-활용-폐기 전 과정의 <span class="highlight">관리 체계</span> 수립</li>
+                    <li>🧑‍💻 최종 목표는 현업 누구나 데이터를 활용하는 <span class="strong">데이터 민주화</span></li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">👨‍👩‍👧‍👦</div>
+                <h3>3. 인재 양성 및 조직 문화</h3>
+                <ul>
+                    <li>🤝 AI는 '대체'가 아닌 <span class="strong">'협업 도구'</span>라는 공감대 형성</li>
+                    <li>🎓 전 직원 대상 'AI 리터러시' 교육과 <span class="highlight">'시민 데이터 과학자'</span> 양성</li>
+                    <li>⚙️ AI와 인간이 협업하는 <span class="strong">Human-in-the-Loop</span> 모델 정착</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-section">
+            <h2 class="section-title">📈 3단계 실행 로드맵 <a href="https://jeongsanghoon.notion.site/225da23d969a808a95fdc2edc4b51e60?v=225da23d969a81ed939d000c60c5e427" target="_blank" style="font-size: 0.6em; text-decoration: none; color: #42526e; vertical-align: middle;">(상세 WBS 예시)</a></h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">1단계: 준비 및 탐색 (6개월)</div>
+                    <div class="timeline-title">🚀 기반 구축과 가능성 확인</div>
+                    <ul>
+                        <li>전담 TF팀 구성 및 전사적 AI 리터러시 교육 실시</li>
+                        <li>소규모 PoC를 통해 <span class="strong">Quick-Win(작은 성공)</span> 사례 발굴</li>
+                        <li>AI 도입에 대한 긍정적 공감대 형성</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">2단계: 시범 도입 및 확산 (1년)</div>
+                    <div class="timeline-title">🔥 실증 및 내재화</div>
+                     <ul>
+                        <li>파일럿 프로젝트를 실제 업무에 적용하여 <span class="strong">성과 측정</span></li>
+                        <li>AI 윤리 원칙 구체화 및 데이터 거버넌스 체계 고도화</li>
+                        <li>'시민 데이터 과학자' 심화 육성</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">3단계: 전사 통합 및 고도화 (2년 이상)</div>
+                    <div class="timeline-title">🌍 문화 정착과 혁신 가속</div>
+                    <ul>
+                        <li>성공 모델을 전사 사업부로 확산 적용</li>
+                        <li>AI 전담 조직(CoE)을 중심으로 혁신 주도</li>
+                        <li><span class="strong">데이터 기반 의사결정</span>을 조직 문화로 완전 정착</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <section class="features-section">
+            <h2 class="section-title">💡 사업군별 AI적용 혁신 아이디어(예시)</h2>
+            <div class="overview" style="margin-bottom: 0;">
+                <div class="card">
+                    <div class="card-icon">🏭</div>
+                    <h3>제조업 혁신</h3>
+                    <p class="card-goal"><strong>목표:</strong> 고부가가치 제품 개발, 만성 불량 해결, 현장 작업자 역량 강화.</p>
+                    <ul>
+                        <li><strong class="strong">Project Genesis (생성형 디자인):</strong><br>AI 기반 신소재 설계로 고부가가치 제품 창출.</li>
+                        <li><strong class="strong">Project Echo (디지털 트윈 RCA):</strong><br>가상공장 시뮬레이션으로 만성 불량 원인 규명.</li>
+                        <li><strong class="strong">Project Mentor (AI 코파일럿):</strong><br>AR 글래스 통한 현장 작업자 실시간 지원.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📰</div>
+                    <h3>미디어 사업부 혁신</h3>
+                    <p class="card-goal"><strong>목표:</strong> 초개인화된 콘텐츠 경험 제공, 탐사보도 역량 강화, 미디어 위상 제고.</p>
+                    <ul>
+                        <li><strong class="strong">Project Chronicle (인터랙티브 뉴스):</strong><br>독자 페르소나 맞춤형 콘텐츠 자동 생성.</li>
+                        <li><strong class="strong">Project Veritas (AI 저널리스트):</strong><br>AI 에이전트의 자율적 정보 수집 및 분석.</li>
+                        <li><strong class="strong">Project Cassandra (뉴스 예측):</strong><br>데이터 기반 미래 시나리오 예측 콘텐츠 개발.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🚗</div>
+                    <h3>중고차 사업부 혁신</h3>
+                    <p class="card-goal"><strong>목표:</strong> 정보 비대칭 해소, 진단 신뢰도 확보, 압도적인 구매 편의성 제공.</p>
+                    <ul>
+                        <li><strong class="strong">Project Empath (구매의도 예측):</strong><br>고객-딜러 대화 분석으로 계약 전환율 증대.</li>
+                        <li><strong class="strong">Project Sherlock (미세결함 진단):</strong><br>멀티모달 AI로 숨겨진 차량 결함 탐지.</li>
+                        <li><strong class="strong">Project Concierge (원클릭 구매):</strong><br>AI가 금융/보험 상품 조합 및 구매 절차 자동화.</li>
+                    </ul>
+                </div>
+                 <div class="card">
+                    <div class="card-icon">🏢</div>
+                    <h3>업무 생산성 혁신</h3>
+                    <p class="card-goal"><strong>목표:</strong> 전사적 생산성 혁신, 내부 통제 강화, 전사적 AI 혁신 문화 확산.</p>
+                    <ul>
+                        <li><strong class="strong">Project Sentinel (AI 재무감사):</strong><br>ERP 연동 실시간 전수 감사로 내부 통제 강화.</li>
+                        <li><strong class="strong">Project Compass (AI HR비서):</strong><br>RAG 기반 내부 규정 질의응답 자동화.</li>
+                        <li><strong class="strong">Project LEGO (AI 워크플로우 빌더):</strong><br>전 직원이 직접 만드는 노코드 AI 자동화.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" style="background: #f8f9fa;">
+            <h2 class="section-title">⚙️ 적용 핵심 AI 기술</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-title">AI 에이전트</div>
+                    <div class="feature-description">인간의 지시를 받아 정보 수집, 상품 비교, 감사 등 복잡한 과업을 자율적으로 수행합니다. (Veritas, Concierge, Sentinel)</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">생성형 AI</div>
+                    <div class="feature-description">신소재 미세구조 설계, 독자 맞춤형 뉴스 콘텐츠 생성 등 세상에 없던 새로운 것을 창조합니다. (Genesis, Chronicle)</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎛️</div>
+                    <div class="feature-title">멀티모달 AI</div>
+                    <div class="feature-description">영상, 소음, 진동 등 복합 데이터를 종합적으로 이해하여 인간의 오감을 뛰어넘는 분석을 제공합니다. (Echo, Sherlock)</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-title">디지털 트윈</div>
+                    <div class="feature-description">현실의 공장을 가상에 복제하고 시뮬레이션을 통해 복합적인 문제의 근본 원인을 규명합니다. (Echo)</div>
+                </div>
+                 <div class="feature-item">
+                    <div class="feature-icon">🧑‍⚖️</div>
+                    <div class="feature-title">RAG (검색 증강 생성)</div>
+                    <div class="feature-description">내부 규정, 법규 등 신뢰도 높은 데이터를 기반으로 정확한 정보를 제공하는 AI를 구현합니다. (Compass)</div>
+                </div>
+                 <div class="feature-item">
+                    <div class="feature-icon">🧩</div>
+                    <div class="feature-title">노코드 AI 플랫폼</div>
+                    <div class="feature-description">모든 직원이 코딩 없이 자신만의 업무 자동화 AI를 만들어 상향식 혁신 문화를 확산시킵니다. (LEGO)</div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="conclusion">
+            <h2>✨ AI 시대, '디지털 혁신'의 길을 묻다</h2>
+            <p style="font-size: 1.2em; max-width: 800px; margin: 20px auto;">
+                동화그룹의 AI 전략은 기술의 도입이 끝이 아니라, 비즈니스의 근본적인 혁신을 위한 시작임을 보여줍니다.<br>
+                <strong>명확한 비전, 신뢰도 높은 데이터, 그리고 준비된 사람</strong>이 함께할 때, AI는 비로소 강력한 성장 엔진이 될 것입니다.
+            </p>
+        </div>
+    </div>
+    <p style="text-align:center; margin-top:20px; font-size: 0.9em; color: #5e6c84;">출처: 동화그룹 AI 도입 전략 보고서 분석 (제공된 텍스트 기반) [2025.07.02]</p>
+</body>
+</html>
