@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동화그룹 AX 전략 분석</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: #f0f2f5;
+            min-height: 100vh;
+            color: #172b4d;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        .header h1 {
+            font-size: 3.5em;
+            color: #0052cc;
+            margin-bottom: 25px;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+        @keyframes titlePulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.02); }
+        }
+        .subtitle {
+            font-size: 1.4em;
+            color: #555;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        .header-description {
+            font-size: 1.1em;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #e9f2ff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #0052cc;
+        }
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #0052cc;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+        .card-icon {
+            font-size: 3.5em;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .card h3 {
+            color: #0052cc;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #0052cc;
+            padding-bottom: 15px;
+        }
+        .features-section {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .feature-item {
+            background: #0052cc;
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        .feature-item:hover {
+            transform: scale(1.08);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+        }
+        .feature-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .feature-description {
+            font-size: 1em;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+        .stats-container {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 50px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+        .stat-item {
+            position: relative;
+            padding: 20px;
+            border-radius: 15px;
+            background: #e9f2ff;
+            transition: all 0.3s ease;
+        }
+        .stat-item:hover {
+            transform: scale(1.1);
+            background: #d4e4ff;
+        }
+        .stat-number {
+            font-size: 3.5em;
+            font-weight: bold;
+            color: #0052cc;
+            display: block;
+        }
+        .stat-label {
+            font-size: 1.1em;
+            color: #172b4d;
+            font-weight: 600;
+        }
+        .timeline-section {
+            margin: 60px 0;
+        }
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 100%;
+            background: #0052cc;
+            border-radius: 3px;
+        }
+        .timeline-item {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            width: 45%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        .timeline-item:nth-child(odd) {
+            margin-left: 0;
+        }
+        .timeline-item:nth-child(even) {
+            margin-left: 55%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: #0052cc;
+            border-radius: 50%;
+            top: 40px;
+            border: 3px solid #f0f2f5;
+        }
+        .timeline-item:nth-child(odd)::after {
+            right: -65px;
+        }
+        .timeline-item:nth-child(even)::after {
+            left: -65px;
+        }
+        .timeline-date {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #0052cc;
+            margin-bottom: 10px;
+        }
+        .timeline-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #172b4d;
+            margin-bottom: 15px;
+        }
+        .use-cases-section {
+            margin: 60px 0;
+        }
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin: 40px 0;
+        }
+        .use-case {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            border-left: 8px solid #0052cc;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+        .use-case:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+        .use-case h3 {
+            font-size: 1.8em;
+            color: #172b4d;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .prompt-example {
+            background: #172b4d;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #4c9aff;
+            font-family: 'Courier New', monospace;
+        }
+        .prompt-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .prompt-text {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+        .result-box {
+            background: #e9f2ff;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            border: 2px solid rgba(0, 82, 204, 0.3);
+        }
+        .result-label {
+            font-weight: bold;
+            color: #0052cc;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .pros {
+            background: rgba(39, 174, 96, 0.1);
+            border: 2px solid #27ae60;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        .cons {
+            background: rgba(231, 76, 60, 0.1);
+            border: 2px solid #e74c3c;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        .pros h4, .cons h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .pros h4 { color: #27ae60; }
+        .cons h4 { color: #e74c3c; }
+        .pros ul, .cons ul { list-style: none; padding: 0; }
+        .pros li, .cons li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .pros li:last-child, .cons li:last-child { border-bottom: none; }
+        .strong {
+            font-weight: bold;
+            color: #0052cc;
+        }
+        .highlight {
+            background: #d4e4ff;
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .conclusion {
+            background: #172b4d;
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+        }
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #172b4d;
+        }
+        @media (max-width: 768px) {
+            .timeline::before { left: 30px; }
+            .timeline-item { width: calc(100% - 80px); margin-left: 80px !important; }
+            .timeline-item::after { left: -65px !important; }
+            .header h1 { font-size: 2.5em; }
+            .use-cases { grid-template-columns: 1fr; }
+            .pros-cons { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 동화그룹 AX 전략 분석</h1>
+            <p class="subtitle">💡 <span class="strong">DX를 넘어 AI로</span> - 차세대 지능형 기업으로의 전환 로드맵 (2025.07.10)</p>
+            <div class="header-description">
+                <ul style="list-style: none; padding: 0; margin: 0; text-align: left;">
+                    <li>🏛️ <strong>AX 전략의 핵심</strong>은 기존의 강력한 DX 기반 위에 AI를 접목하여 <span class="strong">업무 방식을 근본적으로 고도화</span>하는 것</li>
+                    <li>🧠 단순 도구 도입을 넘어, 전 조직원의 <span class="highlight">AI 리터러시를 함양</span>하여 개인과 조직의 성과를 극대화</li>
+                    <li>🎯 AI를 파트너로 활용하여 <span class="strong">데이터 기반의 전문가급 결과물</span>을 창출하는 조직 문화 구축</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="overview">
+            <div class="card">
+                <div class="card-icon">🎓</div>
+                <h3>리터러시 역량 재정의</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>- <strong>디지털 리터러시:</strong> 이미 높은 수준. 모든 혁신의 근간.</li>
+                    <li>- <strong>데이터 리터러시:</strong> 과거 성장의 장애물. 데이터 해석 및 활용 능력.</li>
+                    <li>- <strong class="strong">AI 리터러시:</strong> 데이터 리터러시를 견인할 <span class="highlight">핵심 열쇠.</span> AI 결과의 비판적 평가 및 윤리적 활용 역량.</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>AX 전략 방향성</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>- <strong>인재상:</strong> 로지컬 씽킹을 갖추고 AI를 활용하는 <strong class="strong">'일잘러'</strong> 양성</li>
+                    <li>- <strong>활용 초점:</strong> <span class="highlight">언어 기반 업무</span> (요약, 분석, 초안)에 집중하여 생산성 극대화</li>
+                    <li>- <strong>핵심 과제:</strong> 개인의 AI 성과를 <strong class="strong">조직의 시너지</strong>로 연결</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>디지털혁신실의 역할</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>- <strong>기술 검증:</strong> 실질적 효과가 있는 AI 기술 파일럿 테스트 및 도입</li>
+                    <li>- <strong>서비스 개발:</strong> <span class="highlight">공통 AI 서비스/에이전트</span> 연구 및 실험</li>
+                    <li>- <strong>생태계 조성:</strong> 개별 활동 결과물이 전사적으로 활용되고 발전하는 방안 마련</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <h2 class="section-title">📊 AX 핵심 추진 영역</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">1</span>
+                    <div class="stat-label">🖥️ 업무 방식 전환 (개발)</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <div class="stat-label">🔗 편의성 강화 (사무)</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <div class="stat-label">🤖 서비스 구축 (자동화)</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <div class="stat-label">📈 의사결정 지원 (분석)</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="features-section">
+            <h2 class="section-title">🎛️ 주요 파일럿 프로젝트</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">💻</div>
+                    <div class="feature-title">Cursor AI</div>
+                    <div class="feature-description">
+                        AI 기반 코드 에디터 도입. 개발 생산성 및 코드 품질을 향상시키는 파일럿 진행 완료.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📎</div>
+                    <div class="feature-title">Microsoft Copilot</div>
+                    <div class="feature-description">
+                        익숙한 MS 오피스 환경 내 AI 접목. 전사 확산이 용이한 업무 편의성 강화 방안 연구.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💬</div>
+                    <div class="feature-title">AI Chatbot</div>
+                    <div class="feature-description">
+                        IT헬프데스크, 인사, 법무 등 반복 문의 자동 응대. Copilot Studio 활용하여 비용 절감.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🧑‍⚖️</div>
+                    <div class="feature-title">HR AI 제안 서비스</div>
+                    <div class="feature-description">
+                        성과 평가 피드백, KPI 수립 등 제안. Workday 데이터 기반 객관적 인사 관리 지원.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">D-Analytics + AI</div>
+                    <div class="feature-description">
+                        기존 데이터 분석 플랫폼에 AI 결합. 자연어 요약, 질의응답 기능으로 데이터 접근성 강화.
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-title">AI 포털 사이트</div>
+                    <div class="feature-description">
+                        AI 동향, 교육, 사례를 모아두는 중앙 허브. 전사적 AI 리터러시 역량 강화 목표 (계획).
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="timeline-section">
+            <h2 style="font-size: 2.5em; text-align: center; margin-bottom: 40px; color: #172b4d;">📈 AX 추진 로드맵 (향후 계획)</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 1: 기반 구축</div>
+                    <div class="timeline-title">🎓 역량 강화 및 데이터 정비</div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>- <strong class="strong">AI 포털 사이트</strong> 구축으로 전사적 학습 기반 마련</li>
+                        <li>- AI가 활용 가능한 형태로 <span class="highlight">비정형 콘텐츠 데이터</span> 가공 및 정비 연구</li>
+                        <li>- 임직원 AI 활용 현황 설문조사 기반 심층 분석</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 2: 현장 적용</div>
+                    <div class="timeline-title">⚙️ 프로세스 분석 및 Quick-Win 발굴</div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>- 직군별, 사업별 <strong class="strong">프로세스 분석</strong>을 통해 AI 적용점 탐색</li>
+                        <li>- 문제 해결 중심의 <span class="highlight">Quick-Win 사례</span> 지속적 창출</li>
+                        <li>- 파일럿 성공 사례의 점진적 전사 확장</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 3: 가속화</div>
+                    <div class="timeline-title">🔥 전사적 동기부여 (Boom Up)</div>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li>- 전사적 공감대 및 실효성 인식이 확보된 시점</li>
+                        <li>- <strong class="strong">AI 활용 경진대회</strong> 개최</li>
+                        <li>- <span class="highlight">GPI 연계</span> 등 강력한 드라이브 정책 시행</li>
+                    </ul>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Phase 4: 성숙도 측정</div>
+                    <div class="timeline-title">📏 성과 측정 기준 마련</div>
+                    <p><strong class="strong">AX 혁신의 결과</strong>와 조직의 <strong class="strong">성숙도를 평가</strong>할 수 있는 객관적인 기준 및 지표 개발. (지속적 과제)</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="use-cases-section">
+            <h2 style="font-size: 2.5em; text-align: center; margin-bottom: 40px; color: #172b4d;">💼 주요 기술별 활용 전략</h2>
+            <div class="use-cases">
+                <div class="use-case">
+                    <h3>💻 개발 부문 (Cursor AI)</h3>
+                    <div class="result-box">
+                        <div class="result-label">🎯 실행 결과:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>실제 사례 기반:</strong> 모바일 프레임워크 개발 등에서 실질적 도입 가능성 확인</li>
+                            <li><strong>기대 효과:</strong> 개발 속도 향상, 코드 품질 제고, 디버깅 시간 단축</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <h3>🏢 사무/기획 부문 (Copilot & LLM)</h3>
+                     <div class="result-box">
+                        <div class="result-label">🎯 실행 결과:</div>
+                        <ul style="margin: 0; padding-left: 20px;">
+                            <li><strong>업무 자동화:</strong> 보고서 초안, 회의록 요약, 이메일 작성 등 반복 업무 시간 단축</li>
+                            <li><strong>아이디어 창출:</strong> LLM을 활용한 브레인스토밍 및 기획안 구조화</li>
+                            <li><strong>쉬운 접근성:</strong> 익숙한 오피스 환경에서 AI를 활용하여 진입 장벽 최소화</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="use-case">
+                    <h3>📈 분석 부문 (D-Analytics + AI)</h3>
+                    <div class="result-box">
+                        <div class="result-label">🎯 실행 결과:</div>
+                         <ul style="margin: 0; padding-left: 20px;">
+                             <li><strong>사용자 친화적 보고:</strong> 지표 동향을 자연어로 요약하여 데이터 이해도 증진</li>
+                             <li><strong>인터랙티브 분석:</strong> 챗봇을 통해 지표에 대해 질문하고 관련 분석을 추천받음</li>
+                             <li><strong>리터러시 보완:</strong> 데이터 해석의 어려움을 AI가 보조하여 데이터 기반 의사결정 지원</li>
+                         </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ 추진 전략의 강점</h4>
+                <ul>
+                    <li>🎯 <span class="strong">현실적 접근:</span> DX 기반 위에 AX를 쌓는 점진적 전략</li>
+                    <li>🌱 <span class="strong">인간 중심:</span> 기술 도입보다 'AI 리터러시' 역량 강화를 우선</li>
+                    <li>🧪 <span class="strong">실증 기반:</span> 파일럿 프로젝트로 효과 검증 후 확장</li>
+                    <li>🔗 <span class="strong">생태계 연계:</span> 익숙한 O365 등 기존 시스템과 연계 고려</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 예상되는 과제</h4>
+                <ul>
+                    <li>🧩 <span class="strong">시너지 창출:</span> 개인의 성과를 조직 전체로 연결할 방안</li>
+                    <li>🧹 <span class="strong">데이터 정비:</span> 비정형 데이터의 AI 학습용 가공 문제</li>
+                    <li>🏃 <span class="strong">변화 관리:</span> 전사적 저항을 극복하고 참여를 유도할 방안</li>
+                    <li>⚖️ <span class="strong">성과 측정:</span> AX 성숙도를 정량적으로 평가할 기준 부재</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="conclusion">
+            <h2>🚀 DX를 넘어, AX 시대로</h2>
+            <div style="background: rgba(255,255,255,0.1); padding: 25px; border-radius: 15px; margin: 20px 0;">
+                <p style="font-size: 1.4em; margin-bottom: 15px;">
+                    동화의 AX 전략은 단순한 기술 도입이 아닌, <strong style="color: #99caff;">사람과 조직의 근본적인 체질 개선</strong>을 목표로 합니다.
+                </p>
+                <p style="font-size: 1.2em; opacity: 0.9;">
+                    AI를 파트너로 삼아 모든 임직원이 데이터에 기반한 <strong style="color: #99caff;">전문가로 성장</strong>하고, 이를 통해 기업 전체의 <strong style="color: #99caff;">경쟁력을 한 단계 도약</strong>시키는 것이 최종 목표입니다.
+                </p>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top:20px; font-size:0.9em; color:#555;">출처: 동화 그룹 내부 전략 문서 '동화가 지향해야 할 AX 방향' (2025.07.10)</p>
+    </div>
+</body>
+</html>
