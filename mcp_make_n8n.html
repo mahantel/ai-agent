@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP와 업무 자동화 툴 완전 가이드</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
+    
+    :root {
+      --fashion-1: #593C47;
+      --fashion-2: #F2E63D;
+      --fashion-3: #F2C53D;
+      --fashion-4: #F25C05;
+      --fashion-5: #F24405;
+      --section-title: #1e40af;
+      --subtitle: #475569;
+      --body-text: #334155;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+      line-height: 1.4;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, var(--fashion-1), var(--fashion-5));
+      padding: 30px;
+      text-align: center;
+      border-bottom: 3px dashed var(--fashion-3);
+      position: relative;
+    }
+    
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      right: 40px;
+      width: 30px;
+      height: 30px;
+      background-color: var(--fashion-3);
+      border-radius: 50%;
+      transform: rotate(-15deg);
+    }
+    
+    .title {
+      font-size: 36px;
+      color: white;
+      font-weight: 700;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .title::before {
+      content: '🤖';
+      margin-right: 10px;
+    }
+    
+    .subtitle {
+      color: white;
+      font-size: 18px;
+      margin-top: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 8px 15px;
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+      display: inline-block;
+    }
+    
+    .section {
+      padding: 30px;
+      position: relative;
+    }
+    
+    .section:nth-child(even) {
+      background-color: rgba(242, 230, 61, 0.03);
+    }
+    
+    .section-icon {
+      position: absolute;
+      top: -15px;
+      left: 30px;
+      font-size: 24px;
+      background-color: white;
+      padding: 8px;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+    }
+    
+    .section-title {
+      font-size: 24px;
+      color: var(--fashion-1);
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid var(--fashion-3);
+      display: inline-block;
+      position: relative;
+      z-index: 1;
+      margin-left: 10px;
+    }
+    
+    .subsection-title {
+      font-size: 20px;
+      color: var(--section-title);
+      font-weight: 700;
+      margin: 20px 0 15px 0;
+      position: relative;
+      display: inline-block;
+      padding-left: 25px;
+    }
+    
+    .subsection-title::before {
+      content: '▶';
+      position: absolute;
+      left: 0;
+      color: var(--fashion-4);
+    }
+    
+    .description {
+      font-size: 16px;
+      color: var(--body-text);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .feature-list {
+      list-style-type: none;
+      margin: 15px 0;
+    }
+    
+    .feature-list li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 12px;
+      color: var(--body-text);
+      font-size: 14px;
+    }
+    
+    .feature-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--fashion-4);
+      font-size: 20px;
+      top: -5px;
+    }
+    
+    .keyword {
+      font-weight: 700;
+      color: var(--fashion-1);
+      background: linear-gradient(transparent 60%, var(--fashion-2) 40%);
+      padding: 0 2px;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      margin: 2px;
+      background-color: var(--fashion-3);
+      color: var(--fashion-1);
+    }
+    
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(89, 60, 71, 0.05), rgba(242, 68, 4, 0.05));
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      border-left: 4px solid var(--fashion-4);
+      position: relative;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background-color: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .comparison-table th {
+      background: linear-gradient(135deg, var(--fashion-1), var(--fashion-5));
+      color: white;
+      padding: 15px 10px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    
+    .comparison-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 13px;
+      vertical-align: top;
+    }
+    
+    .comparison-table tr:nth-child(even) {
+      background-color: rgba(242, 230, 61, 0.05);
+    }
+    
+    .comparison-table .category {
+      font-weight: 700;
+      color: var(--fashion-1);
+      background-color: rgba(242, 196, 60, 0.2);
+    }
+    
+    .main-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      padding: 20px;
+    }
+    
+    .column {
+      flex: 1;
+      min-width: calc(50% - 30px);
+    }
+    
+    .card {
+      background-color: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      border: 2px solid #f1f5f9;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      color: var(--fashion-1);
+      font-weight: 700;
+      margin-bottom: 15px;
+      padding-left: 30px;
+      position: relative;
+    }
+    
+    .card-title .icon {
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-size: 22px;
+    }
+    
+    .structure-item {
+      background-color: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid var(--fashion-4);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .structure-item h4 {
+      color: var(--fashion-1);
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .mcp-structure-container {
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+      margin-top: 15px;
+    }
+    .mcp-structure-container .image-column {
+      flex: 1;
+      min-width: 40%;
+    }
+    .mcp-structure-container .text-column {
+      flex: 1.5;
+    }
+    .mcp-structure-container img {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .analogy-box {
+      background: linear-gradient(135deg, rgba(242, 230, 61, 0.2), rgba(242, 196, 60, 0.2));
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      border: 2px dashed var(--fashion-3);
+    }
+    
+    .analogy-box .emoji {
+      font-size: 40px;
+      margin: 10px;
+    }
+    
+    .analogy-box .text {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--fashion-1);
+      margin: 10px 0;
+    }
+    
+    .footer {
+      padding: 20px;
+      text-align: center;
+      color: var(--subtitle);
+      font-size: 14px;
+      border-top: 2px dashed #e2e8f0;
+      margin-top: 20px;
+    }
+    
+    @media (max-width: 1024px) {
+      .column {
+        min-width: 100%;
+      }
+      
+      .comparison-table {
+        font-size: 12px;
+      }
+      
+      .comparison-table th,
+      .comparison-table td {
+        padding: 8px 5px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .title {
+        font-size: 28px;
+      }
+      
+      .subtitle {
+        font-size: 16px;
+      }
+
+      .mcp-structure-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">MCP와 업무 자동화 툴 완전 가이드</h1>
+      <div class="subtitle">AI 시대의 업무 혁신을 위한 핵심 기술 이해하기</div>
+    </div>
+    
+    <div class="section">
+      <div class="section-icon">🔗</div>
+      <h2 class="section-title">MCP(Model Context Protocol) 개념 정리</h2>
+      
+      <div class="description">
+        MCP는 <span class="keyword">"AI 모델이 외부 서비스와 소통하고 연동하기 위한 '표준 통신 규약(프로토콜)'"</span>입니다.
+        개발자가 API를 이용해 여러 프로그램을 연결하는 것처럼, MCP는 AI 모델이 슬랙, 노션, 구글 캘린더 같은 외부 서비스를 쉽고 표준화된 방식으로 이용할 수 있도록 만들어진 <span class="keyword">AI를 위한 API</span>와 같다고 이해할 수 있습니다.
+      </div>
+      
+      <div class="subsection-title">MCP의 구조</div>
+      <div class="mcp-structure-container">
+        <div class="image-column">
+          <img src="https://i.imgur.com/8a5aR2i.png" alt="MCP 구조 다이어그램">
+        </div>
+        <div class="text-column">
+          <div class="structure-item">
+            <h4>① 호스트 (Host)</h4>
+            <p>AI 모델이 실행되는 주체 또는 환경</p>
+            <div class="badge">Claude 데스크톱 앱</div>
+            <div class="badge">Cursor AI 코드 에디터</div>
+            <div class="badge">N8N AI 에이전트 툴</div>
+          </div>
+          <div class="structure-item">
+            <h4>② 클라이언트 (Client)</h4>
+            <p>호스트에 내장되어 있으며, 호스트와 서버 간의 통신을 원활하게 중계하는 역할</p>
+          </div>
+          <div class="structure-item">
+            <h4>③ 서버 (Server) - 가장 중요한 개념</h4>
+            <p>연동하고 싶은 외부 서비스를 표준화된 방식으로 감싸는 모듈</p>
+            <div class="badge">텔레그램 서버</div>
+            <div class="badge">노션 서버</div>
+            <div class="badge">구글 캘린더 서버</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="subsection-title">MCP의 장점 및 중요성</div>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="width: 15%;">구분</th>
+            <th style="width: 42.5%;">기존 방식 (API 코딩 또는 자동화 툴)</th>
+            <th style="width: 42.5%;">MCP 활용 방식</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="category">연동 방식</td>
+            <td>각 서비스의 API 사양에 맞춰 직접 코딩 필요<br>자동화 툴에서도 각 기능마다 인증 및 세부 설정 필요</td>
+            <td>필요한 서비스의 <strong>'서버'를 한번 설치</strong>하면 즉시 사용 가능</td>
+          </tr>
+          <tr>
+            <td class="category">복잡성</td>
+            <td>서비스의 기능 하나하나를 개별적으로 구현하고 설정해야 함</td>
+            <td>서버가 복잡한 API 호출을 표준화된 기능으로 제공하여 사용자는 세부 설정 불필요</td>
+          </tr>
+          <tr>
+            <td class="category">재사용성</td>
+            <td>다른 플랫폼에서 동일한 기능을 사용하려면 처음부터 다시 설정해야 하는 번거로움 발생</td>
+            <td>어떤 호스트를 사용하든 <strong>동일한 MCP 서버를 설치</strong>하면 동일한 기능을 그대로 재사용 가능</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="highlight-box">
+        <div class="subsection-title">MCP 유용한 사이트</div>
+        <h4><a href="https://smithery.ai/" target="_blank" style="color: inherit;">스미더리 (Smithery): 공식 MCP 서버 레지스트리 🏛️</a></h4>
+        <p>사실상 <span class="keyword">MCP 서버를 위한 '앱 스토어'</span>와 같은 역할을 하는 가장 대표적인 사이트입니다.</p>
+        <ul class="feature-list">
+          <li><strong>검색 및 카테고리:</strong> 다양한 서버를 기능별로 찾아볼 수 있어 편리</li>
+          <li><strong>사용 편의성:</strong> 기술적인 지식이 깊지 않아도 어떤 서버들이 있는지 쉽게 파악 가능</li>
+          <li><strong>설치 안내:</strong> 대부분의 서버에 대한 기본적인 설명과 설치 가이드 제공</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-icon">⚙️</div>
+      <h2 class="section-title">업무 자동화 툴 Make & N8N 소개</h2>
+      
+      <div class="description">
+        Make와 N8N은 <span class="keyword">'워크플로우 자동화 툴'</span> 또는 <span class="keyword">'노코드(No-Code) 통합 플랫폼'</span>이라 불립니다. 
+        별도의 코딩 지식 없이도 마치 레고 블록을 조립하듯, 여러 앱과 서비스를 시각적으로 연결하여 특정 작업을 자동으로 처리하게 만드는 도구입니다.
+      </div>
+      
+      <div class="subsection-title">이 툴이 유용한 이유</div>
+      <ul class="feature-list">
+        <li><span class="keyword">생산성 극대화:</span> 단순 반복 업무에서 벗어나, 사람은 더 창의적이고 전략적인 고부가가치 업무에 집중</li>
+        <li><span class="keyword">비용 및 시간 절감:</span> 수작업으로 하던 일들을 자동화하여 업무 처리 시간을 획기적으로 단축</li>
+        <li><span class="keyword">휴먼 에러 감소:</span> 사람이 직접 데이터를 옮기거나 입력할 때 발생할 수 있는 실수를 원천적으로 차단</li>
+        <li><span class="keyword">신속한 업무 처리:</span> 24시간 365일 정해진 규칙에 따라 실시간으로 업무를 처리하여 비즈니스 속도 향상</li>
+      </ul>
+      
+      <div class="subsection-title">Make와 N8N 비교 분석</div>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="width: 15%;">구분</th>
+            <th style="width: 42.5%;">Make</th>
+            <th style="width: 42.5%;">N8N</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="category">활용 용이성</td>
+            <td><strong>매우 높음.</strong> 직관적인 UI/UX로 코딩 지식이 없는 사용자도 쉽게 사용 가능</td>
+            <td><strong>높음.</strong> Make와 유사하지만, 일부 고급 기능은 약간의 학습 필요</td>
+          </tr>
+          <tr>
+            <td class="category">비용</td>
+            <td><strong>무료 플랜:</strong> 월 1,000개 오퍼레이션<br><strong>유료 플랜:</strong> 기능 및 사용량에 따라 다양</td>
+            <td><strong>무료 플랜:</strong> 클라우드 버전 무료 제공 (제한적)<br><strong>유료 플랜:</strong> 클라우드 버전 및 자체 호스팅 버전 제공</td>
+          </tr>
+          <tr>
+            <td class="category">확장성</td>
+            <td>1,000개 이상의 다양한 앱과 서비스 연동 지원</td>
+            <td>200개 이상의 앱과 서비스 연동 지원 (계속 추가 중)</td>
+          </tr>
+          <tr>
+            <td class="category">주요 장점</td>
+            <td>압도적으로 많은 연동 앱<br>시각적이고 직관적인 워크플로우 구성<br>다양한 템플릿 제공</td>
+            <td>AI 에이전트 기능<br>자체 호스팅 가능 (보안 및 커스터마이징에 유리)<br>상대적으로 저렴한 유료 플랜</td>
+          </tr>
+          <tr>
+            <td class="category">주요 단점</td>
+            <td>일부 고급 기능은 유료 플랜에서만 제공<br>복잡한 워크플로우 구성 시 비용 증가</td>
+            <td>Make에 비해 연동 앱 수가 적음<br>커뮤니티 및 한글 자료 부족</td>
+          </tr>
+          <tr>
+            <td class="category">학습에 유용한 사이트</td>
+            <td>
+              🎥 <a href="https://www.youtube.com/playlist?list=PLhqjU9f_F2T946tAv5OL8Y6Q_ZNWy7Pfm" target="_blank" style="color: inherit; text-decoration: underline;">시민개발자 구씨 메이크 자동화 튜토리얼</a><br>
+              🎥 <a href="https://www.youtube.com/playlist?list=PLjs9nIkyFVwjp75lydvOikvex6cEpZZzK" target="_blank" style="color: inherit; text-decoration: underline;">게으른 일절러 LazyAchiever Make.com</a><br>
+              🎥 <a href="https://www.youtube.com/@notionactually" target="_blank" style="color: inherit; text-decoration: underline;">YouTube 노션다움 - 노션을 나만의 맞춤 AI비서로!</a><br>
+              🏫 <a href="https://class101.net/ko/referral/e9c20a53-31bb-4159-a192-64dfb39da53d/landing?utm_campaign=creator-referral&utm_content=krLPflAxzLaA2YUo88J29ISM4Rq2&utm_medium=referral&utm_source=creator&utm_term=20231207" target="_blank" style="color: inherit; text-decoration: underline;">CLASS101 세상의 모든 클래스를 하나의 구독으로(노션다움)</a>
+            </td>
+            <td>
+              🎥 <a href="https://www.youtube.com/playlist?list=PLhqjU9f_F2T8yuYZxVYzaUq3xKJa6JPvb" target="_blank" style="color: inherit; text-decoration: underline;">시민개발자 구씨 n8n 자동화 튜토리얼</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="section">
+      <div class="section-icon">🆚</div>
+      <h2 class="section-title">핵심 개념: '정해진 길' vs '스스로 찾는 길'</h2>
+      
+      <div class="main-content">
+        <div class="column">
+          <div class="analogy-box">
+            <div class="emoji">🚕</div>
+            <div class="text">MCP: 자율주행 택시</div>
+            <p>AI에게 목적지만 알려주면, <strong>스스로 가장 효율적인 '길(수행 방법)'을 찾아</strong> 작업을 수행</p>
+          </div>
+        </div>
+        
+        <div class="column">
+          <div class="analogy-box">
+            <div class="emoji">🚂</div>
+            <div class="text">Make / N8N: 자동화 기차</div>
+            <p>사용자가 미리 정해준 <strong>'정해진 지도(워크플로우)'를 따라</strong> 정확하게 작업을 수행</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-icon">📊</div>
+      <h2 class="section-title">MCP vs Make/N8N 핵심 비교 분석</h2>
+      
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="width: 15%;">구분</th>
+            <th style="width: 42.5%;">MCP (Model Context Protocol)</th>
+            <th style="width: 42.5%;">Make / N8N</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="category">개념/범주</td>
+            <td>AI-서비스 연동 <strong>프로토콜 (Protocol)</strong></td>
+            <td>워크플로우 자동화 <strong>플랫폼 (Platform)</strong></td>
+          </tr>
+          <tr>
+            <td class="category">핵심 목적</td>
+            <td><strong>AI의 상황 판단 기반</strong>의 동적 작업 수행</td>
+            <td><strong>정해진 규칙(Rule) 기반</strong>의 반복 업무 자동화</td>
+          </tr>
+          <tr>
+            <td class="category">작동 방식</td>
+            <td><strong>'서버'를 설치</strong> 후, AI에게 <strong>자연어(Prompt)로 명령</strong>하면 AI가 작업 순서와 도구를 결정</td>
+            <td><strong>'Trigger → Action'</strong> 방식의 시각적 워크플로우를 사용자가 <strong>직접 설계</strong></td>
+          </tr>
+          <tr>
+            <td class="category">유연성/자율성</td>
+            <td><strong>매우 높음</strong> (AI가 문맥을 이해하고 스스로 판단하여 유연하게 대처)</td>
+            <td><strong>낮음</strong> (설계된 경로로만 정확히 작동)</td>
+          </tr>
+          <tr>
+            <td class="category">주요 사용자</td>
+            <td>AI 에이전트 개발자, AI를 깊이 있게 활용하려는 <strong>고급 사용자</strong></td>
+            <td>기획자, 마케터, 운영자 등 <strong>비개발 직군</strong> 및 개발자</td>
+          </tr>
+          <tr>
+            <td class="category">설정의 복잡성</td>
+            <td><strong>초기 서버 설정</strong>이 핵심 (AI가 사용할 도구를 미리 준비해주는 개념)</td>
+            <td><strong>워크플로우 설계</strong>가 핵심 (어떤 순서로, 어떤 데이터를 넘길지 사용자가 정의)</td>
+          </tr>
+          <tr>
+            <td class="category">대표 사용 사례</td>
+            <td>"오늘 받은 중요 이메일들 요약하고, 가장 시급한 건에 대한 답장 초안 작성해줘"</td>
+            <td>"G메일에 '청구서'가 오면, 첨부파일을 드라이브에 저장하고 슬랙으로 알림 보내기"</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="section">
+      <div class="section-icon">🎯</div>
+      <h2 class="section-title">핵심 요약 및 선택 가이드</h2>
+      
+      <div class="main-content">
+        <div class="column">
+          <div class="card">
+            <h3 class="card-title"><span class="icon">⚙️</span>Make / N8N이 적합한 경우</h3>
+            <ul class="feature-list">
+              <li><span class="keyword">"만약 A이면, B를 실행하라"</span>와 같이 명확하고 <strong>규칙적인 반복 업무</strong>를 자동화하고 싶을 때</li>
+              <li>예측 가능하고, 정해진 순서대로 처리되어야 하는 프로세스를 자동화할 때</li>
+              <li>비개발자가 직접 자신의 업무를 자동화하고 싶을 때 가장 효과적</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="column">
+          <div class="card">
+            <h3 class="card-title"><span class="icon">🤖</span>MCP가 적합한 경우</h3>
+            <ul class="feature-list">
+              <li><span class="keyword">"상황을 보고 알아서 처리해줘"</span>와 같이 <strong>복잡하고 비정형적인 업무</strong>를 AI에게 위임하고 싶을 때</li>
+              <li>단순 반복을 넘어, AI의 추론과 판단 능력이 필요한 작업을 자동화할 때</li>
+              <li>단순한 자동화를 넘어 나만의 'AI 비서', 'AI 에이전트'를 만들고 싶을 때 강력한 힘을 발휘</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div class="highlight-box">
+        <p><strong>결론적으로</strong> Make와 N8N은 <span class="keyword">'프로세스'를 자동화</span>하는 데 초점을 맞추고, MCP는 <span class="keyword">AI '에이전트'에게 작업 수행 능력을 부여</span>하는 데 초점을 맞춘다고 볼 수 있습니다. 현재는 서로 다른 영역에 있지만, 미래에는 MCP를 통해 AI 에이전트가 Make나 N8N의 워크플로우를 필요에 따라 실행시키는 형태로 결합될 가능성도 충분합니다.</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      © 2024 MCP & Automation Guide. All Rights Reserved.
+    </div>
+  </div>
+</body>
+</html>
