@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구글 AI 모드 & 코멧 브라우저 분석</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fonts-archive/Paperlogy/subsets/Paperlogy-dynamic-subset.css" type="text/css"/>
+    <style>
+        /*
+         * 전반적인 스타일 설정
+         */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Paperlogy", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /*
+         * 헤더 섹션 스타일
+         */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 3.5em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titlePulse 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titlePulse {
+            from { transform: scale(1); filter: hue-rotate(0deg); }
+            to { transform: scale(1.05); filter: hue-rotate(10deg); }
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #555;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .header-description {
+            font-size: 1.1em;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /*
+         * 개요 카드 섹션 스타일
+         */
+        .overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+            /* justify-content: center; */ /* 이전 가운데 정렬 속성 제거 */
+            max-width: fit-content; /* 카드 그룹의 너비를 내용에 맞춤 */
+            margin: 0 auto; /* 카드 그룹 자체를 가운데 정렬 */
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .card:hover {
+            transform: translateY(-15px) rotate(1deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            position: relative;
+            display: flex; /* Flexbox 추가 */
+            align-items: center; /* 세로 중앙 정렬 */
+            gap: 10px; /* 아이콘과 텍스트 사이 간격 */
+        }
+        
+        .card h3 .icon-placeholder { /* 아이콘 placeholder 스타일 추가 */
+            font-size: 1.2em;
+            line-height: 1;
+        }
+
+        /* ▼▼▼ [수정] 다운로드 링크 스타일 (텍스트 버튼형) ▼▼▼ */
+        .download-icon-link {
+            margin-left: auto; /* 오른쪽으로 밀어냄 */
+            text-decoration: none;
+            color: #ffffff; /* 텍스트 흰색 */
+            background-color: #667eea; /* 기본 배경색 */
+            padding: 5px 12px; /* 패딩 */
+            border-radius: 20px; /* 둥근 모서리 */
+            font-size: 0.8em; /* 폰트 크기 살짝 줄임 */
+            font-weight: 600; /* 폰트 굵기 */
+            transition: all 0.3s ease;
+            line-height: 1.5; /* 라인 높이 조정 */
+        }
+        
+        .download-icon-link:hover {
+            background-color: #764ba2; /* 호버 시 배경색 변경 */
+            color: #ffffff; /* 호버 시 텍스트 색상 유지 */
+            transform: scale(1.05); /* 호버 시 약간 확대 */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 그림자 효과 */
+        }
+        /* ▲▲▲ [수정] 스타일 수정 완료 ▲▲▲ */
+
+        .card h3::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 30%;
+            height: 3px;
+            background: #f093fb;
+            transition: width 0.3s ease;
+        }
+        
+        .card:hover h3::after {
+            width: 100%;
+        }
+        
+        /* === 추가된 스타일: 카드 전체 너비 === */
+        .card.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        /* === '실용적인 활용 예시' 섹션 스타일 시작 === */
+        .practical-examples-section {
+            background-color: #f8f9fa; /* 연한 회색 배경 */
+            border-radius: 25px;
+            padding: 40px;
+            margin: 60px 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .practical-title {
+            font-size: 2.2em; /* 2.5em -> 2.2em */
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #d9534f, #c9302c); /* 붉은 계열 그라디언트 */
+            padding: 20px 30px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .example-card {
+            background: #ffffff; /* 흰색 카드 배경 */
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+        
+        .example-card-title {
+            font-size: 1.7em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .example-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* 태그 줄바꿈 */
+        }
+
+        .example-tag {
+            font-size: 0.9em;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            color: #fff;
+        }
+
+        .tag-blue { background-color: #5bc0de; }
+        .tag-green { background-color: #5cb85c; }
+        .tag-orange { background-color: #f0ad4e; }
+        .tag-purple { background-color: #764ba2; }
+
+
+        .example-list {
+            list-style: none; /* list-style-type: disc; */
+            padding-left: 0; /* padding-left: 25px; */
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.7;
+        }
+        
+        .example-list li {
+            margin-bottom: 12px;
+            padding-left: 1.4em; /* 아이콘을 위한 공간 */
+            position: relative;
+        }
+
+        .example-list li::before { /* 리스트 아이콘 추가 */
+            content: '🔹'; /* 또는 '✓', '→' 등 */
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #667eea; /* 아이콘 색상 */
+            font-size: 0.9em;
+        }
+
+
+        .prompt-section-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: left; /* 중앙 정렬 -> 좌측 정렬 */
+            margin-top: 40px;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .prompt-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .prompt-box {
+            background: #fffbef; /* 연한 베이지색 배경 */
+            border: 2px solid #f0e68c; /* 노란색 계열 테두리 */
+            border-radius: 15px;
+            padding: 25px;
+            font-size: 1.05em;
+            line-height: 1.6;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .prompt-box strong {
+            font-weight: bold;
+            color: #764ba2; /* 포인트 컬러 */
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        /* === '실용적인 활용 예시' 섹션 스타일 끝 === */
+        
+        /*
+         * 장점 및 한계점 섹션 스타일
+         */
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .pros, .cons {
+            padding: 20px;
+            border-radius: 15px;
+        }
+        
+        .pros {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.1), rgba(46, 204, 113, 0.1));
+            border: 2px solid #27ae60;
+        }
+        
+        .cons {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.1), rgba(192, 57, 43, 0.1));
+            border: 2px solid #e74c3c;
+        }
+        
+        .pros h4, .cons h4 {
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .pros h4 {
+            color: #27ae60;
+        }
+        
+        .cons h4 {
+            color: #e74c3c;
+        }
+        
+        .pros ul, .cons ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pros li, .cons li {
+            padding: 10px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative; /* 아이콘을 위한 relative 포지션 */
+            padding-left: 1.5em; /* 아이콘을 위한 공간 */
+        }
+        
+        .pros li::before {
+            content: '✅';
+            position: absolute;
+            left: 0;
+            top: 10px; /* 텍스트와 세로 정렬 */
+            font-size: 0.9em;
+        }
+        
+        .cons li::before {
+            content: '⚠️';
+            position: absolute;
+            left: 0;
+            top: 10px; /* 텍스트와 세로 정렬 */
+            font-size: 0.9em;
+        }
+
+
+        .pros li:last-child, .cons li:last-child {
+            border-bottom: none;
+        }
+        
+        /*
+         * 공통 강조 스타일
+         */
+        .strong {
+            font-weight: bold;
+            color: #2c3e50;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /*
+         * 결론 섹션 스타일
+         */
+        .conclusion {
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .conclusion::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .conclusion h2 {
+            font-size: 3em;
+            margin-bottom: 25px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .conclusion p {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /*
+         * 반응형 디자인
+         */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5em;
+            }
+            
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /*
+         * 추가 애니메이션 및 타이틀 스타일
+         */
+        .pulse {
+            animation: pulse 3s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+            70% { box-shadow: 0 0 0 30px rgba(102, 126, 234, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+        }
+        
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 0.5rem; /* 여백 수정 */
+            color: #2c3e50;
+            background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 구글 AI 모드 & 코멧 브라우저</h1>
+            <p class="subtitle">💭 <span class="strong">검색에서 실행까지</span> - 차세대 자율형 AI Agentic Brower 서비스 (2025.10.24)</p>
+            <div class="header-description">
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li>🤖 <strong>구글 AI 모드</strong>는 단순 챗봇을 넘어 <span class="strong">출처 기반의 신뢰할 수 있는 요약</span>을 제공</li>
+                    <li>🚀 <strong>코멧(Comet) 브라우저</strong>는 여기서 한발 더 나아가, 사용자의 명령을 <span class="highlight">실제 행동(앱 실행)으로 연결</span>하는 범용 자율형 AI 에이전트</li>
+                    <li>🏆 <span class="strong">"에이전틱 AI"</span> 시대의 서막을 열며, AI가 '답변'을 넘어 '실행'을 하는 시대로 진입</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="overview">
+            <div class="card">
+                <h3>🔍 구글 AI 모드 (검색)</h3>
+                <!-- === 수정된 내용 1 === -->
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.05em; line-height: 1.7;">
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">🧠</span>
+                        구글 검색 시 AI가 정보를 요약하고 '출처'를 제공하여 신뢰할 수 있는 '답변'에 집중
+                    </li>
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">⚡</span>
+                        기존 Gemini와 달리 <span class="strong">출처 링크를 명확히 제공</span>
+                    </li>
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">📊</span>
+                        퍼플렉시티(Perplexity)와 유사하게 정보의 <span class="highlight">신뢰성을 높임</span>
+                    </li>
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">💬</span>
+                        후속 질문을 통해 대화의 맥락을 이해하고 맞춤형 정보 제공하여 <span class="strong">대화형 검색이 가능</span>
+                    </li>
+                </ul>
+                <!-- === 수정 끝 === -->
+            </div>
+            
+            <!-- === 복원된 내용: 코멧 브라우저 카드 === -->
+            <div class="card">
+                <!-- ▼▼▼ [수정] '외부 링크' 아이콘을 "Download" 텍스트 링크로 변경 ▼▼▼ -->
+                <h3>
+                    <span>⚡ 코멧 브라우저 (실행)</span>
+                    <a href="https://www.perplexity.ai/comet/ko" target="_blank" rel="noopener noreferrer" title="코멧 브라우저 다운로드" class="download-icon-link">
+                        Download
+                    </a>
+                </h3>
+                <!-- ▲▲▲ [수정] 수정 완료 ▲▲▲ -->
+                <!-- === 수정된 내용 2 === -->
+                <ul style="list-style: none; padding: 0; margin: 0; font-size: 1.05em; line-height: 1.7;">
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">🔥</span>
+                        단순 '답변(Answer)'이 아닌 <span class="strong">'실행(Action)'을 하는 AI</span>
+                    </li>
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">⚙️</span>
+                        사용자의 명령을 받고, 스스로 계획을 세워 여러 앱/웹을 조작
+                    </li>
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">🚀</span>
+                        퍼플렉시티가 개발한 AI 에이전틱 브라우저의 다음 단계를 보여 줌. 
+                    </li>
+                    <li style="position: relative; padding-left: 1.8em; margin-bottom: 10px;">
+                        <span style="position: absolute; left: 0; top: 4px;">📈</span>
+                        <span class="highlight">구글(AI 모드)이 퍼플렉시티(답변)를 추격하자, 퍼플렉시티(코멧)는 '에이전트'로 도망</span> 
+                    </li>
+                </ul>
+                <!-- === 수정 끝 === -->
+            </div>
+            <!-- === 복원 끝 === -->
+            
+            <!-- === 수정된 내용 3 (full-width 클래스 추가) === -->
+             <div class="card full-width">
+                <h3>🎯 웹과의 상호작용 방식을 근본적으로 재정의하는 새로운 패러다임</h3>
+                 <ul style="list-style: none; padding: 0; margin: 0; margin-top: 15px;">
+                    <li style="font-size: 1.1em; margin-bottom: 10px;">🔧 <span class="strong">패러다임 전환:</span> 정보를 '검색'하는 창(Window)에서 사용자를 대신해 작업을 '수행'하는 비서(Agent)로 진화</li>
+                    <li style="font-size: 1.1em; margin-bottom: 10px;">⚔️ <span class="strong">새로운 브라우저 전쟁:</span> 거대 기술기업 '생태계 방어'(구글, MS) vs 새로운 사용자 경험 'AI 네이티브 스타트업'(퍼플렉시티/Arc)의 새로운 경쟁 구도</li>
+                    <li style="font-size: 1.1em; margin-bottom: 10px;">⚔️ <span class="strong">Open AI도 브라우저 전쟁에 참전:</span> 10월 21일 AI Agentic Browser인 GPT Atlas 출시</li>
+                    <li style="font-size: 1.1em;">🚀 <span class="strong">생산성 혁신:</span> AI 비서가 요약, 예약 등 복잡한 업무를 자동화 (지식 근로자 생산성 향상)</li>
+                </ul>
+            </div>
+            <!-- === 수정 끝 === -->
+        </div>
+
+        <!-- === 'AI 도구 비교' 섹션 삭제됨 === -->
+
+        <!-- === '실용적인 활용 예시' 섹션 === -->
+        <section class="practical-examples-section">
+            <h2 class="practical-title">
+                <span>💼</span>
+                실용적인 활용 예시
+            </h2>
+
+            <!-- 업무 자동화 카드 -->
+            <div class="example-card">
+                <div class="example-card-title">
+                    <span>👨‍💼</span>
+                    업무 자동화 
+                </div>
+                <div class="example-tags">
+                    <span class="example-tag tag-blue">메일 작업</span>
+                    <span class="example-tag tag-orange">문서 작성</span>
+                    <span class="example-tag tag-green">일정 관리</span>
+                </div>
+               <ul class="example-list">
+                    <li>온라인 아웃룩 메일 요약과 작성, 답변 메일 초안 작성</li>
+                    <li>구글 문서 생성, 제목 변경, 공유 권한 설정을 한 번의 명령으로 자동화</li>
+                    <li>출장 등 방문지를 검색하고, 방문지 정보 확인과 해당 출발 시간을 구글 캘린더에 자동 등록</li>
+                    <li>아이디어가 떠오를 때마다 "할 일 등록해 줘"라는 명령어로 구글 태스크에 즉시 저장</li>
+                </ul>
+            </div>
+
+
+            <!-- 프롬프트 예시 -->
+            <h3 class="prompt-section-title">업무에서 활용 가능한 프롬프트 예시</h3>
+            <div class="prompt-grid">
+                <div class="prompt-box">
+                    <strong>업무 메일 초안 :</strong>
+                    "다른 일정으로 인해 참석이 어렵다는 내용으로 회신메일 초안을 outlook mail로 작성해 줘"
+                </div>
+                <div class="prompt-box">
+                    <strong>문서 작성:</strong>
+                    "구글 드라이브에서 '10월 기획안' 새 문서 만들고, 제목 '코멧 테스트'로 작성한 뒤, '뷰어' 권한으로 공유 링크 만들어줘."
+                </div>
+                <div class="prompt-box">
+                    <strong>출장 등 이동:</strong>
+                    "오늘 오후 5시에 방문하려고해. 여의도 원창빌딩에서 출발하는 최적의 교통 수단을 알려주고 출발 시간을 나의 구글 계정 캘린더에 등록해 줘."
+                </div>
+               
+            </div>
+                
+
+            <!-- 정보 검색 카드 -->
+            <!-- ▼▼▼ [수정] 카드 상단에 여백(margin-top)을 추가하여 간격을 조정합니다. ▼▼▼ -->
+            <div class="example-card" style="margin-top: 30px;">
+            <!-- ▲▲▲ [수정] 수정 완료 ▲▲▲ -->
+                <div class="example-card-title">
+                    <span>📰</span>
+                    일상에서 활용
+                </div>
+                <div class="example-tags">
+                    <span class="example-tag tag-purple">AI 요약</span>
+                    <span class="example-tag tag-green">쇼핑 </span>
+                    <span class="example-tag tag-blue">맥락 질문</span>
+                </div>
+                <ul class="example-list">
+                    <li>보고 있는 영상이나 문서 요약 / 코멧 에이전트 활용 </li>
+                    <li>온라인 구매 사이트 장바구니에 쇼핑 리스트 추가 </li>
+                </ul>
+            </div>
+
+            <!-- 프롬프트 예시 -->
+            <h3 class="prompt-section-title">일상에서 활용 가능한 프롬프트 예시</h3>
+            <div class="prompt-grid">
+                <div class="prompt-box">
+                    <strong>학습:</strong>
+                    "코멧 어시스턴트 대화창에서 / 등록한 개인 프롬프트 호출하여 유투브 영상 요약과 시사점 도출"
+                </div>
+                <div class="prompt-box">
+                    <strong>쇼핑:</strong>
+                    "구매후기와 가격을 고려하여 매일 우유 1.8리터 2개를 내 장바구니에 추가해 줘. ."
+                </div>
+                
+            </div>
+        </section>
+        <!-- === '실용적인 활용 예시' 끝 === -->
+
+        <div class="pros-cons">
+            <div class="pros">
+                <h4>✅ 에이전트 AI (코멧)의 장점</h4>
+                <ul>
+                    <li>🎯 <span class="strong">복합 작업 수행</span> - 여러 단계의 일을 스스로 처리</li>
+                    <li>⚡ <span class="strong">시간 절약</span> - 인간이 하던 반복적 클릭/입력 작업을 자동화</li>
+                    <li>🔧 <span class="strong">범용성</span> - API 없이도 웹사이트(네이버) 조작 가능</li>
+                    <li>🧠 <span class="strong">G-Suite 연동</span> - 문서, 캘린더, 할 일 등 생산성 앱과 결합</li>
+                    <li>🔄 <span class="strong">자율성</span> - 사용자의 개입 없이 백그라운드에서 작업 수행</li>
+                </ul>
+            </div>
+            <div class="cons">
+                <h4>⚠️ 현재 한계점</h4>
+                <ul>
+                     <li>⏰ <span class="strong">처리 시간 지연</span> - 사람이 직접 하는 것보다 아직 느림</li>
+                       <li>🔒 <span class="strong">보안 우려</span> - AI가 내 계정을 마음대로 조작하는 것에 대한 보안/프라이버시 이슈</li>
+                    <li>🐛 <span class="strong">오류 가능성</span> - 대화창에 등록한 내용을 제대로 수행하지 못하는 오류가 자주 발생함</li>
+                    <li>🌐 <span class="strong">이용 제약</span> - 무료, 프로 사용자의 경우 어시스턴트 일일 사용량 제약이 있어, 맥스 가입 요청</li>
+                  
+                </ul>
+            </div>
+        </div>
+        
+        <div class="conclusion pulse">
+            <h2>🚀 AI 에이전트 시대의 서막</h2>
+            <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.3);">
+                <p style="font-size: 1.4em; margin-bottom: 25px; font-weight: bold; color: #ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7);">
+                    <span style="background: rgba(255,255,255,0.25); padding: 10px 20px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.4);">
+                        🤖 <strong>코멧 브라우저</strong>는 AI가 '답변'을 넘어 '실행'을 하는 <strong>에이전틱 AI</strong>의 가능성을 보여주었습니다. 여기에 Open AI도 10월 21일 GPT Atlas를 출시하여 경쟁에 참여하고 있습니다. 
+                    </span>
+                </p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(15px); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.4);">
+                <p style="font-size: 1.3em; margin-bottom: 20px; font-weight: bold; color: #ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7);">
+                    💭 <span style="background: rgba(255,255,255,0.3); padding: 8px 15px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.5);">
+                        <strong>"생각만 하면 나머지는 AI 에이전트가"</strong>
+                    </span>
+                    <br><br>
+                    👥 인간과 AI의 새로운 협업 시대가 현실이 되고 있습니다.
+                </p>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.25); backdrop-filter: blur(20px); padding: 25px; border-radius: 15px; margin: 20px 0; border: 2px solid rgba(255,255,255,0.5);">
+                <p style="font-size: 1.2em; opacity: 1; font-weight: 600; color: #ffffff; text-shadow: 2px 2px 6px rgba(0,0,0,0.7);">
+                    🌟 구글의 AI 모드가 <span style="background: rgba(255,237,78,0.8); color: #2c3e50; padding: 5px 10px; border-radius: 8px; font-weight: bold;">신뢰성 있는 검색</span>을 제공한다면,
+                    코멧은 <span style="background: rgba(255,237,78,0.9); color: #2c3e50; padding: 5px 10px; border-radius: 8px; font-weight: bold;">업무 자동화</span>의 미래를 보여주며,
+                    더 강력한 기능을 탑재하여 구글이 곧 이 방향으로 나아갈 것임을 시사합니다.
+                </p>
+            </div>
+        </div>
+
+</div>
+    
+    <script>
+        // 고급 스크롤 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0) scale(1)';
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+        
+        // 모든 애니메이션 요소에 초기 상태 설정
+        document.querySelectorAll('.card, .timeline-item, .use-case, .feature-item, .stat-item, .pros, .cons, .practical-examples-section, .example-card, .prompt-box').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px) scale(0.95)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            observer.observe(el);
+        });
+        
+        // 프롬프트 박스 클릭 시 복사 기능 (간소화)
+        document.querySelectorAll('.prompt-example, .prompt-box').forEach(prompt => {
+            prompt.addEventListener('click', () => {
+                const text = prompt.textContent.trim(); // .prompt-text 대신 textContent 사용
+                
+                // "업무 (Comet):" 같은 strong 태그 텍스트 제외
+                const strongText = prompt.querySelector('strong');
+                let textToCopy = text;
+                if (strongText) {
+                    textToCopy = text.replace(strongText.textContent, '').trim();
+                }
+
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalBg = prompt.style.background;
+                    prompt.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+                    setTimeout(() => {
+                        prompt.style.background = originalBg;
+                    }, 1000);
+                });
+            });
+            
+            // 툴팁 추가
+            prompt.title = '클릭하여 프롬프트 복사';
+            prompt.style.cursor = 'pointer';
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
