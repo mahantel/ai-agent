@@ -47,13 +47,24 @@
         .header h1 {
             font-size: 3.5em;
             color: #2c3e50;
-            margin-bottom: 25px;
+            /* margin-bottom: 25px; */ /* ◀ [수정] 이 줄을 수정 */
+            margin-bottom: 10px; /* ◀ [수정] 타이틀의 하단 여백을 줄였습니다. */
             background: linear-gradient(45deg, #667eea, #764ba2, #f093fb);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: titlePulse 3s ease-in-out infinite alternate;
         }
+        
+        /* ▼▼▼ [추가] 타이틀 바로 아래 부제목 스타일 ▼▼▼ */
+        .header-subtitle {
+            font-size: 1.25em; /* ◀ [추가] 폰트 크기를 키웠습니다. */
+            font-weight: 600;
+            color: #444;
+            margin-top: 0; /* ◀ [추가] 상단 여백을 제거해 타이틀에 붙입니다. */
+            margin-bottom: 20px; /* ◀ [추가] 아래 내용과의 여백을 확보합니다. */
+        }
+        /* ▲▲▲ [추가] 추가 완료 ▲▲▲ */
         
         @keyframes titlePulse {
             from { transform: scale(1); filter: hue-rotate(0deg); }
@@ -83,7 +94,8 @@
          */
         .overview {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            /* grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); */ /* ◀ [수정] 이 줄을 주석 처리 */
+            grid-template-columns: 1fr 1fr; /* ◀ [추가] 데스크톱에서는 2컬럼으로 고정 */
             gap: 30px;
             margin-bottom: 60px;
         }
@@ -456,6 +468,12 @@
             .pros-cons {
                 grid-template-columns: 1fr;
             }
+
+            /* ▼▼▼ [추가] 모바일 화면에서 overview를 1컬럼으로 변경 ▼▼▼ */
+            .overview {
+                grid-template-columns: 1fr;
+            }
+            /* ▲▲▲ [추가] 수정 완료 ▲▲▲ */
         }
         
         /*
@@ -487,7 +505,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤖 AI Borwser 전쟁</h1>전통강자 vs 신흥경쟁자 vs 새로운 도전자
+            <h1>🤖 AI Borwser 전쟁</h1>
+            <!-- ▼▼▼ [수정] 텍스트를 <p> 태그로 감싸고 클래스 추가 ▼▼▼ -->
+            <p class="header-subtitle">전통강자 vs 신흥경쟁자 vs 새로운 도전자</p>
+            <!-- ▲▲▲ [수정] 수정 완료 ▲▲▲ -->
             <p class="subtitle">💭 <span class="strong">검색에서 실행까지</span> - 차세대 자율형 AI Agentic Brower 서비스 (2025.10.24)</p>
         
             <div class="header-description">
@@ -761,6 +782,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
